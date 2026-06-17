@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>GUS — Great User System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius-xl: 2.5rem;
+      --radius-lg: 2rem;
+      --radius-md: 1.5rem;
+      --radius-sm: 1rem;
+      --transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      --sidebar-width: 300px;
+      --topbar-height: 75px;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #faf8ff;
+      --bg-secondary: #f0ecfc;
+      --text-primary: #13111c;
+      --text-secondary: #4a4065;
+      --text-muted: #6b6080;
+      --accent: #7c3aed;
+      --accent-soft: #c4b5fd;
+      --accent-glow: rgba(124, 58, 237, 0.35);
+      --glass-bg: rgba(255, 255, 255, 0.8);
+      --glass-border: rgba(180, 160, 220, 0.35);
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-hover-border: rgba(124, 58, 237, 0.7);
+      --nav-bg: rgba(250, 248, 255, 0.95);
+      --table-stripe: rgba(124,58,237,0.04);
+      --table-header: rgba(124,58,237,0.15);
+      --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #c084fc 100%);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0b0914;
+      --bg-secondary: #12101e;
+      --text-primary: #f3f0ff;
+      --text-secondary: #b9afd7;
+      --text-muted: #7b6f9e;
+      --accent: #a78bfa;
+      --accent-soft: #7c3aed;
+      --nav-bg: rgba(14, 12, 24, 0.95);
+      --table-stripe: rgba(167,139,250,0.05);
+      --table-header: rgba(167,139,250,0.2);
+      --glass-bg: rgba(18, 18, 24, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-hover-border: rgba(167,139,250,0.6);
+      --hero-gradient: linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #7c3aed 100%);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg-primary); }
+    body {
+      font-family: var(--font-sans);
+      background: transparent;
+      color: var(--text-primary);
+      line-height: 1.65;
+      transition: background 0.3s, color 0.25s;
+      overflow-x: hidden;
+      font-weight: 400;
+      position: relative;
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      pointer-events: none;
+      z-index: -1;
+      background: 
+        radial-gradient(circle at 25% 35%, rgba(120, 70, 230, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 55%, rgba(190, 90, 150, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 45% 80%, rgba(80, 50, 200, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(140, 60, 210, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 60% 40%, rgba(167, 139, 250, 0.1) 0%, transparent 60%);
+      animation: bgPulse 15s ease-in-out infinite alternate;
+    }
+    @keyframes bgPulse {
+      0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+      50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+      100% { transform: scale(1.05) rotate(-3deg); opacity: 0.85; }
+    }
+    [data-theme="light"] .bg-glow {
+      background: 
+        radial-gradient(circle at 30% 30%, rgba(170, 130, 240, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(200, 140, 180, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.1) 0%, transparent 60%);
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 20px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* Верхняя панель */
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 120;
+      background: var(--nav-bg);
+      backdrop-filter: blur(30px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0 2rem;
+      height: var(--topbar-height);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+      gap: 2rem;
+    }
+    
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: absolute;
+      left: 2rem;
+    }
+    
+    .logo {
+      font-weight: 800;
+      font-size: 2.2rem;
+      background: var(--hero-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      transition: all 0.3s;
+    }
+    .logo:hover {
+      transform: scale(1.05);
+      filter: brightness(1.2);
+    }
+    
+    .tagline-center {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+      transition: all 0.3s;
+    }
+    
+    .top-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      position: absolute;
+      right: 2rem;
+    }
+    
+    .icon-btn {
+      background: rgba(167,139,250,0.1);
+      border: 1px solid var(--glass-border);
+      border-radius: 3rem;
+      padding: 0.6rem 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .icon-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s;
+      border-radius: 3rem;
+      z-index: -1;
+    }
+    .icon-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 25px var(--accent-glow);
+    }
+    .icon-btn:hover::before {
+      opacity: 0.15;
+    }
+    .icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    .burger { display: none; }
+
+    /* Боковое меню */
+    .sidebar {
+      position: fixed;
+      top: var(--topbar-height);
+      left: 0;
+      height: calc(100vh - var(--topbar-height));
+      width: var(--sidebar-width);
+      background: var(--nav-bg);
+      backdrop-filter: blur(40px);
+      border-right: 1px solid var(--glass-border);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 100;
+      box-shadow: 8px 0 40px rgba(0,0,0,0.3);
+      overflow-y: auto;
+      transition: all 0.5s cubic-bezier(0.25, 0.1, 0.1, 1.0);
+    }
+    
+    .sidebar a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      padding: 1rem 1.3rem;
+      border-radius: 1.2rem;
+      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .sidebar a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+    }
+    .sidebar a:hover {
+      background: rgba(167,139,250,0.15);
+      color: var(--accent);
+      font-weight: 650;
+      transform: translateX(8px);
+      box-shadow: 0 4px 20px rgba(167,139,250,0.2);
+    }
+    .sidebar a:hover::after {
+      transform: scaleX(1);
+    }
+    .sidebar a.active { 
+      background: rgba(167,139,250,0.25);
+      color: var(--accent);
+      font-weight: 700;
+      border-left: 4px solid var(--accent);
+      transform: translateX(4px);
+      box-shadow: 0 0 25px rgba(167,139,250,0.3);
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 1rem 0;
+      opacity: 0.5;
+    }
+
+    .main-content {
+      margin-left: var(--sidebar-width);
+      transition: margin-left 0.5s cubic-bezier(0.25, 0.1, 0.1, 1.0);
+      padding-top: var(--topbar-height);
+    }
+
+    .overlay { 
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0,0,0,0.7); 
+      backdrop-filter: blur(8px); 
+      z-index: 95; 
+      display: none;
+      transition: all 0.4s;
+    }
+
+    @media (max-width: 1200px) {
+      .sidebar { 
+        transform: translateX(-100%); 
+        box-shadow: none;
+        width: 280px;
+      }
+      .sidebar.open { 
+        transform: translateX(0); 
+        box-shadow: 15px 0 50px rgba(0,0,0,0.8); 
+      }
+      .main-content { margin-left: 0; }
+      .burger { 
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        padding: 8px;
+        position: absolute;
+        left: 1rem;
+      }
+      .burger span { 
+        width: 30px;
+        height: 3px;
+        background: var(--text-primary);
+        border-radius: 10px;
+        transition: 0.3s;
+      }
+      .burger.open span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 8px);
+      }
+      .burger.open span:nth-child(2) {
+        opacity: 0;
+      }
+      .burger.open span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -8px);
+      }
+      .overlay.active { display: block; }
+      .logo-area { position: static; }
+      .tagline-center { font-size: 0.9rem; }
+    }
+
+    /* Секции и анимации */
+    .section { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 5rem 2.5rem;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      will-change: transform, opacity;
+    }
+    .section.visible { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Заголовки */
+    h2 { 
+      font-weight: 750; 
+      font-size: 2.8rem; 
+      margin-bottom: 2.5rem; 
+      letter-spacing: -0.6px;
+      background: linear-gradient(to right, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      display: inline-block;
+    }
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60%;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 10px;
+    }
+
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      gap: 2rem; 
+      margin-top: 2.5rem; 
+    }
+
+    /* Карточки */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 2.5rem 2rem;
+      transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(167,139,250,0.2), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .card:hover::before { opacity: 1; }
+    .card:hover { 
+      border-color: var(--card-hover-border);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 30px 50px -20px var(--accent-glow);
+    }
+    .card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+    .card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Статистика */
+    .stat-number { 
+      font-size: 4rem; 
+      font-weight: 800; 
+      background: var(--hero-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      animation: countUp 2s ease-out;
+    }
+    @keyframes countUp {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .stat-container {
+      display: flex;
+      justify-content: center;
+      gap: 6rem;
+      flex-wrap: wrap;
+      margin-top: 4rem;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      transition: all 0.4s;
+      min-width: 200px;
+    }
+    .stat-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px var(--accent-glow);
+      border-color: var(--card-hover-border);
+    }
+    .stat-label {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-weight: 600;
+    }
+
+    /* Таблица */
+    .table-wrapper { 
+      overflow-x: auto;
+      border-radius: 2rem;
+      border: 1px solid var(--glass-border); 
+      backdrop-filter: blur(20px);
+      background: var(--card-bg);
+      margin-top: 2rem;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+      padding: 0.5rem;
+    }
+    table { 
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 800px;
+    }
+    th { 
+      background: var(--table-header);
+      padding: 1.3rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      position: sticky;
+      top: 0;
+    }
+    td { 
+      padding: 1.1rem 1rem;
+      border-bottom: 1px solid var(--glass-border);
+      transition: background 0.3s;
+    }
+    tr {
+      transition: all 0.3s;
+    }
+    tr:hover td {
+      background: rgba(167,139,250,0.08);
+    }
+    tr:nth-child(even) { background: var(--table-stripe); }
+    .check-mark {
+      color: #10b981;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .cross-mark {
+      color: #ef4444;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .footer { 
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--glass-border);
+      margin-left: var(--sidebar-width);
+      background: rgba(0,0,0,0.05);
+      transition: margin-left 0.5s;
+    }
+    @media (max-width: 1200px) { 
+      .footer { margin-left: 0; }
+    }
+
+    /* Кнопки */
+    .btn-primary {
+      padding: 1rem 2.5rem;
+      background: var(--hero-gradient);
+      border-radius: 3rem;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-block;
+      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      box-shadow: 0 10px 30px var(--accent-glow);
+      letter-spacing: 0.3px;
+    }
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 20px 40px var(--accent-glow);
+    }
+    .btn-outline {
+      padding: 1rem 2.5rem;
+      border: 2px solid var(--accent);
+      border-radius: 3rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-block;
+      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+    }
+    .btn-outline:hover {
+      background: rgba(167,139,250,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px var(--accent-glow);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="overlay" id="overlay"></div>
+
+  <header class="top-nav">
+    <button class="burger" id="burgerBtn">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="logo-area">
+      <span class="logo">GUS</span>
+    </div>
+    <div class="tagline-center" data-i18n="slogan">Оптимизация, кастомизация, свобода</div>
+    <div class="top-actions">
+      <button class="icon-btn" id="themeToggle">
+        <span id="themeIcon">🌙</span>
+        <span data-i18n="theme">Тема</span>
+      </button>
+      <button class="icon-btn" id="langToggle">
+        <span>🌐</span>
+        <span id="langText">RU</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar">
+    <a href="#hero" data-i18n="nav_home">🏠 Главная</a>
+    <a href="#about" data-i18n="nav_about">📖 О проекте</a>
+    <a href="#tech" data-i18n="nav_tech">⚙️ Архитектура</a>
+    <a href="#comparison" data-i18n="nav_comparison">📊 Сравнение</a>
+    <a href="#roadmap" data-i18n="nav_roadmap">🗺️ Roadmap</a>
+    <a href="#manifesto" data-i18n="nav_manifesto">📜 Манифест</a>
+    <a href="#community" data-i18n="nav_community">🌍 Сообщество</a>
+  </nav>
+
+  <div class="main-content" id="mainContent">
+    <main>
+      <section id="hero" class="section" style="text-align:center;">
+        <h1 style="font-size:clamp(2.5rem, 7vw, 4.5rem); background:none; -webkit-text-fill-color: initial; margin-top: 2rem;">
+          <span style="background: var(--hero-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight:800;">GUS</span>
+          <br>
+          <span style="color: var(--text-primary);" data-i18n="hero_title_part">— операционная система, которую ты заслуживаешь</span>
+        </h1>
+        <p style="font-size:1.3rem; color:var(--text-secondary); max-width:800px; margin:2rem auto; line-height: 1.7;" data-i18n="hero_subtitle">
+          GUS — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.
+        </p>
+        <div style="display:flex; gap:1.5rem; justify-content:center; margin-top:3rem; flex-wrap:wrap;">
+          <a href="#tech" class="btn-primary" data-i18n="how_it_works">Как это работает</a>
+          <a href="#manifesto" class="btn-outline" data-i18n="manifesto_btn">Манифест</a>
+        </div>
+        <div class="stat-container">
+          <div class="stat-item">
+            <div class="stat-number">10</div>
+            <div class="stat-label" data-i18n="developers">разработчиков</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">30</div>
+            <div class="stat-label" data-i18n="forum_members">человек на форуме</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section">
+        <h2 data-i18n="about_title">О проекте</h2>
+        <p style="font-weight:700; font-size:1.8rem; margin-bottom:1.5rem; color: var(--accent);" data-i18n="about_lead">Мы не делаем дистрибутив. Мы создаём новую философию.</p>
+        <p style="color:var(--text-secondary); font-size:1.2rem; max-width: 900px;" data-i18n="about_text">GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.</p>
+      </section>
+
+      <section id="tech" class="section">
+        <h2 data-i18n="tech_title">Технические особенности</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>🛡️ Микроядро</h3>
+            <p data-i18n="tech_microkernel">Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает только за критически важные функции.</p>
+          </div>
+          <div class="card">
+            <h3>🦀 Rust</h3>
+            <p data-i18n="tech_rust">Безопасность памяти без компромиссов. Современный язык исключает целые классы уязвимостей на этапе компиляции.</p>
+          </div>
+          <div class="card">
+            <h3>🧩 Модульность</h3>
+            <p data-i18n="tech_modular">Обновления без перезагрузки. Каждый модуль изолирован и может обновляться независимо.</p>
+          </div>
+          <div class="card">
+            <h3>📦 Программа = файл</h3>
+            <p data-i18n="tech_sandbox">Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="comparison" class="section">
+        <h2 data-i18n="comp_title">Сравнение операционных систем</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="col_feature">Характеристика</th>
+                <th>GUS</th>
+                <th>Linux</th>
+                <th>Windows</th>
+                <th>FreeBSD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="row_kernel">Тип ядра</td>
+                <td><strong>Микроядро</strong></td>
+                <td>Монолитное</td>
+                <td>Гибридное</td>
+                <td>Монолитное</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_opensource">Открытый код</td>
+                <td><span class="check-mark">✅ Да</span></td>
+                <td><span class="check-mark">✅ Да</span></td>
+                <td><span class="cross-mark">❌ Нет</span></td>
+                <td><span class="check-mark">✅ Да</span></td>
+              </tr>
+              <tr>
+                <td data-i18n="row_maturity">Зрелость / Стабильность</td>
+                <td>Проект (разработка)</td>
+                <td>Зрелая</td>
+                <td>Зрелая</td>
+                <td>Зрелая</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_complexity">Сложность для пользователя</td>
+                <td><strong>Низкая (конструктор)</strong></td>
+                <td>Высокая</td>
+                <td>Средняя</td>
+                <td>Высокая</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_popularity">Популярность</td>
+                <td>Очень низкая (новая ОС)</td>
+                <td>Высокая</td>
+                <td>Очень высокая</td>
+                <td>Средняя</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_install">Сложность установки</td>
+                <td><strong>Легко</strong></td>
+                <td>Средне</td>
+                <td>Средне</td>
+                <td>Сложно</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_language">Основной язык реализации</td>
+                <td><strong>Rust</strong></td>
+                <td>C</td>
+                <td>C / C++</td>
+                <td>C</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_modularity">Модульность (архитектура)</td>
+                <td><span class="check-mark">✅ Полная</span></td>
+                <td>Частичная</td>
+                <td>Частичная</td>
+                <td>Частичная</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_customization">Кастомизация системы</td>
+                <td><span class="check-mark">✅ Максимальная</span></td>
+                <td>Высокая</td>
+                <td>Низкая</td>
+                <td>Высокая</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_skills">Необходимость навыков (ежедневно)</td>
+                <td><strong>Нет</strong></td>
+                <td>Иногда</td>
+                <td>Нет</td>
+                <td>Часто</td>
+              </tr>
+              <tr>
+                <td data-i18n="row_updates">Управление обновлением</td>
+                <td><strong>Модульное</strong></td>
+                <td>Централизованное</td>
+                <td>Централизованное</td>
+                <td>Централизованное</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="roadmap" class="section">
+        <h2 data-i18n="roadmap_title">Дорожная карта</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>✅ Этап 1</h3>
+            <p data-i18n="roadmap_stage1">Микроядро + IPC. Базовая система обмена сообщениями между компонентами.</p>
+          </div>
+          <div class="card">
+            <h3>🔄 Этап 2</h3>
+            <p data-i18n="roadmap_stage2">Драйверный фреймворк. Возможность создавать драйверы в Userspace.</p>
+          </div>
+          <div class="card">
+            <h3>📋 Этап 3</h3>
+            <p data-i18n="roadmap_stage3">Графический интерфейс. Собственный GUI на Rust.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="manifesto" class="section">
+        <h2 data-i18n="manifesto_title">Манифест</h2>
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+          <p style="font-size: 1.3rem; font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">«GUS возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»</p>
+        </div>
+      </section>
+
+      <section id="community" class="section">
+        <h2 data-i18n="community_title">Сообщество</h2>
+        <div class="grid">
+          <a href="https://t.me/GreatUserSystem" target="_blank" class="card" style="text-decoration: none; color: inherit;">
+            <h3>📢 Канал</h3>
+            <p data-i18n="community_channel">Официальный канал проекта</p>
+          </a>
+          <a href="https://t.me/GreatUserSystemChat" target="_blank" class="card" style="text-decoration: none; color: inherit;">
+            <h3>💬 Чат канала</h3>
+            <p data-i18n="community_chat">Обсуждение и помощь</p>
+          </a>
+          <a href="https://t.me/GreatUserSystemForum" target="_blank" class="card" style="text-decoration: none; color: inherit;">
+            <h3>🗂️ Форум</h3>
+            <p data-i18n="community_forum">Технические обсуждения</p>
+          </a>
+          <a href="https://github.com/GreatUserTeam/GUS" target="_blank" class="card" style="text-decoration: none; color: inherit;">
+            <h3>🐙 GitHub</h3>
+            <p data-i18n="community_github">Исходный код</p>
+          </a>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <p><strong>GUS</strong> — Great User System. Open Source Project. © 2026</p>
+      <p style="margin-top: 0.5rem;" data-i18n="footer_motto">Оптимизация · Кастомизация · Свобода | Built with Rust 🦀</p>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      const i18n = {
+        ru: {
+          slogan: "Оптимизация, кастомизация, свобода",
+          theme: "Тема",
+          nav_home: "🏠 Главная",
+          nav_about: "📖 О проекте",
+          nav_tech: "⚙️ Архитектура",
+          nav_comparison: "📊 Сравнение",
+          nav_roadmap: "🗺️ Roadmap",
+          nav_manifesto: "📜 Манифест",
+          nav_community: "🌍 Сообщество",
+          hero_title_part: "— операционная система, которую ты заслуживаешь",
+          hero_subtitle: "GUS — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.",
+          how_it_works: "Как это работает",
+          manifesto_btn: "Манифест",
+          developers: "разработчиков",
+          forum_members: "человек на форуме",
+          about_title: "О проекте",
+          about_lead: "Мы не делаем дистрибутив. Мы создаём новую философию.",
+          about_text: "GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.",
+          tech_title: "Технические особенности",
+          tech_microkernel: "Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает только за критически важные функции.",
+          tech_rust: "Безопасность памяти без компромиссов. Современный язык исключает целые классы уязвимостей на этапе компиляции.",
+          tech_modular: "Обновления без перезагрузки. Каждый модуль изолирован и может обновляться независимо.",
+          tech_sandbox: "Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.",
+          comp_title: "Сравнение операционных систем",
+          col_feature: "Характеристика",
+          row_kernel: "Тип ядра",
+          row_opensource: "Открытый код",
+          row_maturity: "Зрелость / Стабильность",
+          row_complexity: "Сложность для пользователя",
+          row_popularity: "Популярность",
+          row_install: "Сложность установки",
+          row_language: "Основной язык реализации",
+          row_modularity: "Модульность (архитектура)",
+          row_customization: "Кастомизация системы",
+          row_skills: "Необходимость навыков (ежедневно)",
+          row_updates: "Управление обновлением",
+          roadmap_title: "Дорожная карта",
+          roadmap_stage1: "Микроядро + IPC. Базовая система обмена сообщениями между компонентами.",
+          roadmap_stage2: "Драйверный фреймворк. Возможность создавать драйверы в Userspace.",
+          roadmap_stage3: "Графический интерфейс. Собственный GUI на Rust.",
+          manifesto_title: "Манифест",
+          manifesto_text: "«GUS возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»",
+          community_title: "Сообщество",
+          community_channel: "Официальный канал проекта",
+          community_chat: "Обсуждение и помощь",
+          community_forum: "Технические обсуждения",
+          community_github: "Исходный код",
+          footer_motto: "Оптимизация · Кастомизация · Свобода | Built with Rust 🦀"
+        },
+        en: {
+          slogan: "Optimization, customization, freedom",
+          theme: "Theme",
+          nav_home: "🏠 Home",
+          nav_about: "📖 About",
+          nav_tech: "⚙️ Technology",
+          nav_comparison: "📊 Comparison",
+          nav_roadmap: "🗺️ Roadmap",
+          nav_manifesto: "📜 Manifesto",
+          nav_community: "🌍 Community",
+          hero_title_part: "— the operating system you deserve",
+          hero_subtitle: "GUS is not a Linux distro nor a Windows clone. It's a constructor platform with a Rust microkernel.",
+          how_it_works: "How it works",
+          manifesto_btn: "Manifesto",
+          developers: "developers",
+          forum_members: "forum members",
+          about_title: "About the project",
+          about_lead: "We are not making a distribution. We are creating a new philosophy.",
+          about_text: "GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.",
+          tech_title: "Technical features",
+          tech_microkernel: "A video driver crash won't bring down the system. The kernel is minimal and handles only critical functions.",
+          tech_rust: "Memory safety without compromises. A modern language that eliminates entire classes of vulnerabilities at compile time.",
+          tech_modular: "Updates without rebooting. Each module is isolated and can be updated independently.",
+          tech_sandbox: "Isolated modules, nowhere for viruses to hide. OS-level sandboxing.",
+          comp_title: "Operating System Comparison",
+          col_feature: "Feature",
+          row_kernel: "Kernel type",
+          row_opensource: "Open source",
+          row_maturity: "Maturity / Stability",
+          row_complexity: "User complexity",
+          row_popularity: "Popularity",
+          row_install: "Installation difficulty",
+          row_language: "Implementation language",
+          row_modularity: "Modularity (architecture)",
+          row_customization: "System customization",
+          row_skills: "Required skills (daily)",
+          row_updates: "Update management",
+          roadmap_title: "Roadmap",
+          roadmap_stage1: "Microkernel + IPC. Basic message passing system between components.",
+          roadmap_stage2: "Driver framework. Ability to create drivers in Userspace.",
+          roadmap_stage3: "Graphical interface. Custom GUI in Rust.",
+          manifesto_title: "Manifesto",
+          manifesto_text: "\"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice.\"",
+          community_title: "Community",
+          community_channel: "Official project channel",
+          community_chat: "Discussion and support",
+          community_forum: "Technical discussions",
+          community_github: "Source code",
+          footer_motto: "Optimization · Customization · Freedom | Built with Rust 🦀"
+        }
+      };
+
+      let currentLang = localStorage.getItem('gus-lang') || 'ru';
+      let currentTheme = localStorage.getItem('gus-theme') || 'dark';
+
+      function applyLang(lang) {
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (i18n[lang]?.[key]) {
+            // Добавляем анимацию при смене языка
+            el.style.transition = 'all 0.3s ease';
+            el.textContent = i18n[lang][key];
+          }
+        });
+        document.getElementById('langText').textContent = lang === 'ru' ? 'EN' : 'RU';
+        localStorage.setItem('gus-lang', lang);
+      }
+
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.getElementById('themeIcon').textContent = theme === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('gus-theme', theme);
+        // Анимация смены темы
+        document.body.style.transition = 'all 0.5s ease';
+      }
+
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(currentTheme);
+      });
+      
+      document.getElementById('langToggle').addEventListener('click', () => {
+        currentLang = currentLang === 'ru' ? 'en' : 'ru';
+        applyLang(currentLang);
+      });
+
+      const burger = document.getElementById('burgerBtn');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      burger.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+        burger.classList.toggle('open');
+      });
+      
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        burger.classList.remove('open');
+      });
+      
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', () => {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('active');
+          burger.classList.remove('open');
+        });
+      });
+
+      // Intersection Observer для анимаций появления секций
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            entry.target.classList.remove('visible');
+          }
+        });
+      }, { 
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+      // Подсветка активного раздела с плавной анимацией
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.sidebar a');
+      
+      function updateActiveLink() {
+        let current = '';
+        const scrollPos = window.scrollY + 150;
+        
+        sections.forEach(s => {
+          const sectionTop = s.offsetTop;
+          const sectionBottom = sectionTop + s.offsetHeight;
+          if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+            current = s.getAttribute('id');
+          }
+        });
+        
+        navLinks.forEach(a => {
+          const href = a.getAttribute('href')?.substring(1);
+          if (href === current) {
+            a.classList.add('active');
+          } else {
+            a.classList.remove('active');
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', updateActiveLink);
+      window.addEventListener('load', updateActiveLink);
+
+      // Инициализация
+      applyTheme(currentTheme);
+      applyLang(currentLang);
+      updateActiveLink();
+    })();
+  </script>
+</body>
+</html>
