@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -20,25 +20,6 @@
       --topbar-height: 75px;
     }
 
-    [data-theme="light"] {
-      --bg-primary: #faf8ff;
-      --bg-secondary: #f0ecfc;
-      --text-primary: #13111c;
-      --text-secondary: #4a4065;
-      --text-muted: #6b6080;
-      --accent: #7c3aed;
-      --accent-soft: #c4b5fd;
-      --accent-glow: rgba(124, 58, 237, 0.35);
-      --glass-bg: rgba(255, 255, 255, 0.8);
-      --glass-border: rgba(180, 160, 220, 0.35);
-      --card-bg: rgba(255, 255, 255, 0.75);
-      --card-hover-border: rgba(124, 58, 237, 0.7);
-      --nav-bg: rgba(250, 248, 255, 0.95);
-      --table-stripe: rgba(124,58,237,0.04);
-      --table-header: rgba(124,58,237,0.15);
-      --hero-gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #c084fc 100%);
-    }
-
     [data-theme="dark"] {
       --bg-primary: #0b0914;
       --bg-secondary: #12101e;
@@ -55,6 +36,8 @@
       --card-bg: rgba(255, 255, 255, 0.04);
       --card-hover-border: rgba(167,139,250,0.6);
       --hero-gradient: linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #7c3aed 100%);
+      --timeline-done: #a78bfa;
+      --timeline-pending: #4a4065;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -90,12 +73,6 @@
       0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
       50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
       100% { transform: scale(1.05) rotate(-3deg); opacity: 0.85; }
-    }
-    [data-theme="light"] .bg-glow {
-      background: 
-        radial-gradient(circle at 30% 30%, rgba(170, 130, 240, 0.2) 0%, transparent 50%),
-        radial-gradient(circle at 70% 60%, rgba(200, 140, 180, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.1) 0%, transparent 60%);
     }
 
     ::-webkit-scrollbar { width: 8px; }
@@ -145,9 +122,12 @@
       font-size: 1.2rem;
       color: var(--text-secondary);
       font-weight: 500;
-      white-space: nowrap;
+      white-space: normal;
       letter-spacing: 0.5px;
-      transition: all 0.3s;
+      transition: all 0.5s ease;
+      text-align: center;
+      line-height: 1.4;
+      max-width: 400px;
     }
     
     .top-actions {
@@ -270,6 +250,10 @@
       opacity: 0.5;
     }
 
+    .sidebar-lang-mobile {
+      display: none;
+    }
+
     .main-content {
       margin-left: var(--sidebar-width);
       transition: margin-left 0.5s cubic-bezier(0.25, 0.1, 0.1, 1.0);
@@ -326,7 +310,28 @@
       }
       .overlay.active { display: block; }
       .logo-area { position: static; }
-      .tagline-center { font-size: 0.9rem; }
+      .tagline-center { font-size: 0.9rem; max-width: 250px; }
+      .sidebar-lang-mobile {
+        display: flex;
+        margin-top: auto;
+        padding-top: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tagline-center {
+        font-size: 0.8rem;
+        max-width: 180px;
+      }
+      .top-actions .icon-btn {
+        display: none;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .tagline-center {
+        display: none;
+      }
     }
 
     /* Секции и анимации */
@@ -511,6 +516,61 @@
       font-size: 1.2rem;
     }
 
+    /* Таймлайн */
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+      margin-top: 3rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--timeline-done) 0%, var(--timeline-done) 30%, var(--timeline-pending) 30%, var(--timeline-pending) 100%);
+      border-radius: 4px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 2.5rem;
+      transition: all 0.4s ease;
+    }
+    .timeline-item:hover {
+      transform: translateX(8px);
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.45rem;
+      top: 0.5rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 3px solid var(--timeline-pending);
+      transition: all 0.4s ease;
+      z-index: 2;
+    }
+    .timeline-item.done::before {
+      background: var(--timeline-done);
+      border-color: var(--timeline-done);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+    .timeline-item h3 {
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .timeline-item p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
     .footer { 
       text-align: center;
       padding: 3rem;
@@ -556,6 +616,21 @@
       transform: translateY(-4px);
       box-shadow: 0 10px 30px var(--accent-glow);
     }
+
+    /* Анимация перевода */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .lang-switching {
+      animation: fadeInUp 0.4s ease-out;
+    }
   </style>
 </head>
 <body>
@@ -569,13 +644,9 @@
     <div class="logo-area">
       <span class="logo">GUS</span>
     </div>
-    <div class="tagline-center" data-i18n="slogan">Оптимизация, кастомизация, свобода</div>
+    <div class="tagline-center" data-i18n="slogan">Optimization, customization, freedom</div>
     <div class="top-actions">
-      <button class="icon-btn" id="themeToggle">
-        <span id="themeIcon">🌙</span>
-        <span data-i18n="theme">Тема</span>
-      </button>
-      <button class="icon-btn" id="langToggle">
+      <button class="icon-btn" id="langToggleDesktop">
         <span>🌐</span>
         <span id="langText">RU</span>
       </button>
@@ -583,13 +654,19 @@
   </header>
 
   <nav class="sidebar" id="sidebar">
-    <a href="#hero" data-i18n="nav_home">Главная</a>
-    <a href="#about" data-i18n="nav_about">О проекте</a>
-    <a href="#tech" data-i18n="nav_tech">Архитектура</a>
-    <a href="#comparison" data-i18n="nav_comparison">Сравнение</a>
-    <a href="#roadmap" data-i18n="nav_roadmap">Roadmap</a>
-    <a href="#manifesto" data-i18n="nav_manifesto">Манифест</a>
-    <a href="#community" data-i18n="nav_community">Сообщество</a>
+    <a href="#hero" data-i18n="nav_home">Home</a>
+    <a href="#about" data-i18n="nav_about">About</a>
+    <a href="#tech" data-i18n="nav_tech">Technology</a>
+    <a href="#comparison" data-i18n="nav_comparison">Comparison</a>
+    <a href="#roadmap" data-i18n="nav_roadmap">Our Path</a>
+    <a href="#manifesto" data-i18n="nav_manifesto">Manifesto</a>
+    <a href="#community" data-i18n="nav_community">Community</a>
+    <div class="sidebar-lang-mobile">
+      <button class="icon-btn" id="langToggleMobile" style="width: 100%; justify-content: center;">
+        <span>🌐</span>
+        <span id="langTextMobile">RU</span>
+      </button>
+    </div>
   </nav>
 
   <div class="main-content" id="mainContent">
@@ -598,62 +675,62 @@
         <h1 style="font-size:clamp(2.5rem, 7vw, 4.5rem); background:none; -webkit-text-fill-color: initial; margin-top: 2rem;">
           <span style="background: var(--hero-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight:800;">Great User System</span>
           <br>
-          <span style="color: var(--text-primary);" data-i18n="hero_title_part">— операционная система, которую ты заслуживаешь</span>
+          <span style="color: var(--text-primary);" data-i18n="hero_title_part">— the operating system you deserve</span>
         </h1>
         <p style="font-size:1.3rem; color:var(--text-secondary); max-width:800px; margin:2rem auto; line-height: 1.7;" data-i18n="hero_subtitle">
-          GUS — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.
+          GUS is not a Linux distro nor a Windows clone. It's a constructor platform with a Rust microkernel.
         </p>
         <div style="display:flex; gap:1.5rem; justify-content:center; margin-top:3rem; flex-wrap:wrap;">
-          <a href="#tech" class="btn-primary" data-i18n="how_it_works">Как это работает</a>
-          <a href="#manifesto" class="btn-outline" data-i18n="manifesto_btn">Манифест</a>
+          <a href="#tech" class="btn-primary" data-i18n="how_it_works">How it works</a>
+          <a href="#manifesto" class="btn-outline" data-i18n="manifesto_btn">Manifesto</a>
         </div>
         <div class="stat-container">
           <div class="stat-item">
             <div class="stat-number">10</div>
-            <div class="stat-label" data-i18n="developers">разработчиков</div>
+            <div class="stat-label" data-i18n="developers">developers</div>
           </div>
           <div class="stat-item">
             <div class="stat-number">30</div>
-            <div class="stat-label" data-i18n="forum_members">человек на форуме</div>
+            <div class="stat-label" data-i18n="forum_members">forum members</div>
           </div>
         </div>
       </section>
 
       <section id="about" class="section">
-        <h2 data-i18n="about_title">О проекте</h2>
-        <p style="font-weight:700; font-size:1.8rem; margin-bottom:1.5rem; color: var(--accent);" data-i18n="about_lead">Мы не делаем дистрибутив. Мы создаём новую философию.</p>
-        <p style="color:var(--text-secondary); font-size:1.2rem; max-width: 900px;" data-i18n="about_text">GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.</p>
+        <h2 data-i18n="about_title">About the project</h2>
+        <p style="font-weight:700; font-size:1.8rem; margin-bottom:1.5rem; color: var(--accent);" data-i18n="about_lead">We are not making a distribution. We are creating a new philosophy.</p>
+        <p style="color:var(--text-secondary); font-size:1.2rem; max-width: 900px;" data-i18n="about_text">GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.</p>
       </section>
 
       <section id="tech" class="section">
-        <h2 data-i18n="tech_title">Технические особенности</h2>
+        <h2 data-i18n="tech_title">Technical features</h2>
         <div class="grid">
           <div class="card">
-            <h3>🛡️ Микроядро</h3>
-            <p data-i18n="tech_microkernel">Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает только за критически важные функции.</p>
+            <h3>🛡️ Microkernel</h3>
+            <p data-i18n="tech_microkernel">A video driver crash won't bring down the system. The kernel is minimal and handles only critical functions.</p>
           </div>
           <div class="card">
             <h3>🦀 Rust</h3>
-            <p data-i18n="tech_rust">Безопасность памяти без компромиссов. Современный язык исключает целые классы уязвимостей на этапе компиляции.</p>
+            <p data-i18n="tech_rust">Memory safety without compromises. A modern language that eliminates entire classes of vulnerabilities at compile time.</p>
           </div>
           <div class="card">
-            <h3>🧩 Модульность</h3>
-            <p data-i18n="tech_modular">Обновления без перезагрузки. Каждый модуль изолирован и может обновляться независимо.</p>
+            <h3>🧩 Modularity</h3>
+            <p data-i18n="tech_modular">Updates without rebooting. Each module is isolated and can be updated independently.</p>
           </div>
           <div class="card">
-            <h3>📦 Программа = файл</h3>
-            <p data-i18n="tech_sandbox">Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.</p>
+            <h3>📦 Program = File</h3>
+            <p data-i18n="tech_sandbox">Isolated modules, nowhere for viruses to hide. OS-level sandboxing.</p>
           </div>
         </div>
       </section>
 
       <section id="comparison" class="section">
-        <h2 data-i18n="comp_title">Сравнение операционных систем</h2>
+        <h2 data-i18n="comp_title">Operating System Comparison</h2>
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
-                <th data-i18n="col_feature">Характеристика</th>
+                <th data-i18n="col_feature">Feature</th>
                 <th>GUS</th>
                 <th>Linux</th>
                 <th>Windows</th>
@@ -662,81 +739,81 @@
             </thead>
             <tbody>
               <tr>
-                <td data-i18n="row_kernel">Тип ядра</td>
-                <td><strong>Микроядро</strong></td>
-                <td>Монолитное</td>
-                <td>Гибридное</td>
-                <td>Монолитное</td>
+                <td data-i18n="row_kernel">Kernel type</td>
+                <td><strong>Microkernel</strong></td>
+                <td>Monolithic</td>
+                <td>Hybrid</td>
+                <td>Monolithic</td>
               </tr>
               <tr>
-                <td data-i18n="row_opensource">Открытый код</td>
-                <td><span class="check-mark">✅ Да</span></td>
-                <td><span class="check-mark">✅ Да</span></td>
-                <td><span class="cross-mark">❌ Нет</span></td>
-                <td><span class="check-mark">✅ Да</span></td>
+                <td data-i18n="row_opensource">Open source</td>
+                <td><span class="check-mark">✅ Yes</span></td>
+                <td><span class="check-mark">✅ Yes</span></td>
+                <td><span class="cross-mark">❌ No</span></td>
+                <td><span class="check-mark">✅ Yes</span></td>
               </tr>
               <tr>
-                <td data-i18n="row_maturity">Зрелость / Стабильность</td>
-                <td>Проект (разработка)</td>
-                <td>Зрелая</td>
-                <td>Зрелая</td>
-                <td>Зрелая</td>
+                <td data-i18n="row_maturity">Maturity / Stability</td>
+                <td>Project (in development)</td>
+                <td>Mature</td>
+                <td>Mature</td>
+                <td>Mature</td>
               </tr>
               <tr>
-                <td data-i18n="row_complexity">Сложность для пользователя</td>
-                <td><strong>Низкая (конструктор)</strong></td>
-                <td>Высокая</td>
-                <td>Средняя</td>
-                <td>Высокая</td>
+                <td data-i18n="row_complexity">User complexity</td>
+                <td><strong>Low (constructor)</strong></td>
+                <td>High</td>
+                <td>Medium</td>
+                <td>High</td>
               </tr>
               <tr>
-                <td data-i18n="row_popularity">Популярность</td>
-                <td>Очень низкая (новая ОС)</td>
-                <td>Высокая</td>
-                <td>Очень высокая</td>
-                <td>Средняя</td>
+                <td data-i18n="row_popularity">Popularity</td>
+                <td>Very low (new OS)</td>
+                <td>High</td>
+                <td>Very high</td>
+                <td>Medium</td>
               </tr>
               <tr>
-                <td data-i18n="row_install">Сложность установки</td>
-                <td><strong>Легко</strong></td>
-                <td>Средне</td>
-                <td>Средне</td>
-                <td>Сложно</td>
+                <td data-i18n="row_install">Installation difficulty</td>
+                <td><strong>Easy</strong></td>
+                <td>Medium</td>
+                <td>Medium</td>
+                <td>Hard</td>
               </tr>
               <tr>
-                <td data-i18n="row_language">Основной язык реализации</td>
+                <td data-i18n="row_language">Implementation language</td>
                 <td><strong>Rust</strong></td>
                 <td>C</td>
                 <td>C / C++</td>
                 <td>C</td>
               </tr>
               <tr>
-                <td data-i18n="row_modularity">Модульность (архитектура)</td>
-                <td><span class="check-mark">✅ Полная</span></td>
-                <td>Частичная</td>
-                <td>Частичная</td>
-                <td>Частичная</td>
+                <td data-i18n="row_modularity">Modularity (architecture)</td>
+                <td><span class="check-mark">✅ Complete</span></td>
+                <td>Partial</td>
+                <td>Partial</td>
+                <td>Partial</td>
               </tr>
               <tr>
-                <td data-i18n="row_customization">Кастомизация системы</td>
-                <td><span class="check-mark">✅ Максимальная</span></td>
-                <td>Высокая</td>
-                <td>Низкая</td>
-                <td>Высокая</td>
+                <td data-i18n="row_customization">System customization</td>
+                <td><span class="check-mark">✅ Maximum</span></td>
+                <td>High</td>
+                <td>Low</td>
+                <td>High</td>
               </tr>
               <tr>
-                <td data-i18n="row_skills">Необходимость навыков (ежедневно)</td>
-                <td><strong>Нет</strong></td>
-                <td>Иногда</td>
-                <td>Нет</td>
-                <td>Часто</td>
+                <td data-i18n="row_skills">Required skills (daily)</td>
+                <td><strong>None</strong></td>
+                <td>Sometimes</td>
+                <td>None</td>
+                <td>Often</td>
               </tr>
               <tr>
-                <td data-i18n="row_updates">Управление обновлением</td>
-                <td><strong>Модульное</strong></td>
-                <td>Централизованное</td>
-                <td>Централизованное</td>
-                <td>Централизованное</td>
+                <td data-i18n="row_updates">Update management</td>
+                <td><strong>Modular</strong></td>
+                <td>Centralized</td>
+                <td>Centralized</td>
+                <td>Centralized</td>
               </tr>
             </tbody>
           </table>
@@ -744,119 +821,96 @@
       </section>
 
       <section id="roadmap" class="section">
-        <h2 data-i18n="roadmap_title">Дорожная карта</h2>
-        <div class="grid">
-          <div class="card">
-            <h3>✅ Этап 1</h3>
-            <p data-i18n="roadmap_stage1">Микроядро + IPC. Базовая система обмена сообщениями между компонентами.</p>
+        <h2 data-i18n="roadmap_title">Our Path</h2>
+        <div class="timeline">
+          <div class="timeline-item done">
+            <h3 data-i18n="roadmap_concept_title">Concept</h3>
+            <p data-i18n="roadmap_concept_desc">We have a concrete vision of what we want to create. It may not seem like much, but it's often important to understand where we're heading.</p>
           </div>
-          <div class="card">
-            <h3>🔄 Этап 2</h3>
-            <p data-i18n="roadmap_stage2">Драйверный фреймворк. Возможность создавать драйверы в Userspace.</p>
+          <div class="timeline-item done">
+            <h3 data-i18n="roadmap_bootstrap_title">Bootstrap</h3>
+            <p data-i18n="roadmap_bootstrap_desc">Our code is currently more than just a hello world.</p>
           </div>
-          <div class="card">
-            <h3>📋 Этап 3</h3>
-            <p data-i18n="roadmap_stage3">Графический интерфейс. Собственный GUI на Rust.</p>
+          <div class="timeline-item done">
+            <h3 data-i18n="roadmap_search_title">Finding programmers and starting the journey</h3>
+            <p data-i18n="roadmap_search_desc">We are actively looking for contributors to help develop our project.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 data-i18n="roadmap_kernel_title">Kernel</h3>
+            <p data-i18n="roadmap_kernel_desc">The kernel must be lightweight, as it won't contain drivers etc. Each element will reside in its own module.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 data-i18n="roadmap_modules_title">Modular system</h3>
+            <p data-i18n="roadmap_modules_desc">All modules must interact with each other and communicate through the kernel.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 data-i18n="roadmap_interface_title">Interface</h3>
+            <p data-i18n="roadmap_interface_desc">Customization is one of our three main pillars upon which the entire ideology of the system is based.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 data-i18n="roadmap_software_title">Software</h3>
+            <p data-i18n="roadmap_software_desc">We plan to create our own alternatives to programs on GUS, and following the example of Google and Apple, create our own ecosystem of simple (and not so simple) applications. We also need to create an app store for our OS.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 data-i18n="roadmap_distribution_title">Distribution</h3>
+            <p data-i18n="roadmap_distribution_desc">GUS should become popular due to its advantages.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 data-i18n="roadmap_bootloader_title">Custom bootloader</h3>
+            <p data-i18n="roadmap_bootloader_desc">rust-bootloader is good, but having our own bootloader is even better.</p>
+          </div>
+          <div class="timeline-item">
+            <h3 data-i18n="roadmap_mobile_title">GUS for Mobile</h3>
+            <p data-i18n="roadmap_mobile_desc">In the future, we want to bring our OS to phones and tablets.</p>
           </div>
         </div>
       </section>
 
       <section id="manifesto" class="section">
-        <h2 data-i18n="manifesto_title">Манифест</h2>
+        <h2 data-i18n="manifesto_title">Manifesto</h2>
         <div class="card" style="max-width: 800px; margin: 0 auto;">
-          <p style="font-size: 1.3rem; font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">«GUS возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»</p>
+          <p style="font-size: 1.3rem; font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice."</p>
         </div>
       </section>
 
       <section id="community" class="section">
-        <h2 data-i18n="community_title">Сообщество</h2>
+        <h2 data-i18n="community_title">Community</h2>
         <div class="grid">
           <a href="https://t.me/GreatUserSystem" target="_blank" class="card" style="text-decoration: none; color: inherit;">
-            <h3>📢 Канал</h3>
-            <p data-i18n="community_channel">Официальный канал проекта</p>
+            <h3>📢 Channel</h3>
+            <p data-i18n="community_channel">Official project channel</p>
           </a>
           <a href="https://t.me/GreatUserSystemChat" target="_blank" class="card" style="text-decoration: none; color: inherit;">
-            <h3>💬 Чат канала</h3>
-            <p data-i18n="community_chat">Обсуждение и помощь</p>
+            <h3>💬 Chat</h3>
+            <p data-i18n="community_chat">Discussion and support</p>
           </a>
           <a href="https://t.me/GreatUserSystemForum" target="_blank" class="card" style="text-decoration: none; color: inherit;">
-            <h3>🗂️ Форум</h3>
-            <p data-i18n="community_forum">Технические обсуждения</p>
+            <h3>🗂️ Forum</h3>
+            <p data-i18n="community_forum">Technical discussions</p>
           </a>
           <a href="https://github.com/GreatUserTeam/GUS" target="_blank" class="card" style="text-decoration: none; color: inherit;">
             <h3>🐙 GitHub</h3>
-            <p data-i18n="community_github">Исходный код</p>
+            <p data-i18n="community_github">Source code</p>
           </a>
         </div>
       </section>
     </main>
     <footer class="footer">
       <p><strong>GUS</strong> — Great User System. Open Source Project. © 2026</p>
-      <p style="margin-top: 0.5rem;" data-i18n="footer_motto">Оптимизация · Кастомизация · Свобода | Built with Rust 🦀</p>
+      <p style="margin-top: 0.5rem;" data-i18n="footer_motto">Optimization · Customization · Freedom | Built with Rust 🦀</p>
     </footer>
   </div>
 
   <script>
     (function() {
       const i18n = {
-        ru: {
-          slogan: "Оптимизация, кастомизация, свобода",
-          theme: "Тема",
-          nav_home: "Главная",
-          nav_about: "О проекте",
-          nav_tech: "Архитектура",
-          nav_comparison: "Сравнение",
-          nav_roadmap: "Roadmap",
-          nav_manifesto: "Манифест",
-          nav_community: "Сообщество",
-          hero_title_part: "— операционная система, которую ты заслуживаешь",
-          hero_subtitle: "GUS — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.",
-          how_it_works: "Как это работает",
-          manifesto_btn: "Манифест",
-          developers: "разработчиков",
-          forum_members: "человек на форуме",
-          about_title: "О проекте",
-          about_lead: "Мы не делаем дистрибутив. Мы создаём новую философию.",
-          about_text: "GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.",
-          tech_title: "Технические особенности",
-          tech_microkernel: "Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает только за критически важные функции.",
-          tech_rust: "Безопасность памяти без компромиссов. Современный язык исключает целые классы уязвимостей на этапе компиляции.",
-          tech_modular: "Обновления без перезагрузки. Каждый модуль изолирован и может обновляться независимо.",
-          tech_sandbox: "Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.",
-          comp_title: "Сравнение операционных систем",
-          col_feature: "Характеристика",
-          row_kernel: "Тип ядра",
-          row_opensource: "Открытый код",
-          row_maturity: "Зрелость / Стабильность",
-          row_complexity: "Сложность для пользователя",
-          row_popularity: "Популярность",
-          row_install: "Сложность установки",
-          row_language: "Основной язык реализации",
-          row_modularity: "Модульность (архитектура)",
-          row_customization: "Кастомизация системы",
-          row_skills: "Необходимость навыков (ежедневно)",
-          row_updates: "Управление обновлением",
-          roadmap_title: "Дорожная карта",
-          roadmap_stage1: "Микроядро + IPC. Базовая система обмена сообщениями между компонентами.",
-          roadmap_stage2: "Драйверный фреймворк. Возможность создавать драйверы в Userspace.",
-          roadmap_stage3: "Графический интерфейс. Собственный GUI на Rust.",
-          manifesto_title: "Манифест",
-          manifesto_text: "«GUS возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»",
-          community_title: "Сообщество",
-          community_channel: "Официальный канал проекта",
-          community_chat: "Обсуждение и помощь",
-          community_forum: "Технические обсуждения",
-          community_github: "Исходный код",
-          footer_motto: "Оптимизация · Кастомизация · Свобода | Built with Rust 🦀"
-        },
         en: {
           slogan: "Optimization, customization, freedom",
-          theme: "Theme",
           nav_home: "Home",
           nav_about: "About",
           nav_tech: "Technology",
           nav_comparison: "Comparison",
-          nav_roadmap: "Roadmap",
+          nav_roadmap: "Our Path",
           nav_manifesto: "Manifesto",
           nav_community: "Community",
           hero_title_part: "— the operating system you deserve",
@@ -886,10 +940,27 @@
           row_customization: "System customization",
           row_skills: "Required skills (daily)",
           row_updates: "Update management",
-          roadmap_title: "Roadmap",
-          roadmap_stage1: "Microkernel + IPC. Basic message passing system between components.",
-          roadmap_stage2: "Driver framework. Ability to create drivers in Userspace.",
-          roadmap_stage3: "Graphical interface. Custom GUI in Rust.",
+          roadmap_title: "Our Path",
+          roadmap_concept_title: "Concept",
+          roadmap_concept_desc: "We have a concrete vision of what we want to create. It may not seem like much, but it's often important to understand where we're heading.",
+          roadmap_bootstrap_title: "Bootstrap",
+          roadmap_bootstrap_desc: "Our code is currently more than just a hello world.",
+          roadmap_search_title: "Finding programmers and starting the journey",
+          roadmap_search_desc: "We are actively looking for contributors to help develop our project.",
+          roadmap_kernel_title: "Kernel",
+          roadmap_kernel_desc: "The kernel must be lightweight, as it won't contain drivers etc. Each element will reside in its own module.",
+          roadmap_modules_title: "Modular system",
+          roadmap_modules_desc: "All modules must interact with each other and communicate through the kernel.",
+          roadmap_interface_title: "Interface",
+          roadmap_interface_desc: "Customization is one of our three main pillars upon which the entire ideology of the system is based.",
+          roadmap_software_title: "Software",
+          roadmap_software_desc: "We plan to create our own alternatives to programs on GUS, and following the example of Google and Apple, create our own ecosystem of simple (and not so simple) applications. We also need to create an app store for our OS.",
+          roadmap_distribution_title: "Distribution",
+          roadmap_distribution_desc: "GUS should become popular due to its advantages.",
+          roadmap_bootloader_title: "Custom bootloader",
+          roadmap_bootloader_desc: "rust-bootloader is good, but having our own bootloader is even better.",
+          roadmap_mobile_title: "GUS for Mobile",
+          roadmap_mobile_desc: "In the future, we want to bring our OS to phones and tablets.",
           manifesto_title: "Manifesto",
           manifesto_text: "\"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice.\"",
           community_title: "Community",
@@ -898,41 +969,124 @@
           community_forum: "Technical discussions",
           community_github: "Source code",
           footer_motto: "Optimization · Customization · Freedom | Built with Rust 🦀"
+        },
+        ru: {
+          slogan: "Оптимизация, кастомизация, свобода",
+          nav_home: "Главная",
+          nav_about: "О проекте",
+          nav_tech: "Архитектура",
+          nav_comparison: "Сравнение",
+          nav_roadmap: "Наш путь",
+          nav_manifesto: "Манифест",
+          nav_community: "Сообщество",
+          hero_title_part: "— операционная система, которую ты заслуживаешь",
+          hero_subtitle: "GUS — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.",
+          how_it_works: "Как это работает",
+          manifesto_btn: "Манифест",
+          developers: "разработчиков",
+          forum_members: "человек на форуме",
+          about_title: "О проекте",
+          about_lead: "Мы не делаем дистрибутив. Мы создаём новую философию.",
+          about_text: "GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.",
+          tech_title: "Технические особенности",
+          tech_microkernel: "Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает только за критически важные функции.",
+          tech_rust: "Безопасность памяти без компромиссов. Современный язык исключает целые классы уязвимостей на этапе компиляции.",
+          tech_modular: "Обновления без перезагрузки. Каждый модуль изолирован и может обновляться независимо.",
+          tech_sandbox: "Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.",
+          comp_title: "Сравнение операционных систем",
+          col_feature: "Характеристика",
+          row_kernel: "Тип ядра",
+          row_opensource: "Открытый код",
+          row_maturity: "Зрелость / Стабильность",
+          row_complexity: "Сложность для пользователя",
+          row_popularity: "Популярность",
+          row_install: "Сложность установки",
+          row_language: "Основной язык реализации",
+          row_modularity: "Модульность (архитектура)",
+          row_customization: "Кастомизация системы",
+          row_skills: "Необходимость навыков (ежедневно)",
+          row_updates: "Управление обновлением",
+          roadmap_title: "Наш путь",
+          roadmap_concept_title: "Концепция",
+          roadmap_concept_desc: "У нас есть конкретное представление о том, что мы хотим сделать. Конечно так себе достижение, но зачастую важно понимать к чему двигаться.",
+          roadmap_bootstrap_title: "Bootstrap",
+          roadmap_bootstrap_desc: "Наш код на данный момент представляет собой нечто большее, чем хелоуворд.",
+          roadmap_search_title: "Поиск программистов и начало пути",
+          roadmap_search_desc: "Мы в активном поиске активистов, которые помогут развивать наш проект.",
+          roadmap_kernel_title: "Ядро",
+          roadmap_kernel_desc: "Ядро должно быть легким, т.к. оно не будет содержать драйверов и т.п., каждый элемент будет находиться в своем модуле.",
+          roadmap_modules_title: "Модульная система",
+          roadmap_modules_desc: "Все модули должны взаимодействовать друг с другом и общаться через ядро.",
+          roadmap_interface_title: "Интерфейс",
+          roadmap_interface_desc: "Кастомизация является одним из трех наших основных «китов», на которой основывается вся идеология системы.",
+          roadmap_software_title: "Софт",
+          roadmap_software_desc: "Мы планируем сделать свои аналоги программ на GUS, а так же по примеру Google и Apple создать собственную экосистему из простых (и не очень) приложений. Так же требуется сделать магазин приложений для нашей OS.",
+          roadmap_distribution_title: "Распространение",
+          roadmap_distribution_desc: "GUS должен стать популярным за счет своих преимуществ.",
+          roadmap_bootloader_title: "Собственный загрузчик",
+          roadmap_bootloader_desc: "rust-bootloader это хорошо, а свой загрузчик — еще лучше.",
+          roadmap_mobile_title: "GUS for Mobile",
+          roadmap_mobile_desc: "В будущем мы хотим сделать нашу OS и на телефоны и планшеты.",
+          manifesto_title: "Манифест",
+          manifesto_text: "«GUS возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»",
+          community_title: "Сообщество",
+          community_channel: "Официальный канал проекта",
+          community_chat: "Обсуждение и помощь",
+          community_forum: "Технические обсуждения",
+          community_github: "Исходный код",
+          footer_motto: "Оптимизация · Кастомизация · Свобода | Built with Rust 🦀"
         }
       };
 
-      let currentLang = localStorage.getItem('gus-lang') || 'ru';
-      let currentTheme = localStorage.getItem('gus-theme') || 'dark';
+      let currentLang = localStorage.getItem('gus-lang') || 'en';
+      const currentTheme = 'dark';
 
       function applyLang(lang) {
         document.documentElement.lang = lang;
-        document.querySelectorAll('[data-i18n]').forEach(el => {
+        const elements = document.querySelectorAll('[data-i18n]');
+        
+        // Добавляем класс для анимации
+        elements.forEach(el => {
+          el.classList.add('lang-switching');
+        });
+        
+        // Меняем текст
+        elements.forEach(el => {
           const key = el.getAttribute('data-i18n');
           if (i18n[lang]?.[key]) {
-            // Добавляем анимацию при смене языка
-            el.style.transition = 'all 0.3s ease';
             el.textContent = i18n[lang][key];
           }
         });
-        document.getElementById('langText').textContent = lang === 'ru' ? 'EN' : 'RU';
+        
+        // Обновляем текст на кнопках
+        const langTexts = document.querySelectorAll('#langText, #langTextMobile');
+        langTexts.forEach(btn => {
+          btn.textContent = lang === 'en' ? 'RU' : 'EN';
+        });
+        
         localStorage.setItem('gus-lang', lang);
+        
+        // Убираем класс анимации после завершения
+        setTimeout(() => {
+          elements.forEach(el => {
+            el.classList.remove('lang-switching');
+          });
+        }, 400);
       }
 
       function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        document.getElementById('themeIcon').textContent = theme === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('gus-theme', theme);
-        // Анимация смены темы
-        document.body.style.transition = 'all 0.5s ease';
       }
 
-      document.getElementById('themeToggle').addEventListener('click', () => {
-        currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(currentTheme);
+      // Обработчики для десктопной и мобильной кнопок
+      document.getElementById('langToggleDesktop').addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'ru' : 'en';
+        applyLang(currentLang);
       });
       
-      document.getElementById('langToggle').addEventListener('click', () => {
-        currentLang = currentLang === 'ru' ? 'en' : 'ru';
+      document.getElementById('langToggleMobile').addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'ru' : 'en';
         applyLang(currentLang);
       });
 
@@ -976,7 +1130,7 @@
       
       document.querySelectorAll('.section').forEach(s => observer.observe(s));
 
-      // Подсветка активного раздела с плавной анимацией
+      // Подсветка активного раздела
       const sections = document.querySelectorAll('section[id]');
       const navLinks = document.querySelectorAll('.sidebar a');
       
