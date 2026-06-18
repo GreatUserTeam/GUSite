@@ -421,6 +421,57 @@
       line-height: 1.6;
     }
 
+    /* Прямоугольные карточки для tech */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .tech-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 0.5rem;
+      padding: 2rem 1.8rem;
+      transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .tech-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(167,139,250,0.2), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .tech-card:hover::before { opacity: 1; }
+    .tech-card:hover { 
+      border-color: var(--card-hover-border);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -15px var(--accent-glow);
+    }
+    .tech-card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .tech-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .tech-card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
     /* Статистика */
     .stat-number { 
       font-size: 4rem; 
@@ -475,7 +526,8 @@
       background: var(--card-bg);
       margin-top: 2rem;
       box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-      padding: 0.5rem;
+      padding: 0;
+      overflow: hidden;
     }
     table { 
       width: 100%;
@@ -526,29 +578,35 @@
     .timeline::before {
       content: '';
       position: absolute;
-      left: 15px;
+      left: 20px;
       top: 0;
       bottom: 0;
       width: 4px;
-      background: linear-gradient(to bottom, var(--timeline-done) 0%, var(--timeline-done) 30%, var(--timeline-pending) 30%, var(--timeline-pending) 100%);
+      background: linear-gradient(to bottom, 
+        var(--timeline-done) 0%, 
+        var(--timeline-done) 20%, 
+        var(--timeline-pending) 30%, 
+        var(--timeline-pending) 100%);
       border-radius: 4px;
+      mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
     }
     .timeline-item {
       position: relative;
-      margin-bottom: 3rem;
+      margin-bottom: 3.2rem;
       padding-left: 2.5rem;
-      transition: all 0.4s ease;
+      transition: all 0.459s ease;
     }
     .timeline-item:hover {
-      transform: translateX(8px);
+      transform: translateX(9px);
     }
     .timeline-item::before {
       content: '';
       position: absolute;
       left: -2.45rem;
       top: 0.5rem;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: var(--card-bg);
       border: 3px solid var(--timeline-pending);
@@ -570,6 +628,79 @@
       color: var(--text-secondary);
       font-size: 1rem;
       line-height: 1.6;
+    }
+
+    /* Манифест */
+    .manifesto-list {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0;
+      max-width: 800px;
+    }
+    .manifesto-list li {
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--glass-border);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      transition: all 0.3s;
+    }
+    .manifesto-list li:hover {
+      color: var(--accent);
+      padding-left: 0.8rem;
+    }
+    .manifesto-list li strong {
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+    .manifesto-list li span {
+      color: var(--text-secondary);
+    }
+
+    /* Сообщество */
+    .community-intro {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      max-width: 800px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .community-section {
+      margin-bottom: 2rem;
+    }
+    .community-section h4 {
+      font-size: 1.3rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .community-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .community-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 2rem;
+      padding: 0.7rem 1.4rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      font-size: 0.95rem;
+    }
+    .community-link:hover {
+      border-color: var(--accent);
+      background: rgba(167,139,250,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px var(--accent-glow);
+    }
+    .community-link-icon {
+      font-size: 1.3rem;
     }
 
     .footer { 
@@ -655,19 +786,13 @@
   </header>
 
   <nav class="sidebar" id="sidebar">
-    <a href="#hero" data-i18n="nav_home">Home</a>
+    <a href="#hero" data-i18n="nav_home">Start</a>
     <a href="#about" data-i18n="nav_about">About</a>
     <a href="#tech" data-i18n="nav_tech">Technology</a>
     <a href="#comparison" data-i18n="nav_comparison">Comparison</a>
     <a href="#roadmap" data-i18n="nav_roadmap">Our Path</a>
     <a href="#manifesto" data-i18n="nav_manifesto">Manifesto</a>
     <a href="#community" data-i18n="nav_community">Community</a>
-    <div class="sidebar-lang-mobile">
-      <button class="icon-btn" id="langToggleMobile" style="width: 100%; justify-content: center;">
-        <span>🌐</span>
-        <span id="langTextMobile">RU</span>
-      </button>
-    </div>
   </nav>
 
   <div class="main-content" id="mainContent">
@@ -705,21 +830,25 @@
 
       <section id="tech" class="section">
         <h2 data-i18n="tech_title">Technical features</h2>
-        <div class="grid">
-          <div class="card">
-            <h3>🛡️ Microkernel</h3>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="tech-card-icon">🛡️</div>
+            <h3>Microkernel</h3>
             <p data-i18n="tech_microkernel">A video driver crash won't bring down the system. The kernel is minimal and handles only critical functions.</p>
           </div>
-          <div class="card">
-            <h3>🦀 Rust</h3>
+          <div class="tech-card">
+            <div class="tech-card-icon">🦀</div>
+            <h3>Rust</h3>
             <p data-i18n="tech_rust">Memory safety without compromises. A modern language that eliminates entire classes of vulnerabilities at compile time.</p>
           </div>
-          <div class="card">
-            <h3>🧩 Modularity</h3>
+          <div class="tech-card">
+            <div class="tech-card-icon">🧩</div>
+            <h3>Modularity</h3>
             <p data-i18n="tech_modular">Updates without rebooting. Each module is isolated and can be updated independently.</p>
           </div>
-          <div class="card">
-            <h3>📦 Program = File</h3>
+          <div class="tech-card">
+            <div class="tech-card-icon">📦</div>
+            <h3>Program = File</h3>
             <p data-i18n="tech_sandbox">Isolated modules, nowhere for viruses to hide. OS-level sandboxing.</p>
           </div>
         </div>
@@ -727,6 +856,7 @@
 
       <section id="comparison" class="section">
         <h2 data-i18n="comp_title">Operating System Comparison</h2>
+        <p style="color:var(--text-secondary); font-size:1.15rem; max-width:800px; margin-bottom:1.5rem; line-height:1.7;" data-i18n="comp_intro">We compared GUS with other popular operating systems to show the fundamental differences in architecture and philosophy.</p>
         <div class="table-wrapper">
           <table>
             <thead>
@@ -819,6 +949,7 @@
             </tbody>
           </table>
         </div>
+        <p style="color:var(--text-muted); font-size:1rem; max-width:800px; margin-top:1.5rem; line-height:1.6;" data-i18n="comp_outro">GUS is a young project, but its architecture is designed for the future — maximum security, modularity and user control.</p>
       </section>
 
       <section id="roadmap" class="section">
@@ -869,30 +1000,48 @@
 
       <section id="manifesto" class="section">
         <h2 data-i18n="manifesto_title">Manifesto</h2>
-        <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <ul class="manifesto-list">
+          <li><strong>Minimalism:</strong> <span data-i18n="manifesto_minimalism">A system without unnecessary "garbage" and redundant processes.</span></li>
+          <li><strong>Security:</strong> <span data-i18n="manifesto_security">Rust, microkernel and complete module isolation.</span></li>
+          <li><strong>Flexibility:</strong> <span data-i18n="manifesto_flexibility">Modular architecture for any hardware.</span></li>
+          <li><strong>Privacy:</strong> <span data-i18n="manifesto_privacy">No surveillance or imposed functionality.</span></li>
+          <li><strong>Control:</strong> <span data-i18n="manifesto_control">We return full power over your device to you.</span></li>
+        </ul>
+        <div class="card" style="max-width: 800px; margin: 2rem auto 0;">
           <p style="font-size: 1.3rem; font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice."</p>
         </div>
       </section>
 
       <section id="community" class="section">
         <h2 data-i18n="community_title">Community</h2>
-        <div class="grid">
-          <a href="https://t.me/GreatUserSystem" target="_blank" class="card" style="text-decoration: none; color: inherit;">
-            <h3>📢 Channel</h3>
-            <p data-i18n="community_channel">Official project channel</p>
-          </a>
-          <a href="https://t.me/GreatUserSystemChat" target="_blank" class="card" style="text-decoration: none; color: inherit;">
-            <h3>💬 Chat</h3>
-            <p data-i18n="community_chat">Discussion and support</p>
-          </a>
-          <a href="https://t.me/GreatUserSystemForum" target="_blank" class="card" style="text-decoration: none; color: inherit;">
-            <h3>🗂️ Forum</h3>
-            <p data-i18n="community_forum">Technical discussions</p>
-          </a>
-          <a href="https://github.com/GreatUserTeam/GUS" target="_blank" class="card" style="text-decoration: none; color: inherit;">
-            <h3>🐙 GitHub</h3>
-            <p data-i18n="community_github">Source code</p>
-          </a>
+        <p class="community-intro" data-i18n="community_intro">Our project relies entirely on volunteers. Contribute by supporting us and joining us on our resources. We need support:</p>
+        
+        <div class="community-section">
+          <h4 data-i18n="community_sub_community">Community</h4>
+          <div class="community-links">
+            <a href="https://t.me/GreatUserSystem" target="_blank" class="community-link"><span class="community-link-icon">📢</span> Telegram Channel</a>
+            <a href="https://t.me/GreatUserSystemForum" target="_blank" class="community-link"><span class="community-link-icon">🗂️</span> Telegram Forum</a>
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">🎮</span> Discord Chat</a>
+          </div>
+        </div>
+
+        <div class="community-section">
+          <h4 data-i18n="community_sub_social">Social Networks</h4>
+          <div class="community-links">
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">📷</span> Instagram</a>
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">📘</span> Facebook</a>
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">🐦</span> X (Twitter)</a>
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">🌐</span> VK</a>
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">👽</span> Reddit</a>
+          </div>
+        </div>
+
+        <div class="community-section">
+          <h4 data-i18n="community_sub_support">Support</h4>
+          <div class="community-links">
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">💰</span> VK Donut</a>
+            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">❤️</span> Patreon</a>
+          </div>
         </div>
       </section>
     </main>
@@ -907,7 +1056,7 @@
       const i18n = {
         en: {
           slogan: "Optimization, customization, freedom",
-          nav_home: "Home",
+          nav_home: "Start",
           nav_about: "About",
           nav_tech: "Technology",
           nav_comparison: "Comparison",
@@ -929,6 +1078,8 @@
           tech_modular: "Updates without rebooting. Each module is isolated and can be updated independently.",
           tech_sandbox: "Isolated modules, nowhere for viruses to hide. OS-level sandboxing.",
           comp_title: "Operating System Comparison",
+          comp_intro: "We compared GUS with other popular operating systems to show the fundamental differences in architecture and philosophy.",
+          comp_outro: "GUS is a young project, but its architecture is designed for the future — maximum security, modularity and user control.",
           col_feature: "Feature",
           row_kernel: "Kernel type",
           row_opensource: "Open source",
@@ -963,8 +1114,17 @@
           roadmap_mobile_title: "GUS for Mobile",
           roadmap_mobile_desc: "In the future, we want to bring our OS to phones and tablets.",
           manifesto_title: "Manifesto",
+          manifesto_minimalism: "A system without unnecessary \"garbage\" and redundant processes.",
+          manifesto_security: "Rust, microkernel and complete module isolation.",
+          manifesto_flexibility: "Modular architecture for any hardware.",
+          manifesto_privacy: "No surveillance or imposed functionality.",
+          manifesto_control: "We return full power over your device to you.",
           manifesto_text: "\"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice.\"",
           community_title: "Community",
+          community_intro: "Our project relies entirely on volunteers. Contribute by supporting us and joining us on our resources. We need support:",
+          community_sub_community: "Community",
+          community_sub_social: "Social Networks",
+          community_sub_support: "Support",
           community_channel: "Official project channel",
           community_chat: "Discussion and support",
           community_forum: "Technical discussions",
@@ -973,7 +1133,7 @@
         },
         ru: {
           slogan: "Оптимизация, кастомизация, свобода",
-          nav_home: "Главная",
+          nav_home: "Старт",
           nav_about: "О проекте",
           nav_tech: "Архитектура",
           nav_comparison: "Сравнение",
@@ -995,6 +1155,8 @@
           tech_modular: "Обновления без перезагрузки. Каждый модуль изолирован и может обновляться независимо.",
           tech_sandbox: "Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.",
           comp_title: "Сравнение операционных систем",
+          comp_intro: "Мы сравнили GUS с другими популярными ОС, чтобы показать принципиальные отличия в архитектуре и философии.",
+          comp_outro: "GUS — молодой проект, но его архитектура спроектирована для будущего — максимальная безопасность, модульность и контроль пользователя.",
           col_feature: "Характеристика",
           row_kernel: "Тип ядра",
           row_opensource: "Открытый код",
@@ -1025,12 +1187,21 @@
           roadmap_distribution_title: "Распространение",
           roadmap_distribution_desc: "GUS должен стать популярным за счет своих преимуществ.",
           roadmap_bootloader_title: "Собственный загрузчик",
-          roadmap_bootloader_desc: "rust-bootloader это хорошо, а свой загрузчик — еще лучше.",
+          roadmap_bootloader_desc: "Rust-bootloader это хорошо, а свой загрузчик — еще лучше.",
           roadmap_mobile_title: "GUS for Mobile",
           roadmap_mobile_desc: "В будущем мы хотим сделать нашу OS и на телефоны и планшеты.",
           manifesto_title: "Манифест",
+          manifesto_minimalism: "Система без лишнего «мусора» и ненужных процессов.",
+          manifesto_security: "Rust, микроядро и полная изоляция модулей.",
+          manifesto_flexibility: "Модульная архитектура под любое «железо».",
+          manifesto_privacy: "Никакой слежки и навязанного функционала.",
+          manifesto_control: "Возвращаем вам полную власть над вашим устройством.",
           manifesto_text: "«GUS возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»",
           community_title: "Сообщество",
+          community_intro: "Наш проект держится исключительно на добровольцах. Внесите посильный вклад, поддержав нас и присоединившись к нам на наших ресурсах. Мы нуждаемся в поддержке:",
+          community_sub_community: "Комьюнити",
+          community_sub_social: "Соцсети",
+          community_sub_support: "Поддержать",
           community_channel: "Официальный канал проекта",
           community_chat: "Обсуждение и помощь",
           community_forum: "Технические обсуждения",
@@ -1046,12 +1217,10 @@
         document.documentElement.lang = lang;
         const elements = document.querySelectorAll('[data-i18n]');
         
-        // Добавляем класс для анимации
         elements.forEach(el => {
           el.classList.add('lang-switching');
         });
         
-        // Меняем текст
         elements.forEach(el => {
           const key = el.getAttribute('data-i18n');
           if (i18n[lang]?.[key]) {
@@ -1059,7 +1228,6 @@
           }
         });
         
-        // Обновляем текст на кнопках
         const langTexts = document.querySelectorAll('#langText, #langTextMobile');
         langTexts.forEach(btn => {
           btn.textContent = lang === 'en' ? 'RU' : 'EN';
@@ -1067,7 +1235,6 @@
         
         localStorage.setItem('gus-lang', lang);
         
-        // Убираем класс анимации после завершения
         setTimeout(() => {
           elements.forEach(el => {
             el.classList.remove('lang-switching');
@@ -1080,13 +1247,7 @@
         localStorage.setItem('gus-theme', theme);
       }
 
-      // Обработчики для десктопной и мобильной кнопок
       document.getElementById('langToggleDesktop').addEventListener('click', () => {
-        currentLang = currentLang === 'en' ? 'ru' : 'en';
-        applyLang(currentLang);
-      });
-      
-      document.getElementById('langToggleMobile').addEventListener('click', () => {
         currentLang = currentLang === 'en' ? 'ru' : 'en';
         applyLang(currentLang);
       });
@@ -1115,7 +1276,6 @@
         });
       });
 
-      // Intersection Observer для анимаций появления секций
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -1131,7 +1291,6 @@
       
       document.querySelectorAll('.section').forEach(s => observer.observe(s));
 
-      // Подсветка активного раздела
       const sections = document.querySelectorAll('section[id]');
       const navLinks = document.querySelectorAll('.sidebar a');
       
@@ -1160,7 +1319,6 @@
       window.addEventListener('scroll', updateActiveLink);
       window.addEventListener('load', updateActiveLink);
 
-      // Инициализация
       applyTheme(currentTheme);
       applyLang(currentLang);
       updateActiveLink();
