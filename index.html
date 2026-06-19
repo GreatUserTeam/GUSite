@@ -500,25 +500,7 @@
       position: relative;
       /* Индикатор прокрутки */
     }
-    /* Подсказка о возможности скролла */
-    .table-wrapper::after {
-      content: '← свайп →';
-      position: absolute;
-      bottom: 8px;
-      right: 12px;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      background: rgba(0,0,0,0.7);
-      padding: 4px 10px;
-      border-radius: 20px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-      z-index: 2;
-    }
-    .table-wrapper.scrollable::after {
-      opacity: 1;
-    }
+    
     table { 
       width: 100%;
       border-collapse: collapse;
