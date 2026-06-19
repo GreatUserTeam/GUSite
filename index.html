@@ -9,47 +9,40 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ===== CSS ПЕРЕМЕННЫЕ (легко менять) ===== */
+    /* ===== CSS ПЕРЕМЕННЫЕ ===== */
     :root {
       --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-      --radius-xl: 2.5rem;
-      --radius-lg: 2rem;
-      --radius-md: 1.5rem;
-      --radius-sm: 1rem;
-      /* Настройка интенсивности размытия фона карточек */
+      --radius-xl: 1.5rem;
+      --radius-lg: 1.2rem;
+      --radius-md: 1rem;
+      --radius-sm: 0.75rem;
       --card-blur: 10px;
-      /* Настройка интенсивности размытия при наведении на соседей */
       --hover-blur-intensity: 2px;
       --transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      --sidebar-width: 300px;
-      --topbar-height: 75px;
+      --sidebar-width: 280px;
+      --topbar-height: 60px;
     }
 
-    /* ===== ТЕМНАЯ ТЕМА (Google Flow style) ===== */
+    /* ===== ТЕМНАЯ ТЕМА ===== */
     [data-theme="dark"] {
-      /* Основной фон — глубокий черный */
       --bg-primary: #000000;
       --bg-secondary: #0a0a0a;
       --text-primary: #FFFFFF;
       --text-secondary: #b0b0b0;
       --text-muted: #6b6b6b;
-      /* Акцентный цвет — голубоватый (как у Google Flow) */
       --accent: #4da8da;
       --accent-soft: #1e5a7a;
       --nav-bg: rgba(0, 0, 0, 0.95);
       --table-stripe: rgba(77, 168, 218, 0.05);
       --table-header: rgba(77, 168, 218, 0.2);
-      /* Полупрозрачный фон карточек с blur */
       --glass-bg: rgba(255, 255, 255, 0.03);
       --glass-border: rgba(255, 255, 255, 0.1);
       --card-bg: rgba(255, 255, 255, 0.04);
       --card-hover-border: rgba(77, 168, 218, 0.6);
-      /* Градиент для акцентов */
       --hero-gradient: linear-gradient(135deg, #4da8da 0%, #1e5a7a 100%);
       --timeline-done: #4da8da;
       --timeline-pending: #2a3a4a;
-      /* Тень для акцентных элементов */
       --accent-glow: rgba(77, 168, 218, 0.3);
     }
 
@@ -59,15 +52,15 @@
       font-family: var(--font-sans);
       background: transparent;
       color: var(--text-primary);
-      line-height: 1.65;
+      line-height: 1.5;
       transition: background 0.3s, color 0.25s;
       overflow-x: hidden;
       font-weight: 400;
       position: relative;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ===== ФОНОВОЕ СВЕЧЕНИЕ (Google Flow radial-gradient) ===== */
-    /* Настройка интенсивности рассеивания градиента — меняй проценты и цвета */
+    /* ===== ФОНОВОЕ СВЕЧЕНИЕ ===== */
     .bg-glow {
       position: fixed;
       top: -50%;
@@ -88,7 +81,7 @@
       100% { transform: scale(1.05) rotate(-3deg); opacity: 0.85; }
     }
 
-    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 20px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
@@ -98,27 +91,28 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 120;
       background: var(--nav-bg);
       backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
       border-bottom: 1px solid var(--glass-border);
-      padding: 0 2rem;
+      padding: 0 1rem;
       height: var(--topbar-height);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
-      gap: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      gap: 1rem;
     }
     
     .logo-area {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 0.75rem;
       position: absolute;
-      left: 2rem;
+      left: 3.5rem;
     }
     
     .logo {
       font-weight: 800;
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       background: var(--hero-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -126,45 +120,43 @@
       letter-spacing: -0.5px;
       transition: all 0.3s;
     }
-    .logo:hover {
-      transform: scale(1.05);
-      filter: brightness(1.2);
-    }
     
     .tagline-center {
-      font-size: 1.2rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
       font-weight: 500;
       white-space: normal;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       transition: all 0.5s ease;
       text-align: center;
-      line-height: 1.4;
-      max-width: 400px;
+      line-height: 1.3;
+      max-width: 250px;
+      display: none;
     }
     
     .top-actions {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
       align-items: center;
       position: absolute;
-      right: 2rem;
+      right: 1rem;
     }
     
     .icon-btn {
       background: rgba(77, 168, 218, 0.1);
       border: 1px solid var(--glass-border);
-      border-radius: 3rem;
-      padding: 0.6rem 1.4rem;
+      border-radius: 2rem;
+      padding: 0.5rem 1rem;
       font-weight: 600;
       cursor: pointer;
       color: var(--text-primary);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.95rem;
+      gap: 0.4rem;
+      font-size: 0.85rem;
       position: relative;
       overflow: hidden;
     }
@@ -175,12 +167,12 @@
       background: var(--accent);
       opacity: 0;
       transition: opacity 0.3s;
-      border-radius: 3rem;
+      border-radius: 2rem;
       z-index: -1;
     }
     .icon-btn:hover {
       border-color: var(--accent);
-      transform: translateY(-2px) scale(1.05);
+      transform: translateY(-2px) scale(1.03);
       box-shadow: 0 8px 25px var(--accent-glow);
     }
     .icon-btn:hover::before {
@@ -190,7 +182,34 @@
       transform: scale(0.95);
     }
 
-    .burger { display: none; }
+    .burger { 
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      padding: 6px;
+      position: absolute;
+      left: 0.75rem;
+      z-index: 121;
+    }
+    .burger span { 
+      width: 26px;
+      height: 2.5px;
+      background: var(--text-primary);
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+    .burger.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 6px);
+    }
+    .burger.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .burger.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -6px);
+    }
 
     /* Боковое меню */
     .sidebar {
@@ -201,75 +220,61 @@
       width: var(--sidebar-width);
       background: var(--nav-bg);
       backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
       border-right: 1px solid var(--glass-border);
-      padding: 2rem 1.5rem;
+      padding: 1.5rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.3rem;
       z-index: 100;
       box-shadow: 8px 0 40px rgba(0,0,0,0.3);
       overflow-y: auto;
-      transition: all 0.5s cubic-bezier(0.25, 0.1, 0.1, 1.0);
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.1, 1.0);
+    }
+    .sidebar.open { 
+      transform: translateX(0); 
+      box-shadow: 15px 0 50px rgba(0,0,0,0.8); 
     }
     
     .sidebar a {
       text-decoration: none;
       color: var(--text-secondary);
       font-weight: 500;
-      padding: 1rem 1.3rem;
-      border-radius: 1.2rem;
-      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      font-size: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 0.8rem;
+      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
-      gap: 0.8rem;
+      gap: 0.6rem;
       position: relative;
       overflow: hidden;
-    }
-    .sidebar a::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 3px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
     }
     .sidebar a:hover {
       background: rgba(77, 168, 218, 0.15);
       color: var(--accent);
-      font-weight: 650;
-      transform: translateX(8px);
-      box-shadow: 0 4px 20px rgba(77, 168, 218, 0.2);
-    }
-    .sidebar a:hover::after {
-      transform: scaleX(1);
+      font-weight: 600;
+      transform: translateX(6px);
     }
     .sidebar a.active { 
       background: rgba(77, 168, 218, 0.25);
       color: var(--accent);
       font-weight: 700;
-      border-left: 4px solid var(--accent);
+      border-left: 3px solid var(--accent);
       transform: translateX(4px);
-      box-shadow: 0 0 25px rgba(77, 168, 218, 0.3);
+      box-shadow: 0 0 20px rgba(77, 168, 218, 0.2);
     }
 
     .sidebar-divider {
       height: 1px;
       background: var(--glass-border);
-      margin: 1rem 0;
+      margin: 0.75rem 0;
       opacity: 0.5;
     }
 
-    .sidebar-lang-mobile {
-      display: none;
-    }
-
     .main-content {
-      margin-left: var(--sidebar-width);
-      transition: margin-left 0.5s cubic-bezier(0.25, 0.1, 0.1, 1.0);
+      margin-left: 0;
       padding-top: var(--topbar-height);
     }
 
@@ -277,84 +282,22 @@
       position: fixed; 
       inset: 0; 
       background: rgba(0,0,0,0.7); 
-      backdrop-filter: blur(8px); 
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       z-index: 95; 
       display: none;
       transition: all 0.4s;
     }
-
-    @media (max-width: 1200px) {
-      .sidebar { 
-        transform: translateX(-100%); 
-        box-shadow: none;
-        width: 280px;
-      }
-      .sidebar.open { 
-        transform: translateX(0); 
-        box-shadow: 15px 0 50px rgba(0,0,0,0.8); 
-      }
-      .main-content { margin-left: 0; }
-      .burger { 
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        cursor: pointer;
-        background: transparent;
-        border: none;
-        padding: 8px;
-        position: absolute;
-        left: 1rem;
-      }
-      .burger span { 
-        width: 30px;
-        height: 3px;
-        background: var(--text-primary);
-        border-radius: 10px;
-        transition: 0.3s;
-      }
-      .burger.open span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 8px);
-      }
-      .burger.open span:nth-child(2) {
-        opacity: 0;
-      }
-      .burger.open span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -8px);
-      }
-      .overlay.active { display: block; }
-      .logo-area { position: static; }
-      .tagline-center { font-size: 0.9rem; max-width: 250px; }
-      .sidebar-lang-mobile {
-        display: flex;
-        margin-top: auto;
-        padding-top: 1rem;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .tagline-center {
-        font-size: 0.8rem;
-        max-width: 180px;
-      }
-      .top-actions .icon-btn {
-        display: none;
-      }
-    }
-
-    @media (max-width: 400px) {
-      .tagline-center {
-        display: none;
-      }
-    }
+    .overlay.active { display: block; }
 
     /* Секции и анимации */
     .section { 
-      max-width: 1200px; 
+      max-width: 1000px; 
       margin: 0 auto; 
-      padding: 5rem 2.5rem;
+      padding: 3rem 1.2rem;
       opacity: 0;
-      transform: translateY(60px);
-      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      transform: translateY(40px);
+      transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
       will-change: transform, opacity;
     }
     .section.visible { 
@@ -365,9 +308,9 @@
     /* Заголовки */
     h2 { 
       font-weight: 750; 
-      font-size: 2.8rem; 
-      margin-bottom: 2.5rem; 
-      letter-spacing: -0.6px;
+      font-size: 2rem; 
+      margin-bottom: 1.8rem; 
+      letter-spacing: -0.4px;
       background: linear-gradient(to right, var(--text-primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -378,30 +321,29 @@
     h2::after {
       content: '';
       position: absolute;
-      bottom: -8px;
+      bottom: -6px;
       left: 0;
-      width: 60%;
-      height: 3px;
+      width: 50%;
+      height: 2px;
       background: var(--accent);
       border-radius: 10px;
     }
 
     .grid { 
       display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-      gap: 2rem; 
-      margin-top: 2.5rem; 
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+      gap: 1.2rem; 
+      margin-top: 2rem; 
     }
 
-    /* ===== КАРТОЧКИ (Google Flow style) ===== */
-    /* Полупрозрачный фон + blur + тонкая обводка + border-radius: 20px */
+    /* ===== КАРТОЧКИ ===== */
     .card {
       background: var(--card-bg);
       backdrop-filter: blur(var(--card-blur));
       -webkit-backdrop-filter: blur(var(--card-blur));
       border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      padding: 1.8rem 1.5rem;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -422,52 +364,42 @@
     .card:hover::before { opacity: 1; }
     .card:hover { 
       border-color: var(--card-hover-border);
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 30px 50px -20px var(--accent-glow);
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 40px -15px var(--accent-glow);
     }
     .card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
       color: var(--accent);
     }
     .card p {
       color: var(--text-secondary);
-      line-height: 1.6;
+      line-height: 1.5;
+      font-size: 0.9rem;
     }
 
-    /* ===== ЭФФЕКТ HOVER НА КАРТОЧКИ: размытие соседей ===== */
-    /* При наведении на контейнер grid, все карточки blur, кроме наведенной */
-    .grid:hover .card:not(:hover) {
-      filter: blur(var(--hover-blur-intensity));
-      opacity: 0.6;
-      transition: 0.3s;
-    }
-    .grid .card {
-      transition: 0.3s;
-    }
+    /* Эффект размытия соседей при наведении */
+    .grid:hover .card:not(:hover),
     .tech-grid:hover .tech-card:not(:hover) {
       filter: blur(var(--hover-blur-intensity));
       opacity: 0.6;
       transition: 0.3s;
     }
-    .tech-grid .tech-card {
-      transition: 0.3s;
-    }
 
-    /* Прямоугольные карточки для tech */
+    /* Tech карточки */
     .tech-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
     }
     .tech-card {
       background: var(--card-bg);
       backdrop-filter: blur(var(--card-blur));
       -webkit-backdrop-filter: blur(var(--card-blur));
       border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 2rem 1.8rem;
+      border-radius: 16px;
+      padding: 1.5rem 1.3rem;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -487,28 +419,28 @@
     .tech-card:hover::before { opacity: 1; }
     .tech-card:hover { 
       border-color: var(--card-hover-border);
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px -15px var(--accent-glow);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px -12px var(--accent-glow);
     }
     .tech-card-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
     }
     .tech-card h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.8rem;
+      font-size: 1.15rem;
+      margin-bottom: 0.6rem;
       color: var(--accent);
       font-weight: 700;
     }
     .tech-card p {
       color: var(--text-secondary);
-      line-height: 1.6;
-      font-size: 0.95rem;
+      line-height: 1.5;
+      font-size: 0.85rem;
     }
 
     /* Статистика */
     .stat-number { 
-      font-size: 4rem; 
+      font-size: 3rem; 
       font-weight: 800; 
       background: var(--hero-gradient);
       -webkit-background-clip: text;
@@ -525,65 +457,88 @@
     .stat-container {
       display: flex;
       justify-content: center;
-      gap: 6rem;
+      gap: 2rem;
       flex-wrap: wrap;
-      margin-top: 4rem;
+      margin-top: 3rem;
     }
     .stat-item {
       text-align: center;
-      padding: 2rem;
+      padding: 1.5rem;
       background: var(--card-bg);
       backdrop-filter: blur(var(--card-blur));
       -webkit-backdrop-filter: blur(var(--card-blur));
-      border-radius: 20px;
+      border-radius: 16px;
       border: 1px solid var(--glass-border);
       transition: all 0.4s;
-      min-width: 200px;
+      min-width: 140px;
+      flex: 1;
+      max-width: 200px;
     }
     .stat-item:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px var(--accent-glow);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px var(--accent-glow);
       border-color: var(--card-hover-border);
     }
     .stat-label {
-      font-size: 1.2rem;
+      font-size: 1rem;
       color: var(--text-muted);
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
       font-weight: 600;
     }
 
     /* Таблица */
     .table-wrapper { 
       overflow-x: auto;
-      border-radius: 20px;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 14px;
       border: 1px solid var(--glass-border); 
       backdrop-filter: blur(var(--card-blur));
       -webkit-backdrop-filter: blur(var(--card-blur));
       background: var(--card-bg);
-      margin-top: 2rem;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-      padding: 0;
-      overflow: hidden;
+      margin-top: 1.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      position: relative;
+      /* Индикатор прокрутки */
+    }
+    /* Подсказка о возможности скролла */
+    .table-wrapper::after {
+      content: '← свайп →';
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.7);
+      padding: 4px 10px;
+      border-radius: 20px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 2;
+    }
+    .table-wrapper.scrollable::after {
+      opacity: 1;
     }
     table { 
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
-      min-width: 800px;
+      font-size: 0.8rem;
+      min-width: 700px;
     }
     th { 
       background: var(--table-header);
-      padding: 1.3rem 1rem;
+      padding: 1rem 0.8rem;
       text-align: left;
       font-weight: 700;
       color: var(--accent);
-      font-size: 0.95rem;
-      letter-spacing: 0.3px;
+      font-size: 0.8rem;
+      letter-spacing: 0.2px;
       position: sticky;
       top: 0;
+      white-space: nowrap;
     }
     td { 
-      padding: 1.1rem 1rem;
+      padding: 0.9rem 0.8rem;
       border-bottom: 1px solid var(--glass-border);
       transition: background 0.3s;
     }
@@ -597,97 +552,97 @@
     .check-mark {
       color: #10b981;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
     .cross-mark {
       color: #ef4444;
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: 1rem;
     }
 
     /* Таймлайн */
     .timeline {
       position: relative;
-      padding-left: 3rem;
-      margin-top: 3rem;
+      padding-left: 2rem;
+      margin-top: 2rem;
     }
     .timeline::before {
       content: '';
       position: absolute;
-      left: 20px;
+      left: 14px;
       top: 0;
       bottom: 0;
-      width: 4px;
+      width: 3px;
       background: linear-gradient(to bottom, 
         var(--timeline-done) 0%, 
-        var(--timeline-done) 20%, 
-        var(--timeline-pending) 30%, 
+        var(--timeline-done) 25%, 
+        var(--timeline-pending) 35%, 
         var(--timeline-pending) 100%);
-      border-radius: 4px;
+      border-radius: 3px;
       mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
     }
     .timeline-item {
       position: relative;
-      margin-bottom: 3.2rem;
-      padding-left: 2.5rem;
-      transition: all 0.459s ease;
+      margin-bottom: 2.5rem;
+      padding-left: 1.8rem;
+      transition: all 0.4s ease;
     }
     .timeline-item:hover {
-      transform: translateX(9px);
+      transform: translateX(6px);
     }
     .timeline-item::before {
       content: '';
       position: absolute;
-      left: -2.45rem;
-      top: 0.5rem;
-      width: 18px;
-      height: 18px;
+      left: -1.65rem;
+      top: 0.4rem;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: var(--card-bg);
-      border: 3px solid var(--timeline-pending);
+      border: 2.5px solid var(--timeline-pending);
       transition: all 0.4s ease;
       z-index: 2;
     }
     .timeline-item.done::before {
       background: var(--timeline-done);
       border-color: var(--timeline-done);
-      box-shadow: 0 0 15px var(--accent-glow);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
     .timeline-item h3 {
-      font-size: 1.4rem;
+      font-size: 1.15rem;
       color: var(--accent);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       font-weight: 700;
     }
     .timeline-item p {
       color: var(--text-secondary);
-      font-size: 1rem;
-      line-height: 1.6;
+      font-size: 0.85rem;
+      line-height: 1.5;
     }
 
     /* Манифест */
     .manifesto-list {
       list-style: none;
       padding: 0;
-      margin: 2rem 0;
+      margin: 1.5rem 0;
       max-width: 800px;
     }
     .manifesto-list li {
-      padding: 1.2rem 0;
+      padding: 1rem 0;
       border-bottom: 1px solid var(--glass-border);
-      font-size: 1.1rem;
-      line-height: 1.6;
+      font-size: 0.95rem;
+      line-height: 1.5;
       transition: all 0.3s;
     }
     .manifesto-list li:hover {
       color: var(--accent);
-      padding-left: 0.8rem;
+      padding-left: 0.6rem;
     }
     .manifesto-list li strong {
       color: var(--accent);
       font-weight: 700;
-      margin-right: 0.5rem;
+      margin-right: 0.4rem;
     }
     .manifesto-list li span {
       color: var(--text-secondary);
@@ -696,110 +651,187 @@
     /* Сообщество */
     .community-intro {
       color: var(--text-secondary);
-      font-size: 1.15rem;
+      font-size: 0.95rem;
       max-width: 800px;
-      margin-bottom: 2.5rem;
-      line-height: 1.7;
+      margin-bottom: 2rem;
+      line-height: 1.6;
     }
     .community-section {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     .community-section h4 {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       color: var(--accent);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       font-weight: 700;
     }
     .community-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.6rem;
     }
     .community-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       background: var(--card-bg);
       backdrop-filter: blur(var(--card-blur));
       -webkit-backdrop-filter: blur(var(--card-blur));
       border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 0.7rem 1.4rem;
+      border-radius: 14px;
+      padding: 0.6rem 1.1rem;
       color: var(--text-primary);
       text-decoration: none;
       font-weight: 500;
-      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      font-size: 0.95rem;
+      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      font-size: 0.85rem;
     }
     .community-link:hover {
       border-color: var(--accent);
       background: rgba(77, 168, 218, 0.15);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px var(--accent-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--accent-glow);
     }
     .community-link-icon {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
 
     .footer { 
       text-align: center;
-      padding: 3rem;
+      padding: 2rem 1rem;
       color: var(--text-muted);
       border-top: 1px solid var(--glass-border);
-      margin-left: var(--sidebar-width);
       background: rgba(0,0,0,0.05);
-      transition: margin-left 0.5s;
-    }
-    @media (max-width: 1200px) { 
-      .footer { margin-left: 0; }
+      font-size: 0.85rem;
     }
 
     /* Кнопки */
     .btn-primary {
-      padding: 1rem 2.5rem;
+      padding: 0.8rem 2rem;
       background: var(--hero-gradient);
-      border-radius: 3rem;
+      border-radius: 2.5rem;
       color: white;
       text-decoration: none;
       font-weight: 700;
       display: inline-block;
       transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      box-shadow: 0 10px 30px var(--accent-glow);
-      letter-spacing: 0.3px;
+      box-shadow: 0 8px 25px var(--accent-glow);
+      letter-spacing: 0.2px;
+      font-size: 0.95rem;
     }
     .btn-primary:hover {
-      transform: translateY(-4px) scale(1.05);
-      box-shadow: 0 20px 40px var(--accent-glow);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 15px 35px var(--accent-glow);
     }
     .btn-outline {
-      padding: 1rem 2.5rem;
+      padding: 0.8rem 2rem;
       border: 2px solid var(--accent);
-      border-radius: 3rem;
+      border-radius: 2.5rem;
       color: var(--text-primary);
       text-decoration: none;
       font-weight: 700;
       display: inline-block;
       transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      font-size: 0.95rem;
     }
     .btn-outline:hover {
       background: rgba(77, 168, 218, 0.2);
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px var(--accent-glow);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px var(--accent-glow);
     }
 
     /* Анимация перевода */
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .lang-switching {
-      animation: fadeInUp 0.4s ease-out;
+      animation: fadeInUp 0.35s ease-out;
+    }
+
+    /* ===== МЕДИА-ЗАПРОСЫ ===== */
+
+    /* Планшеты и средние экраны */
+    @media (min-width: 769px) {
+      .burger { display: none; }
+      .sidebar {
+        transform: translateX(0);
+        box-shadow: 8px 0 40px rgba(0,0,0,0.3);
+      }
+      .main-content { margin-left: var(--sidebar-width); }
+      .footer { margin-left: var(--sidebar-width); }
+      .tagline-center { display: block; }
+      .logo-area { position: absolute; left: 2rem; }
+      .section { padding: 4rem 2.5rem; }
+      h2 { font-size: 2.5rem; }
+      .stat-number { font-size: 3.5rem; }
+    }
+
+    /* Десктопы */
+    @media (min-width: 1025px) {
+      .tagline-center {
+        font-size: 1.1rem;
+        max-width: 400px;
+      }
+      .section { padding: 5rem 3rem; }
+      h2 { font-size: 2.8rem; }
+      .logo { font-size: 2.2rem; }
+      .stat-number { font-size: 4rem; }
+      .top-nav { padding: 0 2rem; }
+    }
+
+    /* Телефоны */
+    @media (max-width: 480px) {
+      .tagline-center { display: none; }
+      .section { padding: 2rem 1rem; }
+      h2 { font-size: 1.6rem; }
+      h2::after { width: 40%; }
+      .stat-number { font-size: 2.5rem; }
+      .stat-container { gap: 1rem; }
+      .stat-item { padding: 1.2rem; min-width: 120px; }
+      .stat-label { font-size: 0.85rem; }
+      .card { padding: 1.3rem 1.1rem; }
+      .card h3 { font-size: 1.1rem; }
+      .card p { font-size: 0.8rem; }
+      .tech-card { padding: 1.2rem 1rem; }
+      .tech-card h3 { font-size: 1rem; }
+      .tech-card p { font-size: 0.78rem; }
+      .tech-card-icon { font-size: 1.6rem; }
+      .timeline { padding-left: 1.8rem; }
+      .timeline::before { left: 10px; }
+      .timeline-item { padding-left: 1.5rem; }
+      .timeline-item::before { left: -1.45rem; width: 12px; height: 12px; }
+      .timeline-item h3 { font-size: 1rem; }
+      .timeline-item p { font-size: 0.78rem; }
+      .btn-primary, .btn-outline { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
+      .manifesto-list li { font-size: 0.85rem; }
+      .community-link { font-size: 0.78rem; padding: 0.5rem 0.9rem; }
+      .community-section h4 { font-size: 1rem; }
+      .table-wrapper::after {
+        font-size: 0.65rem;
+        bottom: 4px;
+        right: 8px;
+        padding: 3px 8px;
+      }
+      th { font-size: 0.72rem; padding: 0.7rem 0.5rem; }
+      td { font-size: 0.7rem; padding: 0.7rem 0.5rem; }
+      .logo { font-size: 1.5rem; }
+      .icon-btn { padding: 0.4rem 0.8rem; font-size: 0.78rem; }
+      .burger span { width: 22px; height: 2px; }
+      .burger { gap: 4px; }
+    }
+
+    /* Очень маленькие телефоны */
+    @media (max-width: 360px) {
+      .section { padding: 1.5rem 0.8rem; }
+      h2 { font-size: 1.4rem; }
+      .stat-number { font-size: 2rem; }
+      .stat-item { padding: 1rem; min-width: 100px; }
+      .stat-label { font-size: 0.75rem; }
+      .grid { grid-template-columns: 1fr; gap: 0.8rem; }
+      .tech-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+      .community-links { gap: 0.4rem; }
+      .community-link { font-size: 0.72rem; padding: 0.4rem 0.7rem; }
     }
   </style>
 </head>
@@ -808,7 +840,7 @@
   <div class="overlay" id="overlay"></div>
 
   <header class="top-nav">
-    <button class="burger" id="burgerBtn">
+    <button class="burger" id="burgerBtn" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
     <div class="logo-area">
@@ -816,7 +848,7 @@
     </div>
     <div class="tagline-center" data-i18n="slogan">Optimization, customization, freedom</div>
     <div class="top-actions">
-      <button class="icon-btn" id="langToggleDesktop">
+      <button class="icon-btn" id="langToggleDesktop" aria-label="Сменить язык">
         <span>🌐</span>
         <span id="langText">RU</span>
       </button>
@@ -836,15 +868,15 @@
   <div class="main-content" id="mainContent">
     <main>
       <section id="hero" class="section" style="text-align:center;">
-        <h1 style="font-size:clamp(2.5rem, 7vw, 4.5rem); background:none; -webkit-text-fill-color: initial; margin-top: 2rem;">
+        <h1 style="font-size:clamp(1.8rem, 5vw, 4rem); background:none; -webkit-text-fill-color: initial; margin-top: 1.5rem;">
           <span style="background: var(--hero-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight:800;">Great User System</span>
           <br>
-          <span style="color: var(--text-primary);" data-i18n="hero_title_part">— the operating system you deserve</span>
+          <span style="color: var(--text-primary); font-size:0.7em;" data-i18n="hero_title_part">— the operating system you deserve</span>
         </h1>
-        <p style="font-size:1.3rem; color:var(--text-secondary); max-width:800px; margin:2rem auto; line-height: 1.7;" data-i18n="hero_subtitle">
+        <p style="font-size:clamp(0.9rem, 3vw, 1.2rem); color:var(--text-secondary); max-width:700px; margin:1.5rem auto; line-height: 1.6; padding: 0 0.5rem;" data-i18n="hero_subtitle">
           GUS is not a Linux distro nor a Windows clone. It's a constructor platform with a Rust microkernel.
         </p>
-        <div style="display:flex; gap:1.5rem; justify-content:center; margin-top:3rem; flex-wrap:wrap;">
+        <div style="display:flex; gap:1rem; justify-content:center; margin-top:2rem; flex-wrap:wrap; padding: 0 0.5rem;">
           <a href="#tech" class="btn-primary" data-i18n="how_it_works">How it works</a>
           <a href="#manifesto" class="btn-outline" data-i18n="manifesto_btn">Manifesto</a>
         </div>
@@ -862,8 +894,8 @@
 
       <section id="about" class="section">
         <h2 data-i18n="about_title">About the project</h2>
-        <p style="font-weight:700; font-size:1.8rem; margin-bottom:1.5rem; color: var(--accent);" data-i18n="about_lead">We are not making a distribution. We are creating a new philosophy.</p>
-        <p style="color:var(--text-secondary); font-size:1.2rem; max-width: 900px;" data-i18n="about_text">GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.</p>
+        <p style="font-weight:700; font-size:clamp(1.1rem, 3vw, 1.6rem); margin-bottom:1.2rem; color: var(--accent);" data-i18n="about_lead">We are not making a distribution. We are creating a new philosophy.</p>
+        <p style="color:var(--text-secondary); font-size:clamp(0.85rem, 2.5vw, 1.1rem); max-width: 800px;" data-i18n="about_text">GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.</p>
       </section>
 
       <section id="tech" class="section">
@@ -894,8 +926,8 @@
 
       <section id="comparison" class="section">
         <h2 data-i18n="comp_title">Operating System Comparison</h2>
-        <p style="color:var(--text-secondary); font-size:1.15rem; max-width:800px; margin-bottom:1.5rem; line-height:1.7;" data-i18n="comp_intro">We compared GUS with other popular operating systems to show the fundamental differences in architecture and philosophy.</p>
-        <div class="table-wrapper">
+        <p style="color:var(--text-secondary); font-size:clamp(0.85rem, 2.5vw, 1.1rem); max-width:800px; margin-bottom:1.2rem; line-height:1.6;" data-i18n="comp_intro">We compared GUS with other popular operating systems to show the fundamental differences in architecture and philosophy.</p>
+        <div class="table-wrapper" id="tableWrapper">
           <table>
             <thead>
               <tr>
@@ -987,7 +1019,7 @@
             </tbody>
           </table>
         </div>
-        <p style="color:var(--text-muted); font-size:1rem; max-width:800px; margin-top:1.5rem; line-height:1.6;" data-i18n="comp_outro">GUS is a young project, but its architecture is designed for the future — maximum security, modularity and user control.</p>
+        <p style="color:var(--text-muted); font-size:clamp(0.78rem, 2vw, 0.95rem); max-width:800px; margin-top:1.2rem; line-height:1.5;" data-i18n="comp_outro">GUS is a young project, but its architecture is designed for the future — maximum security, modularity and user control.</p>
       </section>
 
       <section id="roadmap" class="section">
@@ -1045,8 +1077,8 @@
           <li><strong data-i18n="manifesto_privacy_title">Privacy:</strong> <span data-i18n="manifesto_privacy">No surveillance or imposed functionality.</span></li>
           <li><strong data-i18n="manifesto_control_title">Control:</strong> <span data-i18n="manifesto_control">We return full power over your device to you.</span></li>
         </ul>
-        <div class="card" style="max-width: 800px; margin: 2rem auto 0;">
-          <p style="font-size: 1.3rem; font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice."</p>
+        <div class="card" style="max-width: 800px; margin: 1.5rem auto 0;">
+          <p style="font-size: clamp(1rem, 3vw, 1.2rem); font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice."</p>
         </div>
       </section>
 
@@ -1085,7 +1117,7 @@
     </main>
     <footer class="footer">
       <p><strong>GUS</strong> — Great User System. Open Source Project. © 2026</p>
-      <p style="margin-top: 0.5rem;" data-i18n="footer_motto">Optimization · Customization · Freedom | Built with Rust 🦀</p>
+      <p style="margin-top: 0.4rem;" data-i18n="footer_motto">Optimization · Customization · Freedom | Built with Rust 🦀</p>
     </footer>
   </div>
 
@@ -1212,10 +1244,6 @@
           community_sub_community: "Community",
           community_sub_social: "Social Networks",
           community_sub_support: "Support",
-          community_channel: "Official project channel",
-          community_chat: "Discussion and support",
-          community_forum: "Technical discussions",
-          community_github: "Source code",
           footer_motto: "Optimization · Customization · Freedom | Built with Rust 🦀"
         },
         ru: {
@@ -1338,16 +1366,11 @@
           community_sub_community: "Комьюнити",
           community_sub_social: "Соцсети",
           community_sub_support: "Поддержать",
-          community_channel: "Официальный канал проекта",
-          community_chat: "Обсуждение и помощь",
-          community_forum: "Технические обсуждения",
-          community_github: "Исходный код",
           footer_motto: "Оптимизация · Кастомизация · Свобода | Built with Rust 🦀"
         }
       };
 
       let currentLang = localStorage.getItem('gus-lang') || 'en';
-      const currentTheme = 'dark';
 
       function applyLang(lang) {
         document.documentElement.lang = lang;
@@ -1364,7 +1387,7 @@
           }
         });
         
-        const langTexts = document.querySelectorAll('#langText, #langTextMobile');
+        const langTexts = document.querySelectorAll('#langText');
         langTexts.forEach(btn => {
           btn.textContent = lang === 'en' ? 'RU' : 'EN';
         });
@@ -1375,12 +1398,7 @@
           elements.forEach(el => {
             el.classList.remove('lang-switching');
           });
-        }, 400);
-      }
-
-      function applyTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('gus-theme', theme);
+        }, 350);
       }
 
       document.getElementById('langToggleDesktop').addEventListener('click', () => {
@@ -1392,26 +1410,56 @@
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('overlay');
       
-      burger.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('active');
-        burger.classList.toggle('open');
-      });
-      
-      overlay.addEventListener('click', () => {
+      function closeMenu() {
         sidebar.classList.remove('open');
         overlay.classList.remove('active');
         burger.classList.remove('open');
+      }
+      
+      burger.addEventListener('click', () => {
+        const isOpen = sidebar.classList.contains('open');
+        if (isOpen) {
+          closeMenu();
+        } else {
+          sidebar.classList.add('open');
+          overlay.classList.add('active');
+          burger.classList.add('open');
+        }
       });
+      
+      overlay.addEventListener('click', closeMenu);
       
       document.querySelectorAll('.sidebar a').forEach(link => {
         link.addEventListener('click', () => {
-          sidebar.classList.remove('open');
-          overlay.classList.remove('active');
-          burger.classList.remove('open');
+          closeMenu();
         });
       });
 
+      // Проверка скролла таблицы
+      const tableWrapper = document.getElementById('tableWrapper');
+      if (tableWrapper) {
+        function checkTableScroll() {
+          const table = tableWrapper.querySelector('table');
+          if (table && table.scrollWidth > tableWrapper.clientWidth) {
+            tableWrapper.classList.add('scrollable');
+          } else {
+            tableWrapper.classList.remove('scrollable');
+          }
+        }
+        checkTableScroll();
+        window.addEventListener('resize', checkTableScroll);
+        // На мобильных показываем подсказку только при касании
+        tableWrapper.addEventListener('touchstart', function() {
+          this.classList.add('scrollable');
+        });
+        tableWrapper.addEventListener('touchend', function() {
+          setTimeout(() => {
+            checkTableScroll();
+          }, 2000);
+        });
+      }
+
+      // Intersection Observer для анимаций
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -1421,18 +1469,19 @@
           }
         });
       }, { 
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
       });
       
       document.querySelectorAll('.section').forEach(s => observer.observe(s));
 
+      // Активная ссылка в меню
       const sections = document.querySelectorAll('section[id]');
       const navLinks = document.querySelectorAll('.sidebar a');
       
       function updateActiveLink() {
         let current = '';
-        const scrollPos = window.scrollY + 150;
+        const scrollPos = window.scrollY + 120;
         
         sections.forEach(s => {
           const sectionTop = s.offsetTop;
@@ -1452,10 +1501,10 @@
         });
       }
       
-      window.addEventListener('scroll', updateActiveLink);
+      window.addEventListener('scroll', updateActiveLink, { passive: true });
       window.addEventListener('load', updateActiveLink);
 
-      applyTheme(currentTheme);
+      // Применяем сохранённый язык
       applyLang(currentLang);
       updateActiveLink();
     })();
