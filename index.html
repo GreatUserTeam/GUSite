@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ===== CSS ПЕРЕМЕННЫЕ (легко менять) ===== */
     :root {
       --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
@@ -16,29 +17,40 @@
       --radius-lg: 2rem;
       --radius-md: 1.5rem;
       --radius-sm: 1rem;
+      /* Настройка интенсивности размытия фона карточек */
+      --card-blur: 10px;
+      /* Настройка интенсивности размытия при наведении на соседей */
+      --hover-blur-intensity: 2px;
       --transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
       --sidebar-width: 300px;
       --topbar-height: 75px;
     }
 
+    /* ===== ТЕМНАЯ ТЕМА (Google Flow style) ===== */
     [data-theme="dark"] {
-      --bg-primary: #0b0914;
-      --bg-secondary: #12101e;
-      --text-primary: #f3f0ff;
-      --text-secondary: #b9afd7;
-      --text-muted: #7b6f9e;
-      --accent: #a78bfa;
-      --accent-soft: #7c3aed;
-      --nav-bg: rgba(14, 12, 24, 0.95);
-      --table-stripe: rgba(167,139,250,0.05);
-      --table-header: rgba(167,139,250,0.2);
-      --glass-bg: rgba(18, 18, 24, 0.85);
-      --glass-border: rgba(255, 255, 255, 0.08);
+      /* Основной фон — глубокий черный */
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --text-primary: #FFFFFF;
+      --text-secondary: #b0b0b0;
+      --text-muted: #6b6b6b;
+      /* Акцентный цвет — голубоватый (как у Google Flow) */
+      --accent: #4da8da;
+      --accent-soft: #1e5a7a;
+      --nav-bg: rgba(0, 0, 0, 0.95);
+      --table-stripe: rgba(77, 168, 218, 0.05);
+      --table-header: rgba(77, 168, 218, 0.2);
+      /* Полупрозрачный фон карточек с blur */
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.1);
       --card-bg: rgba(255, 255, 255, 0.04);
-      --card-hover-border: rgba(167,139,250,0.6);
-      --hero-gradient: linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #7c3aed 100%);
-      --timeline-done: #a78bfa;
-      --timeline-pending: #4a4065;
+      --card-hover-border: rgba(77, 168, 218, 0.6);
+      /* Градиент для акцентов */
+      --hero-gradient: linear-gradient(135deg, #4da8da 0%, #1e5a7a 100%);
+      --timeline-done: #4da8da;
+      --timeline-pending: #2a3a4a;
+      /* Тень для акцентных элементов */
+      --accent-glow: rgba(77, 168, 218, 0.3);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -54,6 +66,8 @@
       position: relative;
     }
 
+    /* ===== ФОНОВОЕ СВЕЧЕНИЕ (Google Flow radial-gradient) ===== */
+    /* Настройка интенсивности рассеивания градиента — меняй проценты и цвета */
     .bg-glow {
       position: fixed;
       top: -50%;
@@ -63,11 +77,9 @@
       pointer-events: none;
       z-index: -1;
       background: 
-        radial-gradient(circle at 25% 35%, rgba(120, 70, 230, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 70% 55%, rgba(190, 90, 150, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 45% 80%, rgba(80, 50, 200, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(140, 60, 210, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 60% 40%, rgba(167, 139, 250, 0.1) 0%, transparent 60%);
+        radial-gradient(circle at 50% -20%, #001e3c 0%, #000000 70%),
+        radial-gradient(circle at 80% 80%, rgba(30, 60, 90, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 20% 50%, rgba(20, 50, 80, 0.2) 0%, transparent 50%);
       animation: bgPulse 15s ease-in-out infinite alternate;
     }
     @keyframes bgPulse {
@@ -140,7 +152,7 @@
     }
     
     .icon-btn {
-      background: rgba(167,139,250,0.1);
+      background: rgba(77, 168, 218, 0.1);
       border: 1px solid var(--glass-border);
       border-radius: 3rem;
       padding: 0.6rem 1.4rem;
@@ -226,22 +238,22 @@
       transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
     }
     .sidebar a:hover {
-      background: rgba(167,139,250,0.15);
+      background: rgba(77, 168, 218, 0.15);
       color: var(--accent);
       font-weight: 650;
       transform: translateX(8px);
-      box-shadow: 0 4px 20px rgba(167,139,250,0.2);
+      box-shadow: 0 4px 20px rgba(77, 168, 218, 0.2);
     }
     .sidebar a:hover::after {
       transform: scaleX(1);
     }
     .sidebar a.active { 
-      background: rgba(167,139,250,0.25);
+      background: rgba(77, 168, 218, 0.25);
       color: var(--accent);
       font-weight: 700;
       border-left: 4px solid var(--accent);
       transform: translateX(4px);
-      box-shadow: 0 0 25px rgba(167,139,250,0.3);
+      box-shadow: 0 0 25px rgba(77, 168, 218, 0.3);
     }
 
     .sidebar-divider {
@@ -381,14 +393,16 @@
       margin-top: 2.5rem; 
     }
 
-    /* Карточки */
+    /* ===== КАРТОЧКИ (Google Flow style) ===== */
+    /* Полупрозрачный фон + blur + тонкая обводка + border-radius: 20px */
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(var(--card-blur));
+      -webkit-backdrop-filter: blur(var(--card-blur));
       border: 1px solid var(--glass-border);
-      border-radius: var(--radius-md);
+      border-radius: 20px;
       padding: 2.5rem 2rem;
-      transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
       cursor: pointer;
@@ -400,7 +414,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(167,139,250,0.2), transparent 70%);
+      background: radial-gradient(circle, rgba(77, 168, 218, 0.2), transparent 70%);
       opacity: 0;
       transition: opacity 0.5s;
       pointer-events: none;
@@ -421,6 +435,25 @@
       line-height: 1.6;
     }
 
+    /* ===== ЭФФЕКТ HOVER НА КАРТОЧКИ: размытие соседей ===== */
+    /* При наведении на контейнер grid, все карточки blur, кроме наведенной */
+    .grid:hover .card:not(:hover) {
+      filter: blur(var(--hover-blur-intensity));
+      opacity: 0.6;
+      transition: 0.3s;
+    }
+    .grid .card {
+      transition: 0.3s;
+    }
+    .tech-grid:hover .tech-card:not(:hover) {
+      filter: blur(var(--hover-blur-intensity));
+      opacity: 0.6;
+      transition: 0.3s;
+    }
+    .tech-grid .tech-card {
+      transition: 0.3s;
+    }
+
     /* Прямоугольные карточки для tech */
     .tech-grid {
       display: grid;
@@ -430,11 +463,12 @@
     }
     .tech-card {
       background: var(--card-bg);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(var(--card-blur));
+      -webkit-backdrop-filter: blur(var(--card-blur));
       border: 1px solid var(--glass-border);
-      border-radius: 0.5rem;
+      border-radius: 20px;
       padding: 2rem 1.8rem;
-      transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
     }
@@ -445,7 +479,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(167,139,250,0.2), transparent 70%);
+      background: radial-gradient(circle, rgba(77, 168, 218, 0.2), transparent 70%);
       opacity: 0;
       transition: opacity 0.5s;
       pointer-events: none;
@@ -499,8 +533,9 @@
       text-align: center;
       padding: 2rem;
       background: var(--card-bg);
-      border-radius: var(--radius-lg);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(var(--card-blur));
+      -webkit-backdrop-filter: blur(var(--card-blur));
+      border-radius: 20px;
       border: 1px solid var(--glass-border);
       transition: all 0.4s;
       min-width: 200px;
@@ -520,9 +555,10 @@
     /* Таблица */
     .table-wrapper { 
       overflow-x: auto;
-      border-radius: 2rem;
+      border-radius: 20px;
       border: 1px solid var(--glass-border); 
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(var(--card-blur));
+      -webkit-backdrop-filter: blur(var(--card-blur));
       background: var(--card-bg);
       margin-top: 2rem;
       box-shadow: 0 25px 50px rgba(0,0,0,0.3);
@@ -555,7 +591,7 @@
       transition: all 0.3s;
     }
     tr:hover td {
-      background: rgba(167,139,250,0.08);
+      background: rgba(77, 168, 218, 0.08);
     }
     tr:nth-child(even) { background: var(--table-stripe); }
     .check-mark {
@@ -684,8 +720,10 @@
       align-items: center;
       gap: 0.5rem;
       background: var(--card-bg);
+      backdrop-filter: blur(var(--card-blur));
+      -webkit-backdrop-filter: blur(var(--card-blur));
       border: 1px solid var(--glass-border);
-      border-radius: 2rem;
+      border-radius: 20px;
       padding: 0.7rem 1.4rem;
       color: var(--text-primary);
       text-decoration: none;
@@ -695,7 +733,7 @@
     }
     .community-link:hover {
       border-color: var(--accent);
-      background: rgba(167,139,250,0.15);
+      background: rgba(77, 168, 218, 0.15);
       transform: translateY(-3px);
       box-shadow: 0 10px 25px var(--accent-glow);
     }
@@ -744,7 +782,7 @@
       transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
     }
     .btn-outline:hover {
-      background: rgba(167,139,250,0.2);
+      background: rgba(77, 168, 218, 0.2);
       transform: translateY(-4px);
       box-shadow: 0 10px 30px var(--accent-glow);
     }
@@ -871,80 +909,80 @@
             <tbody>
               <tr>
                 <td data-i18n="row_kernel">Kernel type</td>
-                <td><strong>Microkernel</strong></td>
-                <td>Monolithic</td>
-                <td>Hybrid</td>
-                <td>Monolithic</td>
+                <td><strong data-i18n="val_microkernel">Microkernel</strong></td>
+                <td data-i18n="val_monolithic">Monolithic</td>
+                <td data-i18n="val_hybrid">Hybrid</td>
+                <td data-i18n="val_monolithic2">Monolithic</td>
               </tr>
               <tr>
                 <td data-i18n="row_opensource">Open source</td>
-                <td><span class="check-mark">✅ Yes</span></td>
-                <td><span class="check-mark">✅ Yes</span></td>
-                <td><span class="cross-mark">❌ No</span></td>
-                <td><span class="check-mark">✅ Yes</span></td>
+                <td><span class="check-mark" data-i18n="val_yes">✅ Yes</span></td>
+                <td><span class="check-mark" data-i18n="val_yes2">✅ Yes</span></td>
+                <td><span class="cross-mark" data-i18n="val_no">❌ No</span></td>
+                <td><span class="check-mark" data-i18n="val_yes3">✅ Yes</span></td>
               </tr>
               <tr>
                 <td data-i18n="row_maturity">Maturity / Stability</td>
-                <td>Project (in development)</td>
-                <td>Mature</td>
-                <td>Mature</td>
-                <td>Mature</td>
+                <td data-i18n="val_maturity_gus">Project (in development)</td>
+                <td data-i18n="val_maturity_linux">Mature</td>
+                <td data-i18n="val_maturity_windows">Mature</td>
+                <td data-i18n="val_maturity_freebsd">Mature</td>
               </tr>
               <tr>
                 <td data-i18n="row_complexity">User complexity</td>
-                <td><strong>Low (constructor)</strong></td>
-                <td>High</td>
-                <td>Medium</td>
-                <td>High</td>
+                <td><strong data-i18n="val_complexity_low">Low (constructor)</strong></td>
+                <td data-i18n="val_complexity_high">High</td>
+                <td data-i18n="val_complexity_medium">Medium</td>
+                <td data-i18n="val_complexity_high2">High</td>
               </tr>
               <tr>
                 <td data-i18n="row_popularity">Popularity</td>
-                <td>Very low (new OS)</td>
-                <td>High</td>
-                <td>Very high</td>
-                <td>Medium</td>
+                <td data-i18n="val_popularity_gus">Very low (new OS)</td>
+                <td data-i18n="val_popularity_linux">High</td>
+                <td data-i18n="val_popularity_windows">Very high</td>
+                <td data-i18n="val_popularity_freebsd">Medium</td>
               </tr>
               <tr>
                 <td data-i18n="row_install">Installation difficulty</td>
-                <td><strong>Easy</strong></td>
-                <td>Medium</td>
-                <td>Medium</td>
-                <td>Hard</td>
+                <td><strong data-i18n="val_install_easy">Easy</strong></td>
+                <td data-i18n="val_install_medium">Medium</td>
+                <td data-i18n="val_install_medium2">Medium</td>
+                <td data-i18n="val_install_hard">Hard</td>
               </tr>
               <tr>
                 <td data-i18n="row_language">Implementation language</td>
-                <td><strong>Rust</strong></td>
-                <td>C</td>
-                <td>C / C++</td>
-                <td>C</td>
+                <td><strong data-i18n="val_lang_rust">Rust</strong></td>
+                <td data-i18n="val_lang_c">C</td>
+                <td data-i18n="val_lang_cpp">C / C++</td>
+                <td data-i18n="val_lang_c2">C</td>
               </tr>
               <tr>
                 <td data-i18n="row_modularity">Modularity (architecture)</td>
-                <td><span class="check-mark">✅ Complete</span></td>
-                <td>Partial</td>
-                <td>Partial</td>
-                <td>Partial</td>
+                <td><span class="check-mark" data-i18n="val_modularity_complete">✅ Complete</span></td>
+                <td data-i18n="val_modularity_partial">Partial</td>
+                <td data-i18n="val_modularity_partial2">Partial</td>
+                <td data-i18n="val_modularity_partial3">Partial</td>
               </tr>
               <tr>
                 <td data-i18n="row_customization">System customization</td>
-                <td><span class="check-mark">✅ Maximum</span></td>
-                <td>High</td>
-                <td>Low</td>
-                <td>High</td>
+                <td><span class="check-mark" data-i18n="val_customization_max">✅ Maximum</span></td>
+                <td data-i18n="val_customization_high">High</td>
+                <td data-i18n="val_customization_low">Low</td>
+                <td data-i18n="val_customization_high2">High</td>
               </tr>
               <tr>
                 <td data-i18n="row_skills">Required skills (daily)</td>
-                <td><strong>None</strong></td>
-                <td>Sometimes</td>
-                <td>None</td>
-                <td>Often</td>
+                <td><strong data-i18n="val_skills_none">None</strong></td>
+                <td data-i18n="val_skills_sometimes">Sometimes</td>
+                <td data-i18n="val_skills_none2">None</td>
+                <td data-i18n="val_skills_often">Often</td>
               </tr>
               <tr>
                 <td data-i18n="row_updates">Update management</td>
-                <td><strong>Modular</strong></td>
-                <td>Centralized</td>
-                <td>Centralized</td>
-                <td>Centralized</td>
+                <td><strong data-i18n="val_updates_modular">Modular</strong></td>
+                <td data-i18n="val_updates_centralized">Centralized</td>
+                <td data-i18n="val_updates_centralized2">Centralized</td>
+                <td data-i18n="val_updates_centralized3">Centralized</td>
               </tr>
             </tbody>
           </table>
@@ -1001,11 +1039,11 @@
       <section id="manifesto" class="section">
         <h2 data-i18n="manifesto_title">Manifesto</h2>
         <ul class="manifesto-list">
-          <li><strong>Minimalism:</strong> <span data-i18n="manifesto_minimalism">A system without unnecessary "garbage" and redundant processes.</span></li>
-          <li><strong>Security:</strong> <span data-i18n="manifesto_security">Rust, microkernel and complete module isolation.</span></li>
-          <li><strong>Flexibility:</strong> <span data-i18n="manifesto_flexibility">Modular architecture for any hardware.</span></li>
-          <li><strong>Privacy:</strong> <span data-i18n="manifesto_privacy">No surveillance or imposed functionality.</span></li>
-          <li><strong>Control:</strong> <span data-i18n="manifesto_control">We return full power over your device to you.</span></li>
+          <li><strong data-i18n="manifesto_minimalism_title">Minimalism:</strong> <span data-i18n="manifesto_minimalism">A system without unnecessary "garbage" and redundant processes.</span></li>
+          <li><strong data-i18n="manifesto_security_title">Security:</strong> <span data-i18n="manifesto_security">Rust, microkernel and complete module isolation.</span></li>
+          <li><strong data-i18n="manifesto_flexibility_title">Flexibility:</strong> <span data-i18n="manifesto_flexibility">Modular architecture for any hardware.</span></li>
+          <li><strong data-i18n="manifesto_privacy_title">Privacy:</strong> <span data-i18n="manifesto_privacy">No surveillance or imposed functionality.</span></li>
+          <li><strong data-i18n="manifesto_control_title">Control:</strong> <span data-i18n="manifesto_control">We return full power over your device to you.</span></li>
         </ul>
         <div class="card" style="max-width: 800px; margin: 2rem auto 0;">
           <p style="font-size: 1.3rem; font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice."</p>
@@ -1092,6 +1130,50 @@
           row_customization: "System customization",
           row_skills: "Required skills (daily)",
           row_updates: "Update management",
+          val_microkernel: "Microkernel",
+          val_monolithic: "Monolithic",
+          val_hybrid: "Hybrid",
+          val_monolithic2: "Monolithic",
+          val_yes: "✅ Yes",
+          val_yes2: "✅ Yes",
+          val_yes3: "✅ Yes",
+          val_no: "❌ No",
+          val_maturity_gus: "Project (in development)",
+          val_maturity_linux: "Mature",
+          val_maturity_windows: "Mature",
+          val_maturity_freebsd: "Mature",
+          val_complexity_low: "Low (constructor)",
+          val_complexity_high: "High",
+          val_complexity_medium: "Medium",
+          val_complexity_high2: "High",
+          val_popularity_gus: "Very low (new OS)",
+          val_popularity_linux: "High",
+          val_popularity_windows: "Very high",
+          val_popularity_freebsd: "Medium",
+          val_install_easy: "Easy",
+          val_install_medium: "Medium",
+          val_install_medium2: "Medium",
+          val_install_hard: "Hard",
+          val_lang_rust: "Rust",
+          val_lang_c: "C",
+          val_lang_cpp: "C / C++",
+          val_lang_c2: "C",
+          val_modularity_complete: "✅ Complete",
+          val_modularity_partial: "Partial",
+          val_modularity_partial2: "Partial",
+          val_modularity_partial3: "Partial",
+          val_customization_max: "✅ Maximum",
+          val_customization_high: "High",
+          val_customization_low: "Low",
+          val_customization_high2: "High",
+          val_skills_none: "None",
+          val_skills_sometimes: "Sometimes",
+          val_skills_none2: "None",
+          val_skills_often: "Often",
+          val_updates_modular: "Modular",
+          val_updates_centralized: "Centralized",
+          val_updates_centralized2: "Centralized",
+          val_updates_centralized3: "Centralized",
           roadmap_title: "Our Path",
           roadmap_concept_title: "Concept",
           roadmap_concept_desc: "We have a concrete vision of what we want to create. It may not seem like much, but it's often important to understand where we're heading.",
@@ -1114,6 +1196,11 @@
           roadmap_mobile_title: "GUS for Mobile",
           roadmap_mobile_desc: "In the future, we want to bring our OS to phones and tablets.",
           manifesto_title: "Manifesto",
+          manifesto_minimalism_title: "Minimalism:",
+          manifesto_security_title: "Security:",
+          manifesto_flexibility_title: "Flexibility:",
+          manifesto_privacy_title: "Privacy:",
+          manifesto_control_title: "Control:",
           manifesto_minimalism: "A system without unnecessary \"garbage\" and redundant processes.",
           manifesto_security: "Rust, microkernel and complete module isolation.",
           manifesto_flexibility: "Modular architecture for any hardware.",
@@ -1169,6 +1256,50 @@
           row_customization: "Кастомизация системы",
           row_skills: "Необходимость навыков (ежедневно)",
           row_updates: "Управление обновлением",
+          val_microkernel: "Микроядро",
+          val_monolithic: "Монолитное",
+          val_hybrid: "Гибридное",
+          val_monolithic2: "Монолитное",
+          val_yes: "✅ Да",
+          val_yes2: "✅ Да",
+          val_yes3: "✅ Да",
+          val_no: "❌ Нет",
+          val_maturity_gus: "Проект (в разработке)",
+          val_maturity_linux: "Зрелая",
+          val_maturity_windows: "Зрелая",
+          val_maturity_freebsd: "Зрелая",
+          val_complexity_low: "Низкая (конструктор)",
+          val_complexity_high: "Высокая",
+          val_complexity_medium: "Средняя",
+          val_complexity_high2: "Высокая",
+          val_popularity_gus: "Очень низкая (новая ОС)",
+          val_popularity_linux: "Высокая",
+          val_popularity_windows: "Очень высокая",
+          val_popularity_freebsd: "Средняя",
+          val_install_easy: "Легко",
+          val_install_medium: "Средне",
+          val_install_medium2: "Средне",
+          val_install_hard: "Сложно",
+          val_lang_rust: "Rust",
+          val_lang_c: "C",
+          val_lang_cpp: "C / C++",
+          val_lang_c2: "C",
+          val_modularity_complete: "✅ Полная",
+          val_modularity_partial: "Частичная",
+          val_modularity_partial2: "Частичная",
+          val_modularity_partial3: "Частичная",
+          val_customization_max: "✅ Максимальная",
+          val_customization_high: "Высокая",
+          val_customization_low: "Низкая",
+          val_customization_high2: "Высокая",
+          val_skills_none: "Не нужны",
+          val_skills_sometimes: "Иногда",
+          val_skills_none2: "Не нужны",
+          val_skills_often: "Часто",
+          val_updates_modular: "Модульное",
+          val_updates_centralized: "Централизованное",
+          val_updates_centralized2: "Централизованное",
+          val_updates_centralized3: "Централизованное",
           roadmap_title: "Наш путь",
           roadmap_concept_title: "Концепция",
           roadmap_concept_desc: "У нас есть конкретное представление о том, что мы хотим сделать. Конечно так себе достижение, но зачастую важно понимать к чему двигаться.",
@@ -1191,6 +1322,11 @@
           roadmap_mobile_title: "GUS for Mobile",
           roadmap_mobile_desc: "В будущем мы хотим сделать нашу OS и на телефоны и планшеты.",
           manifesto_title: "Манифест",
+          manifesto_minimalism_title: "Минимализм:",
+          manifesto_security_title: "Безопасность:",
+          manifesto_flexibility_title: "Гибкость:",
+          manifesto_privacy_title: "Приватность:",
+          manifesto_control_title: "Контроль:",
           manifesto_minimalism: "Система без лишнего «мусора» и ненужных процессов.",
           manifesto_security: "Rust, микроядро и полная изоляция модулей.",
           manifesto_flexibility: "Модульная архитектура под любое «железо».",
