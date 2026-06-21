@@ -1,824 +1,296 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="ru" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>GUS — Great User System</title>
-  <link rel="icon" href="pic.png" type="image/png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ff7f00'/><text x='50' y='68' font-size='52' font-weight='800' fill='%23000' text-anchor='middle' font-family='Inter,sans-serif'>GUS</text></svg>" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
-    /* ===== CSS ПЕРЕМЕННЫЕ ===== */
     :root {
       --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-      --radius-xl: 1.5rem;
-      --radius-lg: 1.2rem;
-      --radius-md: 1rem;
-      --radius-sm: 0.75rem;
-      --card-blur: 10px;
-      --hover-blur-intensity: 2px;
-      --transition: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      --sidebar-width: 280px;
-      --topbar-height: 60px;
-    }
-
-    /* ===== ТЕМНАЯ ТЕМА ===== */
-    [data-theme="dark"] {
-      --bg-primary: #000000;
-      --bg-secondary: #0a0a0a;
-      --text-primary: #FFFFFF;
+      --radius-card: 1.75rem;
+      --radius-btn: 2.5rem;
+      --radius-tag: 0.6rem;
+      --bg-deep: #000000;
+      --bg-surface: #0a0a0a;
+      --text-primary: #ffffff;
       --text-secondary: #b0b0b0;
       --text-muted: #6b6b6b;
-      --accent: #4da8da;
-      --accent-soft: #1e5a7a;
-      --nav-bg: rgba(0, 0, 0, 0.95);
-      --table-stripe: rgba(77, 168, 218, 0.05);
-      --table-header: rgba(77, 168, 218, 0.2);
-      --glass-bg: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --card-bg: rgba(255, 255, 255, 0.04);
-      --card-hover-border: rgba(77, 168, 218, 0.6);
-      --hero-gradient: linear-gradient(135deg, #4da8da 0%, #1e5a7a 100%);
-      --timeline-done: #4da8da;
-      --timeline-pending: #2a3a4a;
-      --accent-glow: rgba(77, 168, 218, 0.3);
+      --accent: #ff7f00;
+      --accent-soft: rgba(255, 127, 0, 0.08);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --sidebar-width: 280px;
+      --topbar-height: 60px;
+      --transition: 0.25s ease;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; background: var(--bg-primary); }
+    html { scroll-behavior: smooth; background: var(--bg-deep); scroll-padding-top: calc(var(--topbar-height) + 1rem); }
     body {
       font-family: var(--font-sans);
       background: transparent;
       color: var(--text-primary);
       line-height: 1.5;
-      transition: background 0.3s, color 0.25s;
-      overflow-x: hidden;
       font-weight: 400;
-      position: relative;
+      overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
     }
-
-    /* ===== ФОНОВОЕ СВЕЧЕНИЕ ===== */
-    .bg-glow {
-      position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      pointer-events: none;
-      z-index: -1;
-      background: 
-        radial-gradient(circle at 50% -20%, #001e3c 0%, #000000 70%),
-        radial-gradient(circle at 80% 80%, rgba(30, 60, 90, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 20% 50%, rgba(20, 50, 80, 0.2) 0%, transparent 50%);
-      animation: bgPulse 15s ease-in-out infinite alternate;
-    }
-    @keyframes bgPulse {
-      0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
-      50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
-      100% { transform: scale(1.05) rotate(-3deg); opacity: 0.85; }
-    }
-
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    body::before { content: ''; position: fixed; inset: 0; background: var(--bg-deep); z-index: -2; }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--accent-soft); border-radius: 20px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 20px; }
 
-    /* Верхняя панель */
-    .top-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 120;
-      background: var(--nav-bg);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      border-bottom: 1px solid var(--glass-border);
-      padding: 0 1rem;
-      height: var(--topbar-height);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-      gap: 1rem;
-    }
-    
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      position: absolute;
-      left: 3.5rem;
-    }
-    
-    .logo {
+    /* GUS в оранжевом квадрате */
+    .gus-badge {
+      background: var(--accent);
+      color: #000000;
       font-weight: 800;
-      font-size: 1.8rem;
-      background: var(--hero-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      padding: 0.15rem 0.7rem;
+      border-radius: var(--radius-tag);
+      line-height: 1.2;
       letter-spacing: -0.5px;
-      transition: all 0.3s;
-    }
-    
-    .tagline-center {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-      white-space: normal;
-      letter-spacing: 0.3px;
-      transition: all 0.5s ease;
-      text-align: center;
-      line-height: 1.3;
-      max-width: 250px;
-      display: none;
-    }
-    
-    .top-actions {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      position: absolute;
-      right: 1rem;
-    }
-    
-    .icon-btn {
-      background: rgba(77, 168, 218, 0.1);
-      border: 1px solid var(--glass-border);
-      border-radius: 2rem;
-      padding: 0.5rem 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: var(--text-primary);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.85rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .icon-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--accent);
-      opacity: 0;
-      transition: opacity 0.3s;
-      border-radius: 2rem;
-      z-index: -1;
-    }
-    .icon-btn:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 8px 25px var(--accent-glow);
-    }
-    .icon-btn:hover::before {
-      opacity: 0.15;
-    }
-    .icon-btn:active {
-      transform: scale(0.95);
-    }
-
-    .burger { 
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      padding: 6px;
-      position: absolute;
-      left: 0.75rem;
-      z-index: 121;
-    }
-    .burger span { 
-      width: 26px;
-      height: 2.5px;
-      background: var(--text-primary);
-      border-radius: 10px;
-      transition: 0.3s;
-    }
-    .burger.open span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 6px);
-    }
-    .burger.open span:nth-child(2) {
-      opacity: 0;
-    }
-    .burger.open span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -6px);
-    }
-
-    /* Боковое меню */
-    .sidebar {
-      position: fixed;
-      top: var(--topbar-height);
-      left: 0;
-      height: calc(100vh - var(--topbar-height));
-      width: var(--sidebar-width);
-      background: var(--nav-bg);
-      backdrop-filter: blur(40px);
-      -webkit-backdrop-filter: blur(40px);
-      border-right: 1px solid var(--glass-border);
-      padding: 1.5rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      z-index: 100;
-      box-shadow: 8px 0 40px rgba(0,0,0,0.3);
-      overflow-y: auto;
-      transform: translateX(-100%);
-      transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.1, 1.0);
-    }
-    .sidebar.open { 
-      transform: translateX(0); 
-      box-shadow: 15px 0 50px rgba(0,0,0,0.8); 
-    }
-    
-    .sidebar a {
-      text-decoration: none;
-      color: var(--text-secondary);
-      font-weight: 500;
-      padding: 0.8rem 1rem;
-      border-radius: 0.8rem;
-      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .sidebar a:hover {
-      background: rgba(77, 168, 218, 0.15);
-      color: var(--accent);
-      font-weight: 600;
-      transform: translateX(6px);
-    }
-    .sidebar a.active { 
-      background: rgba(77, 168, 218, 0.25);
-      color: var(--accent);
-      font-weight: 700;
-      border-left: 3px solid var(--accent);
-      transform: translateX(4px);
-      box-shadow: 0 0 20px rgba(77, 168, 218, 0.2);
-    }
-
-    .sidebar-divider {
-      height: 1px;
-      background: var(--glass-border);
-      margin: 0.75rem 0;
-      opacity: 0.5;
-    }
-
-    .main-content {
-      margin-left: 0;
-      padding-top: var(--topbar-height);
-    }
-
-    .overlay { 
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.7); 
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index: 95; 
-      display: none;
-      transition: all 0.4s;
-    }
-    .overlay.active { display: block; }
-
-    /* Секции и анимации */
-    .section { 
-      max-width: 1000px; 
-      margin: 0 auto; 
-      padding: 3rem 1.2rem;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-      will-change: transform, opacity;
-    }
-    .section.visible { 
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Заголовки */
-    h2 { 
-      font-weight: 750; 
-      font-size: 2rem; 
-      margin-bottom: 1.8rem; 
-      letter-spacing: -0.4px;
-      background: linear-gradient(to right, var(--text-primary), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
       display: inline-block;
-    }
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 0;
-      width: 50%;
-      height: 2px;
-      background: var(--accent);
-      border-radius: 10px;
-    }
-
-    .grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-      gap: 1.2rem; 
-      margin-top: 2rem; 
-    }
-
-    /* ===== КАРТОЧКИ ===== */
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(var(--card-blur));
-      -webkit-backdrop-filter: blur(var(--card-blur));
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 1.8rem 1.5rem;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(77, 168, 218, 0.2), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.5s;
-      pointer-events: none;
-    }
-    .card:hover::before { opacity: 1; }
-    .card:hover { 
-      border-color: var(--card-hover-border);
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 20px 40px -15px var(--accent-glow);
-    }
-    .card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-      color: var(--accent);
-    }
-    .card p {
-      color: var(--text-secondary);
-      line-height: 1.5;
-      font-size: 0.9rem;
-    }
-
-    /* Эффект размытия соседей при наведении */
-    .grid:hover .card:not(:hover),
-    .tech-grid:hover .tech-card:not(:hover) {
-      filter: blur(var(--hover-blur-intensity));
-      opacity: 0.6;
-      transition: 0.3s;
-    }
-
-    /* Tech карточки */
-    .tech-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.2rem;
-      margin-top: 2rem;
-    }
-    .tech-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(var(--card-blur));
-      -webkit-backdrop-filter: blur(var(--card-blur));
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 1.5rem 1.3rem;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .tech-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(77, 168, 218, 0.2), transparent 70%);
-      opacity: 0;
-      transition: opacity 0.5s;
-      pointer-events: none;
-    }
-    .tech-card:hover::before { opacity: 1; }
-    .tech-card:hover { 
-      border-color: var(--card-hover-border);
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px -12px var(--accent-glow);
-    }
-    .tech-card-icon {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
-    }
-    .tech-card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 0.6rem;
-      color: var(--accent);
-      font-weight: 700;
-    }
-    .tech-card p {
-      color: var(--text-secondary);
-      line-height: 1.5;
-      font-size: 0.85rem;
-    }
-
-    /* Статистика */
-    .stat-number { 
-      font-size: 3rem; 
-      font-weight: 800; 
-      background: var(--hero-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      animation: countUp 2s ease-out;
-    }
-    @keyframes countUp {
-      from { opacity: 0; transform: scale(0.5); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .stat-container {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-top: 3rem;
-    }
-    .stat-item {
-      text-align: center;
-      padding: 1.5rem;
-      background: var(--card-bg);
-      backdrop-filter: blur(var(--card-blur));
-      -webkit-backdrop-filter: blur(var(--card-blur));
-      border-radius: 16px;
-      border: 1px solid var(--glass-border);
-      transition: all 0.4s;
-      min-width: 140px;
-      flex: 1;
-      max-width: 200px;
-    }
-    .stat-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px var(--accent-glow);
-      border-color: var(--card-hover-border);
-    }
-    .stat-label {
-      font-size: 1rem;
-      color: var(--text-muted);
-      margin-top: 0.4rem;
-      font-weight: 600;
-    }
-
-    /* Таблица */
-    .table-wrapper { 
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 14px;
-      border: 1px solid var(--glass-border); 
-      backdrop-filter: blur(var(--card-blur));
-      -webkit-backdrop-filter: blur(var(--card-blur));
-      background: var(--card-bg);
-      margin-top: 1.5rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      position: relative;
-      /* Индикатор прокрутки */
-    }
-    
-    table { 
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      min-width: 700px;
-    }
-    th { 
-      background: var(--table-header);
-      padding: 1rem 0.8rem;
-      text-align: left;
-      font-weight: 700;
-      color: var(--accent);
-      font-size: 0.8rem;
-      letter-spacing: 0.2px;
-      position: sticky;
-      top: 0;
+      font-family: var(--font-sans);
       white-space: nowrap;
     }
-    td { 
-      padding: 0.9rem 0.8rem;
-      border-bottom: 1px solid var(--glass-border);
-      transition: background 0.3s;
-    }
-    tr {
-      transition: all 0.3s;
-    }
-    tr:hover td {
-      background: rgba(77, 168, 218, 0.08);
-    }
-    tr:nth-child(even) { background: var(--table-stripe); }
-    .check-mark {
-      color: #10b981;
-      font-weight: 700;
-      font-size: 1rem;
-    }
-    .cross-mark {
-      color: #ef4444;
-      font-weight: 700;
-      font-size: 1rem;
-    }
 
-    /* Таймлайн */
-    .timeline {
-      position: relative;
-      padding-left: 2rem;
-      margin-top: 2rem;
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 120;
+      background: var(--bg-deep);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 1.2rem; height: var(--topbar-height);
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
     }
-    .timeline::before {
-      content: '';
+    .logo-area { display: flex; align-items: center; gap: 0.5rem; position: absolute; left: 3.5rem; }
+    .logo-badge { font-size: 1.8rem; }
+    .tagline-center {
+      font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;
+      white-space: normal; letter-spacing: 0.2px; text-align: center;
+      line-height: 1.3; max-width: 260px;
+    }
+    .top-actions { display: flex; gap: 0.5rem; align-items: center; position: absolute; right: 1rem; }
+    .icon-btn {
+      background: transparent; border: 1px solid var(--border-color);
+      border-radius: 2rem; padding: 0.5rem; font-weight: 600; cursor: pointer;
+      color: var(--text-primary); transition: all var(--transition);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; background: var(--bg-surface); width: 40px; height: 40px;
+    }
+    .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .icon-btn .material-icons { font-size: 20px; }
+
+    .burger { 
+      display: flex; flex-direction: column; gap: 5px; cursor: pointer;
+      background: transparent; border: none; padding: 6px;
+      position: absolute; left: 0.75rem; z-index: 121;
+    }
+    .burger span { width: 24px; height: 2px; background: var(--text-primary); border-radius: 10px; transition: 0.3s; }
+    .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+    .sidebar {
+      position: fixed; top: var(--topbar-height); left: 0;
+      height: calc(100vh - var(--topbar-height)); width: var(--sidebar-width);
+      background: var(--bg-deep); border-right: 1px solid var(--border-color);
+      padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.2rem;
+      z-index: 100; overflow-y: auto;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.1, 1.0);
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar a {
+      text-decoration: none; color: var(--text-secondary); font-weight: 500;
+      padding: 0.8rem 1rem; border-radius: 0.8rem; transition: all var(--transition);
+      font-size: 0.9rem; display: flex; align-items: center; gap: 0.6rem;
+      border: 1px solid transparent;
+    }
+    .sidebar a:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+    .sidebar a.active { background: var(--accent-soft); color: var(--accent); border-left: 3px solid var(--accent); font-weight: 600; }
+    .sidebar-socials { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+    .sidebar-socials .social-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 0.8rem; }
+    .sidebar-socials .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+    .social-icon-link {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; color: #ffffff; text-decoration: none; overflow: hidden;
+    }
+    .social-icon-link img { width: 22px; height: 22px; filter: brightness(0) invert(1); transition: filter 0.2s; display: block; }
+    .social-icon-link:hover { background: #FF7F00; border-color: #FF7F00; transform: scale(1.08); }
+    .social-icon-link:hover img { filter: brightness(0) invert(0); }
+
+    .main-content { margin-left: 0; padding-top: var(--topbar-height); }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 95; display: none; }
+    .overlay.active { display: block; }
+
+    .section { 
+      max-width: 1000px; margin: 0 auto; padding: 3rem 1.2rem;
+      opacity: 0; transform: translateY(25px); transition: all 0.5s ease;
+    }
+    .section.visible { opacity: 1; transform: translateY(0); }
+
+    h2 { 
+      font-weight: 700; font-size: 2rem; margin-bottom: 1.8rem;
+      color: var(--text-primary); position: relative; display: inline-block;
+      letter-spacing: -0.4px;
+    }
+    h2::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 40%; height: 2px; background: var(--accent); }
+
+    .card {
+      background: var(--bg-surface); border: 1px solid var(--border-color);
+      border-radius: var(--radius-card); padding: 1.8rem 1.5rem;
+      transition: all var(--transition); cursor: default;
+    }
+    .card:hover { border-color: var(--accent); }
+    .card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--accent); font-weight: 700; }
+    .card p { color: var(--text-secondary); line-height: 1.5; font-size: 0.9rem; }
+
+    /* Технические особенности — 6 плиток 3×2 */
+    .tech-grid-3x2 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 2.5rem 0;
+    }
+    .tech-step {
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border-left: 4px solid #FF7F00;
+      transition: background 0.2s;
+      min-width: 0;
+    }
+    .tech-step:hover { background: rgba(255, 127, 0, 0.06); }
+    .tech-step-icon { font-size: 2rem; margin-bottom: 0.5rem; color: var(--accent); }
+    .tech-step-icon .material-icons { font-size: 2rem; }
+    .tech-step h3 { font-size: 1.15rem; margin-bottom: 0.6rem; color: var(--accent); font-weight: 700; }
+    .tech-step p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; font-weight: 300; }
+
+    .stat-container { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 3rem; }
+    .stat-item { text-align: center; padding: 1.5rem; background: var(--bg-surface); border-radius: var(--radius-card); border: 1px solid var(--border-color); min-width: 140px; flex: 1; max-width: 200px; }
+    .stat-number { font-size: 3rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.4rem; font-weight: 600; }
+
+    .table-wrapper { overflow-x: auto; border-radius: 1rem; border: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 1.5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 750px; }
+    th { background: var(--bg-surface); padding: 1rem 0.8rem; text-align: left; font-weight: 700; color: var(--accent); border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+    td { padding: 0.9rem 0.8rem; border-bottom: 1px solid var(--border-color); }
+    tr:hover td { background: var(--accent-soft); }
+    .check-mark { color: #10b981; font-weight: 700; }
+    .cross-mark { color: #ef4444; font-weight: 700; }
+
+    /* Наш путь */
+    .timeline { position: relative; padding-left: 2rem; margin-top: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: var(--border-color); }
+    
+    /* Полоса прогресса */
+    .timeline-progress {
       position: absolute;
       left: 14px;
       top: 0;
-      bottom: 0;
-      width: 3px;
-      background: linear-gradient(to bottom, 
-        var(--timeline-done) 0%, 
-        var(--timeline-done) 25%, 
-        var(--timeline-pending) 35%, 
-        var(--timeline-pending) 100%);
-      border-radius: 3px;
-      mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 95%, transparent 100%);
+      width: 2px;
+      background: var(--accent);
+      z-index: 1;
+      transition: height 0.5s ease;
+      box-shadow: 0 0 6px var(--accent);
     }
-    .timeline-item {
-      position: relative;
-      margin-bottom: 2.5rem;
-      padding-left: 1.8rem;
-      transition: all 0.4s ease;
+    
+    .timeline-item { position: relative; margin-bottom: 2.5rem; padding-left: 1.8rem; z-index: 2; }
+    .timeline-item::before { 
+      content: ''; position: absolute; left: -1.6rem; top: 0.4rem;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--bg-surface); border: 2px solid var(--border-color);
+      transition: all 0.3s ease;
     }
-    .timeline-item:hover {
-      transform: translateX(6px);
+    .timeline-item.done::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px var(--accent); }
+    .timeline-item.future::before { 
+      background: transparent; border-color: var(--accent);
+      box-shadow: 0 0 14px var(--accent), 0 0 28px rgba(255, 127, 0, 0.5);
+      animation: pulse-glow 2s infinite;
     }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -1.65rem;
-      top: 0.4rem;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--card-bg);
-      border: 2.5px solid var(--timeline-pending);
-      transition: all 0.4s ease;
-      z-index: 2;
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 14px var(--accent), 0 0 28px rgba(255, 127, 0, 0.5); }
+      50% { box-shadow: 0 0 20px var(--accent), 0 0 40px rgba(255, 127, 0, 0.7); }
     }
-    .timeline-item.done::before {
-      background: var(--timeline-done);
-      border-color: var(--timeline-done);
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-    .timeline-item h3 {
-      font-size: 1.15rem;
-      color: var(--accent);
-      margin-bottom: 0.4rem;
-      font-weight: 700;
-    }
-    .timeline-item p {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
+    .timeline-item h3 { font-size: 1.1rem; color: var(--accent); margin-bottom: 0.4rem; }
+    .timeline-item p { color: var(--text-secondary); font-size: 0.85rem; }
 
-    /* Манифест */
-    .manifesto-list {
-      list-style: none;
-      padding: 0;
-      margin: 1.5rem 0;
-      max-width: 800px;
-    }
-    .manifesto-list li {
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--glass-border);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      transition: all 0.3s;
-    }
-    .manifesto-list li:hover {
-      color: var(--accent);
-      padding-left: 0.6rem;
-    }
-    .manifesto-list li strong {
-      color: var(--accent);
-      font-weight: 700;
-      margin-right: 0.4rem;
-    }
-    .manifesto-list li span {
-      color: var(--text-secondary);
-    }
+    .manifesto-list { list-style: none; padding: 0; margin: 1.5rem 0; }
+    .manifesto-list li { padding: 1rem 0; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; display: flex; gap: 0.5rem; }
+    .manifesto-list li strong { color: var(--accent); min-width: 100px; }
+    .manifesto-list li span { color: var(--text-secondary); }
 
-    /* Сообщество */
-    .community-intro {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      max-width: 800px;
-      margin-bottom: 2rem;
-      line-height: 1.6;
+    .community-intro { color: var(--text-secondary); max-width: 800px; margin-bottom: 2rem; }
+    .community-links { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.2rem 0 3rem 0; align-items: center; }
+    .community-icon-link {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; text-decoration: none; overflow: hidden;
     }
-    .community-section {
-      margin-bottom: 1.5rem;
-    }
-    .community-section h4 {
-      font-size: 1.1rem;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
-      font-weight: 700;
-    }
-    .community-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-    .community-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--card-bg);
-      backdrop-filter: blur(var(--card-blur));
-      -webkit-backdrop-filter: blur(var(--card-blur));
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 0.6rem 1.1rem;
-      color: var(--text-primary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      font-size: 0.85rem;
-    }
-    .community-link:hover {
-      border-color: var(--accent);
-      background: rgba(77, 168, 218, 0.15);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px var(--accent-glow);
-    }
-    .community-link-icon {
-      font-size: 1.1rem;
-    }
+    .community-icon-link img { width: 24px; height: 24px; filter: brightness(0) invert(1); transition: filter 0.2s; display: block; }
+    .community-icon-link:hover { background: #FF7F00; border-color: #FF7F00; transform: scale(1.08); }
+    .community-icon-link:hover img { filter: brightness(0) invert(0); }
 
-    .footer { 
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--glass-border);
-      background: rgba(0,0,0,0.05);
-      font-size: 0.85rem;
+    .btn-special {
+      background: var(--bg-surface); border: 1px solid var(--text-primary);
+      color: var(--text-primary); padding: 0.8rem 2rem; border-radius: 2.5rem;
+      font-weight: 700; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 0.5rem; transition: all var(--transition);
+      margin-right: 0.8rem; margin-bottom: 0.5rem;
     }
-
-    /* Кнопки */
+    .btn-special:hover { background: var(--text-primary); color: #000; }
     .btn-primary {
-      padding: 0.8rem 2rem;
-      background: var(--hero-gradient);
-      border-radius: 2.5rem;
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      display: inline-block;
-      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      box-shadow: 0 8px 25px var(--accent-glow);
-      letter-spacing: 0.2px;
-      font-size: 0.95rem;
+      padding: 0.8rem 2rem; background: var(--accent); border-radius: 2.5rem;
+      color: #000; text-decoration: none; font-weight: 700; display: inline-block;
+      transition: all var(--transition); border: 1px solid var(--accent);
     }
-    .btn-primary:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 15px 35px var(--accent-glow);
-    }
+    .btn-primary:hover { background: #000; color: var(--accent); border-color: var(--accent); }
     .btn-outline {
-      padding: 0.8rem 2rem;
-      border: 2px solid var(--accent);
-      border-radius: 2.5rem;
-      color: var(--text-primary);
-      text-decoration: none;
-      font-weight: 700;
-      display: inline-block;
-      transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.2);
-      font-size: 0.95rem;
+      padding: 0.8rem 2rem; border: 1px solid var(--accent);
+      border-radius: 2.5rem; color: var(--accent); text-decoration: none;
+      font-weight: 700; display: inline-block; transition: all var(--transition);
     }
-    .btn-outline:hover {
-      background: rgba(77, 168, 218, 0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px var(--accent-glow);
-    }
+    .btn-outline:hover { background: var(--accent); color: #000; }
+    .community-telegram-block { margin-top: 3rem; }
+    .community-telegram-block p { margin-bottom: 1rem; }
+    .community-telegram-block .btn-special { margin-bottom: 2.5rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: var(--text-muted); border-top: 1px solid var(--border-color); font-size: 0.85rem; }
+    .lang-switching { animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Анимация перевода */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .lang-switching {
-      animation: fadeInUp 0.35s ease-out;
-    }
-
-    /* ===== МЕДИА-ЗАПРОСЫ ===== */
-
-    /* Планшеты и средние экраны */
     @media (min-width: 769px) {
       .burger { display: none; }
-      .sidebar {
-        transform: translateX(0);
-        box-shadow: 8px 0 40px rgba(0,0,0,0.3);
-      }
+      .sidebar { transform: translateX(0); }
       .main-content { margin-left: var(--sidebar-width); }
       .footer { margin-left: var(--sidebar-width); }
-      .tagline-center { display: block; }
-      .logo-area { position: absolute; left: 2rem; }
+      .tagline-center { white-space: nowrap; max-width: none; }
+      .logo-area { left: 2rem; }
       .section { padding: 4rem 2.5rem; }
-      h2 { font-size: 2.5rem; }
-      .stat-number { font-size: 3.5rem; }
     }
-
-    /* Десктопы */
-    @media (min-width: 1025px) {
-      .tagline-center {
-        font-size: 1.1rem;
-        max-width: 400px;
+    @media (max-width: 768px) {
+      /* На мобильных — плитки в 1 колонку */
+      .tech-grid-3x2 {
+        grid-template-columns: 1fr;
       }
-      .section { padding: 5rem 3rem; }
-      h2 { font-size: 2.8rem; }
-      .logo { font-size: 2.2rem; }
-      .stat-number { font-size: 4rem; }
-      .top-nav { padding: 0 2rem; }
     }
-
-    /* Телефоны */
     @media (max-width: 480px) {
-      .tagline-center { display: none; }
       .section { padding: 2rem 1rem; }
       h2 { font-size: 1.6rem; }
-      h2::after { width: 40%; }
-      .stat-number { font-size: 2.5rem; }
-      .stat-container { gap: 1rem; }
-      .stat-item { padding: 1.2rem; min-width: 120px; }
-      .stat-label { font-size: 0.85rem; }
-      .card { padding: 1.3rem 1.1rem; }
-      .card h3 { font-size: 1.1rem; }
-      .card p { font-size: 0.8rem; }
-      .tech-card { padding: 1.2rem 1rem; }
-      .tech-card h3 { font-size: 1rem; }
-      .tech-card p { font-size: 0.78rem; }
-      .tech-card-icon { font-size: 1.6rem; }
-      .timeline { padding-left: 1.8rem; }
-      .timeline::before { left: 10px; }
-      .timeline-item { padding-left: 1.5rem; }
-      .timeline-item::before { left: -1.45rem; width: 12px; height: 12px; }
-      .timeline-item h3 { font-size: 1rem; }
-      .timeline-item p { font-size: 0.78rem; }
-      .btn-primary, .btn-outline { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
-      .manifesto-list li { font-size: 0.85rem; }
-      .community-link { font-size: 0.78rem; padding: 0.5rem 0.9rem; }
-      .community-section h4 { font-size: 1rem; }
-      .table-wrapper::after {
-        font-size: 0.65rem;
-        bottom: 4px;
-        right: 8px;
-        padding: 3px 8px;
-      }
-      th { font-size: 0.72rem; padding: 0.7rem 0.5rem; }
-      td { font-size: 0.7rem; padding: 0.7rem 0.5rem; }
-      .logo { font-size: 1.5rem; }
-      .icon-btn { padding: 0.4rem 0.8rem; font-size: 0.78rem; }
-      .burger span { width: 22px; height: 2px; }
-      .burger { gap: 4px; }
-    }
-
-    /* Очень маленькие телефоны */
-    @media (max-width: 360px) {
-      .section { padding: 1.5rem 0.8rem; }
-      h2 { font-size: 1.4rem; }
-      .stat-number { font-size: 2rem; }
-      .stat-item { padding: 1rem; min-width: 100px; }
-      .stat-label { font-size: 0.75rem; }
-      .grid { grid-template-columns: 1fr; gap: 0.8rem; }
-      .tech-grid { grid-template-columns: 1fr; gap: 0.8rem; }
-      .community-links { gap: 0.4rem; }
-      .community-link { font-size: 0.72rem; padding: 0.4rem 0.7rem; }
+      .manifesto-list li { flex-direction: column; gap: 0.2rem; }
+      .manifesto-list li strong { min-width: auto; }
     }
   </style>
 </head>
 <body>
-  <div class="bg-glow"></div>
   <div class="overlay" id="overlay"></div>
 
   <header class="top-nav">
@@ -826,408 +298,200 @@
       <span></span><span></span><span></span>
     </button>
     <div class="logo-area">
-      <span class="logo">GUS</span>
+      <span class="gus-badge logo-badge">GUS</span>
     </div>
-    <div class="tagline-center" data-i18n="slogan">Optimization, customization, freedom</div>
+    <div class="tagline-center" data-i18n="slogan">Оптимизация, кастомизация, свобода</div>
     <div class="top-actions">
       <button class="icon-btn" id="langToggleDesktop" aria-label="Сменить язык">
-        <span>🌐</span>
-        <span id="langText">RU</span>
+        <span class="material-icons">language</span>
       </button>
     </div>
   </header>
 
   <nav class="sidebar" id="sidebar">
-    <a href="#hero" data-i18n="nav_home">Start</a>
-    <a href="#about" data-i18n="nav_about">About</a>
-    <a href="#tech" data-i18n="nav_tech">Technology</a>
-    <a href="#comparison" data-i18n="nav_comparison">Comparison</a>
-    <a href="#roadmap" data-i18n="nav_roadmap">Our Path</a>
-    <a href="#manifesto" data-i18n="nav_manifesto">Manifesto</a>
-    <a href="#community" data-i18n="nav_community">Community</a>
+    <a href="#hero" data-i18n="nav_home">Старт</a>
+    <a href="#about" data-i18n="nav_about">О проекте</a>
+    <a href="#tech" data-i18n="nav_tech">Архитектура</a>
+    <a href="#comparison" data-i18n="nav_comparison">Сравнение</a>
+    <a href="#roadmap" data-i18n="nav_roadmap">Наш путь</a>
+    <a href="#manifesto" data-i18n="nav_manifesto">Манифест</a>
+    <a href="#community" data-i18n="nav_community">Сообщество</a>
+    <div class="sidebar-socials">
+      <div class="social-label" data-i18n="social_label">Соцсети</div>
+      <div class="social-grid">
+        <a href="https://www.instagram.com/greatusersystem/" target="_blank" class="social-icon-link" aria-label="Instagram"><img src="instagram.png" alt="Instagram"></a>
+        <a href="https://www.facebook.com/profile.php?id=61590893377240" target="_blank" class="social-icon-link" aria-label="Facebook"><img src="facebook.png" alt="Facebook"></a>
+        <a href="https://x.com/GreatUserTeam" target="_blank" class="social-icon-link" aria-label="X"><img src="x.png" alt="X"></a>
+        <a href="https://www.youtube.com/@GreatUserTeam" target="_blank" class="social-icon-link" aria-label="YouTube"><img src="youtube.png" alt="YouTube"></a>
+        <a href="https://dzen.ru/greatuserteam" target="_blank" class="social-icon-link" aria-label="Dzen"><img src="dzen.png" alt="Dzen"></a>
+        <a href="https://vk.com/club239710312" target="_blank" class="social-icon-link" aria-label="VK"><img src="vk.png" alt="VK"></a>
+      </div>
+    </div>
   </nav>
 
   <div class="main-content" id="mainContent">
     <main>
-      <section id="hero" class="section" style="text-align:center;">
-        <h1 style="font-size:clamp(1.8rem, 5vw, 4rem); background:none; -webkit-text-fill-color: initial; margin-top: 1.5rem;">
-          <span style="background: var(--hero-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight:800;">Great User System</span>
+      <!-- СТАРТ — увеличенные отступы -->
+      <section id="hero" class="section" style="text-align:center; padding-top: 5rem; padding-bottom: 5rem;">
+        <h1 style="font-size:clamp(1.8rem, 5vw, 3.5rem); margin-top: 1.5rem; color:var(--text-primary); line-height: 1.3;">
+          <span class="gus-badge" style="font-size: 2.2rem; padding: 0.2rem 1rem;">Great User System</span>
           <br>
-          <span style="color: var(--text-primary); font-size:0.7em;" data-i18n="hero_title_part">— the operating system you deserve</span>
+          <span style="font-weight: 600; font-size: 0.7em; display: block; margin-top: 1.2rem;" data-i18n="hero_title_part">OS, которую ты заслуживаешь</span>
         </h1>
-        <p style="font-size:clamp(0.9rem, 3vw, 1.2rem); color:var(--text-secondary); max-width:700px; margin:1.5rem auto; line-height: 1.6; padding: 0 0.5rem;" data-i18n="hero_subtitle">
-          GUS is not a Linux distro nor a Windows clone. It's a constructor platform with a Rust microkernel.
+        <p style="font-size:clamp(0.9rem, 3vw, 1.2rem); color:var(--text-secondary); max-width:700px; margin:2rem auto;" data-i18n="hero_subtitle">
+          <span class="gus-badge">GUS</span> — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.
         </p>
-        <div style="display:flex; gap:1rem; justify-content:center; margin-top:2rem; flex-wrap:wrap; padding: 0 0.5rem;">
-          <a href="#tech" class="btn-primary" data-i18n="how_it_works">How it works</a>
-          <a href="#manifesto" class="btn-outline" data-i18n="manifesto_btn">Manifesto</a>
+        <div style="display:flex; gap:1rem; justify-content:center; margin-top:2.5rem; flex-wrap:wrap;">
+          <a href="#tech" class="btn-primary" data-i18n="how_it_works">Как это работает</a>
+          <a href="#manifesto" class="btn-outline" data-i18n="manifesto_btn">Манифест</a>
         </div>
-        <div class="stat-container">
-          <div class="stat-item">
-            <div class="stat-number">10</div>
-            <div class="stat-label" data-i18n="developers">developers</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">30</div>
-            <div class="stat-label" data-i18n="forum_members">forum members</div>
-          </div>
+        <div class="stat-container" style="margin-top: 4rem;">
+          <div class="stat-item"><div class="stat-number">10</div><div class="stat-label" data-i18n="developers">разработчиков</div></div>
+          <div class="stat-item"><div class="stat-number">30</div><div class="stat-label" data-i18n="forum_members">человек на форуме</div></div>
         </div>
       </section>
 
       <section id="about" class="section">
-        <h2 data-i18n="about_title">About the project</h2>
-        <p style="font-weight:700; font-size:clamp(1.1rem, 3vw, 1.6rem); margin-bottom:1.2rem; color: var(--accent);" data-i18n="about_lead">We are not making a distribution. We are creating a new philosophy.</p>
-        <p style="color:var(--text-secondary); font-size:clamp(0.85rem, 2.5vw, 1.1rem); max-width: 800px;" data-i18n="about_text">GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.</p>
+        <h2 data-i18n="about_title">О проекте</h2>
+        <p style="font-weight:700; font-size:clamp(1.1rem, 3vw, 1.6rem); margin-bottom:1.2rem; color: var(--accent);" data-i18n="about_lead">Мы не делаем дистрибутив. Мы создаём новую философию.</p>
+        <p style="color:var(--text-secondary); max-width:800px;" data-i18n="about_text"><span class="gus-badge">GUS</span> — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.</p>
+        <p style="color:var(--text-secondary); margin-top:1rem; max-width:800px;" data-i18n="about_dynamic">Ядро собирается конкретно под ваш компьютер. Перед установкой оно сканирует оборудование и загружает только нужные модули с нашего сервера — по сути, у каждого будет стоять уникальная система.</p>
       </section>
 
       <section id="tech" class="section">
-        <h2 data-i18n="tech_title">Technical features</h2>
-        <div class="tech-grid">
-          <div class="tech-card">
-            <div class="tech-card-icon">🛡️</div>
-            <h3>Microkernel</h3>
-            <p data-i18n="tech_microkernel">A video driver crash won't bring down the system. The kernel is minimal and handles only critical functions.</p>
+        <h2 data-i18n="tech_title">Технические особенности</h2>
+        <!-- 6 плиток 3×2 -->
+        <div class="tech-grid-3x2">
+          <div class="tech-step">
+            <div class="tech-step-icon"><span class="material-icons">security</span></div>
+            <h3 data-i18n="tech_microkernel_title">Микроядро</h3>
+            <p data-i18n="tech_microkernel">Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает только за критически важные функции.</p>
           </div>
-          <div class="tech-card">
-            <div class="tech-card-icon">🦀</div>
-            <h3>Rust</h3>
-            <p data-i18n="tech_rust">Memory safety without compromises. A modern language that eliminates entire classes of vulnerabilities at compile time.</p>
+          <div class="tech-step">
+            <div class="tech-step-icon"><span class="material-icons">code</span></div>
+            <h3 data-i18n="tech_rust_title">Rust</h3>
+            <p data-i18n="tech_rust">Безопасность памяти без компромиссов. Современный язык исключает целые классы уязвимостей на этапе компиляции.</p>
           </div>
-          <div class="tech-card">
-            <div class="tech-card-icon">🧩</div>
-            <h3>Modularity</h3>
-            <p data-i18n="tech_modular">Updates without rebooting. Each module is isolated and can be updated independently.</p>
+          <div class="tech-step">
+            <div class="tech-step-icon"><span class="material-icons">extension</span></div>
+            <h3 data-i18n="tech_modular_title">Лёгкая модульность</h3>
+            <p data-i18n="tech_modular">Модули общаются через быстрый IPC на Rust. Никаких тяжёлых накладных расходов, присущих старым ОС.</p>
           </div>
-          <div class="tech-card">
-            <div class="tech-card-icon">📦</div>
-            <h3>Program = File</h3>
-            <p data-i18n="tech_sandbox">Isolated modules, nowhere for viruses to hide. OS-level sandboxing.</p>
+          <div class="tech-step">
+            <div class="tech-step-icon"><span class="material-icons">inventory_2</span></div>
+            <h3 data-i18n="tech_sandbox_title">Программа = Файл</h3>
+            <p data-i18n="tech_sandbox">Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.</p>
           </div>
+          <div class="tech-step">
+            <div class="tech-step-icon"><span class="material-icons">speed</span></div>
+            <h3>Производительность</h3>
+            <p>Минимальные накладные расходы IPC обеспечивают быстродействие, сравнимое с монолитными ядрами.</p>
+          </div>
+          <div class="tech-step">
+            <div class="tech-step-icon"><span class="material-icons">build_circle</span></div>
+            <h3>Динамическая сборка</h3>
+            <p>Ядро собирается под конкретное железо — никаких лишних драйверов и модулей в системе.</p>
+          </div>
+        </div>
+        <div style="margin-top:2rem; background:var(--bg-surface); border:1px solid var(--border-color); border-radius:1.5rem; padding:1.5rem;">
+          <p style="color:var(--accent); font-weight:700;" data-i18n="tech_why_title">Почему модульность будет быстрой в <span class="gus-badge">GUS</span>:</p>
+          <p style="color:var(--text-secondary);" data-i18n="tech_why_desc">Тяжесть модульности — это миф, основанный на опыте старых ОС. В <span class="gus-badge">GUS</span> модульность станет легкой, потому что мы изначально проектируем систему как набор независимых сервисов, которые общаются через эффективные каналы (IPC), написанные на безопасном и высокопроизводительном языке Rust.</p>
         </div>
       </section>
 
       <section id="comparison" class="section">
-        <h2 data-i18n="comp_title">Operating System Comparison</h2>
-        <p style="color:var(--text-secondary); font-size:clamp(0.85rem, 2.5vw, 1.1rem); max-width:800px; margin-bottom:1.2rem; line-height:1.6;" data-i18n="comp_intro">We compared GUS with other popular operating systems to show the fundamental differences in architecture and philosophy.</p>
-        <div class="table-wrapper" id="tableWrapper">
+        <h2 data-i18n="comp_title">Сравнение операционных систем</h2>
+        <p style="color:var(--text-secondary); margin-bottom:1.5rem;" data-i18n="comp_intro">Мы сравнили <span class="gus-badge">GUS</span> с другими популярными ОС, чтобы показать принципиальные отличия в архитектуре и философии.</p>
+        <div class="table-wrapper">
           <table>
             <thead>
               <tr>
-                <th data-i18n="col_feature">Feature</th>
-                <th>GUS</th>
+                <th data-i18n="col_feature">Характеристика</th>
+                <th><span class="gus-badge">GUS</span></th>
                 <th>Linux</th>
                 <th>Windows</th>
                 <th>FreeBSD</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td data-i18n="row_kernel">Kernel type</td>
-                <td><strong data-i18n="val_microkernel">Microkernel</strong></td>
-                <td data-i18n="val_monolithic">Monolithic</td>
-                <td data-i18n="val_hybrid">Hybrid</td>
-                <td data-i18n="val_monolithic2">Monolithic</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_opensource">Open source</td>
-                <td><span class="check-mark" data-i18n="val_yes">✅ Yes</span></td>
-                <td><span class="check-mark" data-i18n="val_yes2">✅ Yes</span></td>
-                <td><span class="cross-mark" data-i18n="val_no">❌ No</span></td>
-                <td><span class="check-mark" data-i18n="val_yes3">✅ Yes</span></td>
-              </tr>
-              <tr>
-                <td data-i18n="row_maturity">Maturity / Stability</td>
-                <td data-i18n="val_maturity_gus">Project (in development)</td>
-                <td data-i18n="val_maturity_linux">Mature</td>
-                <td data-i18n="val_maturity_windows">Mature</td>
-                <td data-i18n="val_maturity_freebsd">Mature</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_complexity">User complexity</td>
-                <td><strong data-i18n="val_complexity_low">Low (constructor)</strong></td>
-                <td data-i18n="val_complexity_high">High</td>
-                <td data-i18n="val_complexity_medium">Medium</td>
-                <td data-i18n="val_complexity_high2">High</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_popularity">Popularity</td>
-                <td data-i18n="val_popularity_gus">Very low (new OS)</td>
-                <td data-i18n="val_popularity_linux">High</td>
-                <td data-i18n="val_popularity_windows">Very high</td>
-                <td data-i18n="val_popularity_freebsd">Medium</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_install">Installation difficulty</td>
-                <td><strong data-i18n="val_install_easy">Easy</strong></td>
-                <td data-i18n="val_install_medium">Medium</td>
-                <td data-i18n="val_install_medium2">Medium</td>
-                <td data-i18n="val_install_hard">Hard</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_language">Implementation language</td>
-                <td><strong data-i18n="val_lang_rust">Rust</strong></td>
-                <td data-i18n="val_lang_c">C</td>
-                <td data-i18n="val_lang_cpp">C / C++</td>
-                <td data-i18n="val_lang_c2">C</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_modularity">Modularity (architecture)</td>
-                <td><span class="check-mark" data-i18n="val_modularity_complete">✅ Complete</span></td>
-                <td data-i18n="val_modularity_partial">Partial</td>
-                <td data-i18n="val_modularity_partial2">Partial</td>
-                <td data-i18n="val_modularity_partial3">Partial</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_customization">System customization</td>
-                <td><span class="check-mark" data-i18n="val_customization_max">✅ Maximum</span></td>
-                <td data-i18n="val_customization_high">High</td>
-                <td data-i18n="val_customization_low">Low</td>
-                <td data-i18n="val_customization_high2">High</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_skills">Required skills (daily)</td>
-                <td><strong data-i18n="val_skills_none">None</strong></td>
-                <td data-i18n="val_skills_sometimes">Sometimes</td>
-                <td data-i18n="val_skills_none2">None</td>
-                <td data-i18n="val_skills_often">Often</td>
-              </tr>
-              <tr>
-                <td data-i18n="row_updates">Update management</td>
-                <td><strong data-i18n="val_updates_modular">Modular</strong></td>
-                <td data-i18n="val_updates_centralized">Centralized</td>
-                <td data-i18n="val_updates_centralized2">Centralized</td>
-                <td data-i18n="val_updates_centralized3">Centralized</td>
-              </tr>
+              <tr><td data-i18n="row_kernel">Тип ядра</td><td><strong data-i18n="val_microkernel">Микроядро</strong></td><td data-i18n="val_monolithic">Монолитное</td><td data-i18n="val_hybrid">Гибридное</td><td data-i18n="val_monolithic2">Монолитное</td></tr>
+              <tr><td data-i18n="row_opensource">Открытый исходный код</td><td><span class="check-mark">✅ Да</span></td><td><span class="check-mark">✅ Да</span></td><td><span class="cross-mark">❌ Нет</span></td><td><span class="check-mark">✅ Да</span></td></tr>
+              <tr><td data-i18n="row_maturity">Зрелость / Стабильность</td><td data-i18n="val_maturity_gus">Проект (в разработке)</td><td data-i18n="val_maturity_linux">Зрелая</td><td data-i18n="val_maturity_windows">Зрелая</td><td data-i18n="val_maturity_freebsd">Зрелая</td></tr>
+              <tr><td data-i18n="row_complexity">Сложность для пользователя</td><td><strong data-i18n="val_complexity_low">Низкая (конструктор)</strong></td><td data-i18n="val_complexity_high">Высокая</td><td data-i18n="val_complexity_medium">Средняя</td><td data-i18n="val_complexity_high2">Высокая</td></tr>
+              <tr><td data-i18n="row_popularity">Популярность</td><td data-i18n="val_popularity_gus">Очень низкая (новая ОС)</td><td data-i18n="val_popularity_linux">Высокая</td><td data-i18n="val_popularity_windows">Очень высокая</td><td data-i18n="val_popularity_freebsd">Средняя</td></tr>
+              <tr><td data-i18n="row_install">Сложность установки</td><td><strong data-i18n="val_install_easy">Легко</strong></td><td data-i18n="val_install_medium">Средне</td><td data-i18n="val_install_medium2">Средне</td><td data-i18n="val_install_hard">Сложно</td></tr>
+              <tr><td data-i18n="row_language">Основной язык реализации</td><td><strong data-i18n="val_lang_rust">Rust</strong></td><td data-i18n="val_lang_c">C</td><td data-i18n="val_lang_cpp">C / C++</td><td data-i18n="val_lang_c2">C</td></tr>
+              <tr><td data-i18n="row_modularity">Модульность (архитектура)</td><td><span class="check-mark">✅ Полная</span></td><td data-i18n="val_modularity_partial">Частичная</td><td data-i18n="val_modularity_partial2">Частичная</td><td data-i18n="val_modularity_partial3">Частичная</td></tr>
+              <tr><td data-i18n="row_customization">Кастомизация системы</td><td><span class="check-mark">✅ Максимальная</span></td><td data-i18n="val_customization_high">Высокая</td><td data-i18n="val_customization_low">Низкая</td><td data-i18n="val_customization_high2">Высокая</td></tr>
+              <tr><td data-i18n="row_skills">Необходимость навыков (ежедневно)</td><td><strong data-i18n="val_skills_none">Не нужны</strong></td><td data-i18n="val_skills_sometimes">Иногда</td><td data-i18n="val_skills_none2">Не нужны</td><td data-i18n="val_skills_often">Часто</td></tr>
+              <tr><td data-i18n="row_updates">Управление обновлениями</td><td><strong data-i18n="val_updates_modular">Модульное</strong></td><td data-i18n="val_updates_centralized">Централизованное</td><td data-i18n="val_updates_centralized2">Централизованное</td><td data-i18n="val_updates_centralized3">Централизованное</td></tr>
             </tbody>
           </table>
         </div>
-        <p style="color:var(--text-muted); font-size:clamp(0.78rem, 2vw, 0.95rem); max-width:800px; margin-top:1.2rem; line-height:1.5;" data-i18n="comp_outro">GUS is a young project, but its architecture is designed for the future — maximum security, modularity and user control.</p>
+        <p style="color:var(--text-muted); margin-top:1.2rem;" data-i18n="comp_outro"><span class="gus-badge">GUS</span> — молодой проект, но его архитектура спроектирована для будущего — максимальная безопасность, модульность и контроль пользователя.</p>
       </section>
 
       <section id="roadmap" class="section">
-        <h2 data-i18n="roadmap_title">Our Path</h2>
-        <div class="timeline">
-          <div class="timeline-item done">
-            <h3 data-i18n="roadmap_concept_title">Concept</h3>
-            <p data-i18n="roadmap_concept_desc">We have a concrete vision of what we want to create. It may not seem like much, but it's often important to understand where we're heading.</p>
-          </div>
-          <div class="timeline-item done">
-            <h3 data-i18n="roadmap_bootstrap_title">Bootstrap</h3>
-            <p data-i18n="roadmap_bootstrap_desc">Our code is currently more than just a hello world.</p>
-          </div>
-          <div class="timeline-item done">
-            <h3 data-i18n="roadmap_search_title">Finding programmers and starting the journey</h3>
-            <p data-i18n="roadmap_search_desc">We are actively looking for contributors to help develop our project.</p>
-          </div>
-          <div class="timeline-item">
-            <h3 data-i18n="roadmap_kernel_title">Kernel</h3>
-            <p data-i18n="roadmap_kernel_desc">The kernel must be lightweight, as it won't contain drivers etc. Each element will reside in its own module.</p>
-          </div>
-          <div class="timeline-item">
-            <h3 data-i18n="roadmap_modules_title">Modular system</h3>
-            <p data-i18n="roadmap_modules_desc">All modules must interact with each other and communicate through the kernel.</p>
-          </div>
-          <div class="timeline-item">
-            <h3 data-i18n="roadmap_interface_title">Interface</h3>
-            <p data-i18n="roadmap_interface_desc">Customization is one of our three main pillars upon which the entire ideology of the system is based.</p>
-          </div>
-          <div class="timeline-item">
-            <h3 data-i18n="roadmap_software_title">Software</h3>
-            <p data-i18n="roadmap_software_desc">We plan to create our own alternatives to programs on GUS, and following the example of Google and Apple, create our own ecosystem of simple (and not so simple) applications. We also need to create an app store for our OS.</p>
-          </div>
-          <div class="timeline-item">
-            <h3 data-i18n="roadmap_distribution_title">Distribution</h3>
-            <p data-i18n="roadmap_distribution_desc">GUS should become popular due to its advantages.</p>
-          </div>
-          <div class="timeline-item">
-            <h3 data-i18n="roadmap_bootloader_title">Custom bootloader</h3>
-            <p data-i18n="roadmap_bootloader_desc">rust-bootloader is good, but having our own bootloader is even better.</p>
-          </div>
-          <div class="timeline-item">
-            <h3 data-i18n="roadmap_mobile_title">GUS for Mobile</h3>
-            <p data-i18n="roadmap_mobile_desc">In the future, we want to bring our OS to phones and tablets.</p>
-          </div>
+        <h2 data-i18n="roadmap_title">Наш путь</h2>
+        <div class="timeline" id="timelineContainer">
+          <div class="timeline-progress" id="timelineProgress"></div>
+          <div class="timeline-item done" data-timeline-done="true"><h3 data-i18n="roadmap_concept_title">Концепция</h3><p data-i18n="roadmap_concept_desc">У нас есть конкретное представление о том, что мы хотим сделать. Важно понимать, куда двигаться.</p></div>
+          <div class="timeline-item done" data-timeline-done="true"><h3 data-i18n="roadmap_bootstrap_title">Bootstrap</h3><p data-i18n="roadmap_bootstrap_desc">Наш код на данный момент представляет собой нечто большее, чем hello world.</p></div>
+          <div class="timeline-item done" data-timeline-done="true"><h3 data-i18n="roadmap_search_title">Поиск программистов и начало пути</h3><p data-i18n="roadmap_search_desc">Мы в активном поиске активистов, которые помогут развивать наш проект.</p></div>
+          <div class="timeline-item"><h3 data-i18n="roadmap_kernel_title">Ядро</h3><p data-i18n="roadmap_kernel_desc">Ядро должно быть легким, так как не содержит драйверов. Каждый элемент в своем модуле.</p></div>
+          <div class="timeline-item"><h3 data-i18n="roadmap_modules_title">Модульная система</h3><p data-i18n="roadmap_modules_desc">Все модули взаимодействуют друг с другом и общаются через ядро.</p></div>
+          <div class="timeline-item"><h3 data-i18n="roadmap_interface_title">Интерфейс</h3><p data-i18n="roadmap_interface_desc">Кастомизация — один из трёх наших основных «китов».</p></div>
+          <div class="timeline-item"><h3 data-i18n="roadmap_software_title">Софт</h3><p data-i18n="roadmap_software_desc">Свои аналоги программ и собственная экосистема приложений с магазином.</p></div>
+          <div class="timeline-item"><h3 data-i18n="roadmap_distribution_title">Распространение</h3><p data-i18n="roadmap_distribution_desc"><span class="gus-badge">GUS</span> должен стать популярным за счет своих преимуществ.</p></div>
+          <div class="timeline-item"><h3 data-i18n="roadmap_bootloader_title">Собственный загрузчик</h3><p data-i18n="roadmap_bootloader_desc">Rust-bootloader это хорошо, а свой загрузчик — еще лучше.</p></div>
+          <div class="timeline-item future"><h3 data-i18n="roadmap_mobile_title"><span class="gus-badge">GUS</span> for Mobile</h3><p data-i18n="roadmap_mobile_desc">В будущем мы хотим сделать нашу OS на телефоны и планшеты.</p></div>
         </div>
       </section>
 
       <section id="manifesto" class="section">
-        <h2 data-i18n="manifesto_title">Manifesto</h2>
+        <h2 data-i18n="manifesto_title">Манифест</h2>
         <ul class="manifesto-list">
-          <li><strong data-i18n="manifesto_minimalism_title">Minimalism:</strong> <span data-i18n="manifesto_minimalism">A system without unnecessary "garbage" and redundant processes.</span></li>
-          <li><strong data-i18n="manifesto_security_title">Security:</strong> <span data-i18n="manifesto_security">Rust, microkernel and complete module isolation.</span></li>
-          <li><strong data-i18n="manifesto_flexibility_title">Flexibility:</strong> <span data-i18n="manifesto_flexibility">Modular architecture for any hardware.</span></li>
-          <li><strong data-i18n="manifesto_privacy_title">Privacy:</strong> <span data-i18n="manifesto_privacy">No surveillance or imposed functionality.</span></li>
-          <li><strong data-i18n="manifesto_control_title">Control:</strong> <span data-i18n="manifesto_control">We return full power over your device to you.</span></li>
+          <li><strong data-i18n="manifesto_minimalism_title">Минимализм:</strong> <span data-i18n="manifesto_minimalism">Система без лишнего «мусора» и ненужных процессов.</span></li>
+          <li><strong data-i18n="manifesto_security_title">Безопасность:</strong> <span data-i18n="manifesto_security">Rust, микроядро и полная изоляция модулей.</span></li>
+          <li><strong data-i18n="manifesto_flexibility_title">Гибкость:</strong> <span data-i18n="manifesto_flexibility">Модульная архитектура под любое «железо».</span></li>
+          <li><strong data-i18n="manifesto_privacy_title">Приватность:</strong> <span data-i18n="manifesto_privacy">Никакой слежки и навязанного функционала.</span></li>
+          <li><strong data-i18n="manifesto_control_title">Контроль:</strong> <span data-i18n="manifesto_control">Возвращаем вам полную власть над вашим устройством.</span></li>
+          <li><strong data-i18n="manifesto_transparency_title">Прозрачность:</strong> <span data-i18n="manifesto_transparency">Открытый код и открытый процесс разработки.</span></li>
+          <li><strong data-i18n="manifesto_community_title">Сообщество:</strong> <span data-i18n="manifesto_community">Проект, управляемый сообществом, а не корпорацией.</span></li>
         </ul>
-        <div class="card" style="max-width: 800px; margin: 1.5rem auto 0;">
-          <p style="font-size: clamp(1rem, 3vw, 1.2rem); font-weight: 600; color: var(--accent);" data-i18n="manifesto_text">"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice."</p>
+        <div class="card" style="max-width:800px; margin-top:1.5rem;">
+          <p style="color:var(--accent); font-weight:600;" data-i18n="manifesto_text">«<span class="gus-badge">GUS</span> возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»</p>
         </div>
       </section>
 
       <section id="community" class="section">
-        <h2 data-i18n="community_title">Community</h2>
-        <p class="community-intro" data-i18n="community_intro">Our project relies entirely on volunteers. Contribute by supporting us and joining us on our resources. We need support:</p>
-        
-        <div class="community-section">
-          <h4 data-i18n="community_sub_community">Community</h4>
-          <div class="community-links">
-            <a href="https://t.me/GreatUserSystem" target="_blank" class="community-link"><span class="community-link-icon">📢</span> Telegram Channel</a>
-            <a href="https://t.me/GreatUserSystemForum" target="_blank" class="community-link"><span class="community-link-icon">🗂️</span> Telegram Forum</a>
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">🎮</span> Discord Chat</a>
-          </div>
+        <h2 data-i18n="community_title">Сообщество</h2>
+        <p class="community-intro" data-i18n="community_intro">Наш проект держится исключительно на добровольцах. Если вы хотите следить за нашим развитием, подписывайтесь на наши соцсети:</p>
+        <div class="community-links">
+          <a href="https://www.instagram.com/greatusersystem/" target="_blank" class="community-icon-link" aria-label="Instagram"><img src="instagram.png" alt="Instagram"></a>
+          <a href="https://www.facebook.com/profile.php?id=61590893377240" target="_blank" class="community-icon-link" aria-label="Facebook"><img src="facebook.png" alt="Facebook"></a>
+          <a href="https://x.com/GreatUserTeam" target="_blank" class="community-icon-link" aria-label="X"><img src="x.png" alt="X"></a>
+          <a href="https://www.youtube.com/@GreatUserTeam" target="_blank" class="community-icon-link" aria-label="YouTube"><img src="youtube.png" alt="YouTube"></a>
+          <a href="https://dzen.ru/greatuserteam" target="_blank" class="community-icon-link" aria-label="Dzen"><img src="dzen.png" alt="Dzen"></a>
+          <a href="https://vk.com/club239710312" target="_blank" class="community-icon-link" aria-label="VK"><img src="vk.png" alt="VK"></a>
         </div>
-
-        <div class="community-section">
-          <h4 data-i18n="community_sub_social">Social Networks</h4>
-          <div class="community-links">
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">📷</span> Instagram</a>
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">📘</span> Facebook</a>
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">🐦</span> X (Twitter)</a>
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">🌐</span> VK</a>
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">👽</span> Reddit</a>
-          </div>
-        </div>
-
-        <div class="community-section">
-          <h4 data-i18n="community_sub_support">Support</h4>
-          <div class="community-links">
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">💰</span> VK Donut</a>
-            <a href="#" target="_blank" class="community-link"><span class="community-link-icon">❤️</span> Patreon</a>
-          </div>
+        <div class="community-telegram-block">
+          <p style="color:var(--text-secondary);" data-i18n="community_forum_text">Если вы хотите с нами разрабатывать OS или задать вопрос, присоединяйтесь на наш телеграм форум:</p>
+          <a href="https://t.me/GreatUserSystemForum" target="_blank" class="btn-special"><span>🗂️</span> Telegram Forum</a>
+          <p style="color:var(--text-secondary); margin-top:2rem;" data-i18n="community_channel_text">Также у нас есть телеграм канал, в котором быстрее всего выходят все новости:</p>
+          <a href="https://t.me/GreatUserSystem" target="_blank" class="btn-special"><span>📢</span> Telegram Channel</a>
         </div>
       </section>
     </main>
     <footer class="footer">
-      <p><strong>GUS</strong> — Great User System. Open Source Project. © 2026</p>
-      <p style="margin-top: 0.4rem;" data-i18n="footer_motto">Optimization · Customization · Freedom | Built with Rust 🦀</p>
+      <p><strong><span class="gus-badge">GUS</span></strong> — Great User System. Open Source Project. © 2026</p>
+      <p style="margin-top: 0.4rem;" data-i18n="footer_motto">Оптимизация · Кастомизация · Свобода | Built with Rust 🦀</p>
     </footer>
   </div>
 
   <script>
     (function() {
       const i18n = {
-        en: {
-          slogan: "Optimization, customization, freedom",
-          nav_home: "Start",
-          nav_about: "About",
-          nav_tech: "Technology",
-          nav_comparison: "Comparison",
-          nav_roadmap: "Our Path",
-          nav_manifesto: "Manifesto",
-          nav_community: "Community",
-          hero_title_part: "— the operating system you deserve",
-          hero_subtitle: "GUS is not a Linux distro nor a Windows clone. It's a constructor platform with a Rust microkernel.",
-          how_it_works: "How it works",
-          manifesto_btn: "Manifesto",
-          developers: "developers",
-          forum_members: "forum members",
-          about_title: "About the project",
-          about_lead: "We are not making a distribution. We are creating a new philosophy.",
-          about_text: "GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.",
-          tech_title: "Technical features",
-          tech_microkernel: "A video driver crash won't bring down the system. The kernel is minimal and handles only critical functions.",
-          tech_rust: "Memory safety without compromises. A modern language that eliminates entire classes of vulnerabilities at compile time.",
-          tech_modular: "Updates without rebooting. Each module is isolated and can be updated independently.",
-          tech_sandbox: "Isolated modules, nowhere for viruses to hide. OS-level sandboxing.",
-          comp_title: "Operating System Comparison",
-          comp_intro: "We compared GUS with other popular operating systems to show the fundamental differences in architecture and philosophy.",
-          comp_outro: "GUS is a young project, but its architecture is designed for the future — maximum security, modularity and user control.",
-          col_feature: "Feature",
-          row_kernel: "Kernel type",
-          row_opensource: "Open source",
-          row_maturity: "Maturity / Stability",
-          row_complexity: "User complexity",
-          row_popularity: "Popularity",
-          row_install: "Installation difficulty",
-          row_language: "Implementation language",
-          row_modularity: "Modularity (architecture)",
-          row_customization: "System customization",
-          row_skills: "Required skills (daily)",
-          row_updates: "Update management",
-          val_microkernel: "Microkernel",
-          val_monolithic: "Monolithic",
-          val_hybrid: "Hybrid",
-          val_monolithic2: "Monolithic",
-          val_yes: "✅ Yes",
-          val_yes2: "✅ Yes",
-          val_yes3: "✅ Yes",
-          val_no: "❌ No",
-          val_maturity_gus: "Project (in development)",
-          val_maturity_linux: "Mature",
-          val_maturity_windows: "Mature",
-          val_maturity_freebsd: "Mature",
-          val_complexity_low: "Low (constructor)",
-          val_complexity_high: "High",
-          val_complexity_medium: "Medium",
-          val_complexity_high2: "High",
-          val_popularity_gus: "Very low (new OS)",
-          val_popularity_linux: "High",
-          val_popularity_windows: "Very high",
-          val_popularity_freebsd: "Medium",
-          val_install_easy: "Easy",
-          val_install_medium: "Medium",
-          val_install_medium2: "Medium",
-          val_install_hard: "Hard",
-          val_lang_rust: "Rust",
-          val_lang_c: "C",
-          val_lang_cpp: "C / C++",
-          val_lang_c2: "C",
-          val_modularity_complete: "✅ Complete",
-          val_modularity_partial: "Partial",
-          val_modularity_partial2: "Partial",
-          val_modularity_partial3: "Partial",
-          val_customization_max: "✅ Maximum",
-          val_customization_high: "High",
-          val_customization_low: "Low",
-          val_customization_high2: "High",
-          val_skills_none: "None",
-          val_skills_sometimes: "Sometimes",
-          val_skills_none2: "None",
-          val_skills_often: "Often",
-          val_updates_modular: "Modular",
-          val_updates_centralized: "Centralized",
-          val_updates_centralized2: "Centralized",
-          val_updates_centralized3: "Centralized",
-          roadmap_title: "Our Path",
-          roadmap_concept_title: "Concept",
-          roadmap_concept_desc: "We have a concrete vision of what we want to create. It may not seem like much, but it's often important to understand where we're heading.",
-          roadmap_bootstrap_title: "Bootstrap",
-          roadmap_bootstrap_desc: "Our code is currently more than just a hello world.",
-          roadmap_search_title: "Finding programmers and starting the journey",
-          roadmap_search_desc: "We are actively looking for contributors to help develop our project.",
-          roadmap_kernel_title: "Kernel",
-          roadmap_kernel_desc: "The kernel must be lightweight, as it won't contain drivers etc. Each element will reside in its own module.",
-          roadmap_modules_title: "Modular system",
-          roadmap_modules_desc: "All modules must interact with each other and communicate through the kernel.",
-          roadmap_interface_title: "Interface",
-          roadmap_interface_desc: "Customization is one of our three main pillars upon which the entire ideology of the system is based.",
-          roadmap_software_title: "Software",
-          roadmap_software_desc: "We plan to create our own alternatives to programs on GUS, and following the example of Google and Apple, create our own ecosystem of simple (and not so simple) applications. We also need to create an app store for our OS.",
-          roadmap_distribution_title: "Distribution",
-          roadmap_distribution_desc: "GUS should become popular due to its advantages.",
-          roadmap_bootloader_title: "Custom bootloader",
-          roadmap_bootloader_desc: "rust-bootloader is good, but having our own bootloader is even better.",
-          roadmap_mobile_title: "GUS for Mobile",
-          roadmap_mobile_desc: "In the future, we want to bring our OS to phones and tablets.",
-          manifesto_title: "Manifesto",
-          manifesto_minimalism_title: "Minimalism:",
-          manifesto_security_title: "Security:",
-          manifesto_flexibility_title: "Flexibility:",
-          manifesto_privacy_title: "Privacy:",
-          manifesto_control_title: "Control:",
-          manifesto_minimalism: "A system without unnecessary \"garbage\" and redundant processes.",
-          manifesto_security: "Rust, microkernel and complete module isolation.",
-          manifesto_flexibility: "Modular architecture for any hardware.",
-          manifesto_privacy: "No surveillance or imposed functionality.",
-          manifesto_control: "We return full power over your device to you.",
-          manifesto_text: "\"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice.\"",
-          community_title: "Community",
-          community_intro: "Our project relies entirely on volunteers. Contribute by supporting us and joining us on our resources. We need support:",
-          community_sub_community: "Community",
-          community_sub_social: "Social Networks",
-          community_sub_support: "Support",
-          footer_motto: "Optimization · Customization · Freedom | Built with Rust 🦀"
-        },
         ru: {
           slogan: "Оптимизация, кастомизация, свобода",
           nav_home: "Старт",
@@ -1237,7 +501,8 @@
           nav_roadmap: "Наш путь",
           nav_manifesto: "Манифест",
           nav_community: "Сообщество",
-          hero_title_part: "— операционная система, которую ты заслуживаешь",
+          social_label: "Соцсети",
+          hero_title_part: "OS, которую ты заслуживаешь",
           hero_subtitle: "GUS — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.",
           how_it_works: "Как это работает",
           manifesto_btn: "Манифест",
@@ -1246,17 +511,24 @@
           about_title: "О проекте",
           about_lead: "Мы не делаем дистрибутив. Мы создаём новую философию.",
           about_text: "GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.",
+          about_dynamic: "Ядро собирается конкретно под ваш компьютер. Перед установкой оно сканирует оборудование и загружает только нужные модули с нашего сервера — по сути, у каждого будет стоять уникальная система.",
           tech_title: "Технические особенности",
+          tech_microkernel_title: "Микроядро",
           tech_microkernel: "Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает только за критически важные функции.",
+          tech_rust_title: "Rust",
           tech_rust: "Безопасность памяти без компромиссов. Современный язык исключает целые классы уязвимостей на этапе компиляции.",
-          tech_modular: "Обновления без перезагрузки. Каждый модуль изолирован и может обновляться независимо.",
+          tech_modular_title: "Лёгкая модульность",
+          tech_modular: "Модули общаются через быстрый IPC на Rust. Никаких тяжёлых накладных расходов, присущих старым ОС.",
+          tech_sandbox_title: "Программа = Файл",
           tech_sandbox: "Изолированные модули, вирусам негде прятаться. Песочница на уровне ОС.",
+          tech_why_title: "Почему модульность будет быстрой в GUS:",
+          tech_why_desc: "Тяжесть модульности — это миф, основанный на опыте старых ОС. В GUS модульность станет легкой, потому что мы изначально проектируем систему как набор независимых сервисов, которые общаются через эффективные каналы (IPC), написанные на безопасном и высокопроизводительном языке Rust.",
           comp_title: "Сравнение операционных систем",
           comp_intro: "Мы сравнили GUS с другими популярными ОС, чтобы показать принципиальные отличия в архитектуре и философии.",
           comp_outro: "GUS — молодой проект, но его архитектура спроектирована для будущего — максимальная безопасность, модульность и контроль пользователя.",
           col_feature: "Характеристика",
           row_kernel: "Тип ядра",
-          row_opensource: "Открытый код",
+          row_opensource: "Открытый исходный код",
           row_maturity: "Зрелость / Стабильность",
           row_complexity: "Сложность для пользователя",
           row_popularity: "Популярность",
@@ -1265,15 +537,11 @@
           row_modularity: "Модульность (архитектура)",
           row_customization: "Кастомизация системы",
           row_skills: "Необходимость навыков (ежедневно)",
-          row_updates: "Управление обновлением",
+          row_updates: "Управление обновлениями",
           val_microkernel: "Микроядро",
           val_monolithic: "Монолитное",
           val_hybrid: "Гибридное",
           val_monolithic2: "Монолитное",
-          val_yes: "✅ Да",
-          val_yes2: "✅ Да",
-          val_yes3: "✅ Да",
-          val_no: "❌ Нет",
           val_maturity_gus: "Проект (в разработке)",
           val_maturity_linux: "Зрелая",
           val_maturity_windows: "Зрелая",
@@ -1294,11 +562,9 @@
           val_lang_c: "C",
           val_lang_cpp: "C / C++",
           val_lang_c2: "C",
-          val_modularity_complete: "✅ Полная",
           val_modularity_partial: "Частичная",
           val_modularity_partial2: "Частичная",
           val_modularity_partial3: "Частичная",
-          val_customization_max: "✅ Максимальная",
           val_customization_high: "Высокая",
           val_customization_low: "Низкая",
           val_customization_high2: "Высокая",
@@ -1312,183 +578,268 @@
           val_updates_centralized3: "Централизованное",
           roadmap_title: "Наш путь",
           roadmap_concept_title: "Концепция",
-          roadmap_concept_desc: "У нас есть конкретное представление о том, что мы хотим сделать. Конечно так себе достижение, но зачастую важно понимать к чему двигаться.",
+          roadmap_concept_desc: "У нас есть конкретное представление о том, что мы хотим сделать. Важно понимать, куда двигаться.",
           roadmap_bootstrap_title: "Bootstrap",
-          roadmap_bootstrap_desc: "Наш код на данный момент представляет собой нечто большее, чем хелоуворд.",
+          roadmap_bootstrap_desc: "Наш код на данный момент представляет собой нечто большее, чем hello world.",
           roadmap_search_title: "Поиск программистов и начало пути",
           roadmap_search_desc: "Мы в активном поиске активистов, которые помогут развивать наш проект.",
           roadmap_kernel_title: "Ядро",
-          roadmap_kernel_desc: "Ядро должно быть легким, т.к. оно не будет содержать драйверов и т.п., каждый элемент будет находиться в своем модуле.",
+          roadmap_kernel_desc: "Ядро должно быть легким, так как не содержит драйверов. Каждый элемент в своем модуле.",
           roadmap_modules_title: "Модульная система",
-          roadmap_modules_desc: "Все модули должны взаимодействовать друг с другом и общаться через ядро.",
+          roadmap_modules_desc: "Все модули взаимодействуют друг с другом и общаются через ядро.",
           roadmap_interface_title: "Интерфейс",
-          roadmap_interface_desc: "Кастомизация является одним из трех наших основных «китов», на которой основывается вся идеология системы.",
+          roadmap_interface_desc: "Кастомизация — один из трёх наших основных «китов».",
           roadmap_software_title: "Софт",
-          roadmap_software_desc: "Мы планируем сделать свои аналоги программ на GUS, а так же по примеру Google и Apple создать собственную экосистему из простых (и не очень) приложений. Так же требуется сделать магазин приложений для нашей OS.",
+          roadmap_software_desc: "Свои аналоги программ и собственная экосистема приложений с магазином.",
           roadmap_distribution_title: "Распространение",
           roadmap_distribution_desc: "GUS должен стать популярным за счет своих преимуществ.",
           roadmap_bootloader_title: "Собственный загрузчик",
           roadmap_bootloader_desc: "Rust-bootloader это хорошо, а свой загрузчик — еще лучше.",
           roadmap_mobile_title: "GUS for Mobile",
-          roadmap_mobile_desc: "В будущем мы хотим сделать нашу OS и на телефоны и планшеты.",
+          roadmap_mobile_desc: "В будущем мы хотим сделать нашу OS на телефоны и планшеты.",
           manifesto_title: "Манифест",
           manifesto_minimalism_title: "Минимализм:",
           manifesto_security_title: "Безопасность:",
           manifesto_flexibility_title: "Гибкость:",
           manifesto_privacy_title: "Приватность:",
           manifesto_control_title: "Контроль:",
+          manifesto_transparency_title: "Прозрачность:",
+          manifesto_community_title: "Сообщество:",
           manifesto_minimalism: "Система без лишнего «мусора» и ненужных процессов.",
           manifesto_security: "Rust, микроядро и полная изоляция модулей.",
           manifesto_flexibility: "Модульная архитектура под любое «железо».",
           manifesto_privacy: "Никакой слежки и навязанного функционала.",
           manifesto_control: "Возвращаем вам полную власть над вашим устройством.",
+          manifesto_transparency: "Открытый код и открытый процесс разработки.",
+          manifesto_community: "Проект, управляемый сообществом, а не корпорацией.",
           manifesto_text: "«GUS возвращает контроль пользователю. Никакой телеметрии. Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»",
           community_title: "Сообщество",
-          community_intro: "Наш проект держится исключительно на добровольцах. Внесите посильный вклад, поддержав нас и присоединившись к нам на наших ресурсах. Мы нуждаемся в поддержке:",
-          community_sub_community: "Комьюнити",
-          community_sub_social: "Соцсети",
-          community_sub_support: "Поддержать",
+          community_intro: "Наш проект держится исключительно на добровольцах. Если вы хотите следить за нашим развитием, подписывайтесь на наши соцсети:",
+          community_forum_text: "Если вы хотите с нами разрабатывать OS или задать вопрос, присоединяйтесь на наш телеграм форум:",
+          community_channel_text: "Также у нас есть телеграм канал, в котором быстрее всего выходят все новости:",
           footer_motto: "Оптимизация · Кастомизация · Свобода | Built with Rust 🦀"
+        },
+        en: {
+          slogan: "Optimization, customization, freedom",
+          nav_home: "Start",
+          nav_about: "About",
+          nav_tech: "Technology",
+          nav_comparison: "Comparison",
+          nav_roadmap: "Our Path",
+          nav_manifesto: "Manifesto",
+          nav_community: "Community",
+          social_label: "Socials",
+          hero_title_part: "OS you deserve",
+          hero_subtitle: "GUS is not a Linux distro nor a Windows clone. It's a constructor platform with a Rust microkernel.",
+          how_it_works: "How it works",
+          manifesto_btn: "Manifesto",
+          developers: "developers",
+          forum_members: "forum members",
+          about_title: "About the project",
+          about_lead: "We are not making a distribution. We are creating a new philosophy.",
+          about_text: "GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.",
+          about_dynamic: "The kernel is built specifically for your computer. Before installation, it scans the hardware and downloads only the necessary modules from our server — essentially, everyone gets a unique system.",
+          tech_title: "Technical features",
+          tech_microkernel_title: "Microkernel",
+          tech_microkernel: "A video driver crash won't bring down the system. The kernel is minimal and handles only critical functions.",
+          tech_rust_title: "Rust",
+          tech_rust: "Memory safety without compromises. A modern language that eliminates entire classes of vulnerabilities at compile time.",
+          tech_modular_title: "Lightweight Modularity",
+          tech_modular: "Modules communicate via fast IPC in Rust. No heavy overhead typical of old operating systems.",
+          tech_sandbox_title: "Program = File",
+          tech_sandbox: "Isolated modules, nowhere for viruses to hide. OS-level sandboxing.",
+          tech_why_title: "Why modularity will be fast in GUS:",
+          tech_why_desc: "The heaviness of modularity is a myth based on the experience of old OSes. In GUS, modularity becomes lightweight because we design the system from the ground up as a set of independent services communicating through efficient channels (IPC), written in the safe and high-performance Rust language.",
+          comp_title: "Operating System Comparison",
+          comp_intro: "We compared GUS with other popular operating systems to show the fundamental differences in architecture and philosophy.",
+          comp_outro: "GUS is a young project, but its architecture is designed for the future — maximum security, modularity and user control.",
+          col_feature: "Feature",
+          row_kernel: "Kernel type",
+          row_opensource: "Open source",
+          row_maturity: "Maturity / Stability",
+          row_complexity: "User complexity",
+          row_popularity: "Popularity",
+          row_install: "Installation difficulty",
+          row_language: "Implementation language",
+          row_modularity: "Modularity (architecture)",
+          row_customization: "System customization",
+          row_skills: "Required skills (daily)",
+          row_updates: "Update management",
+          val_microkernel: "Microkernel",
+          val_monolithic: "Monolithic",
+          val_hybrid: "Hybrid",
+          val_monolithic2: "Monolithic",
+          val_maturity_gus: "Project (in development)",
+          val_maturity_linux: "Mature",
+          val_maturity_windows: "Mature",
+          val_maturity_freebsd: "Mature",
+          val_complexity_low: "Low (constructor)",
+          val_complexity_high: "High",
+          val_complexity_medium: "Medium",
+          val_complexity_high2: "High",
+          val_popularity_gus: "Very low (new OS)",
+          val_popularity_linux: "High",
+          val_popularity_windows: "Very high",
+          val_popularity_freebsd: "Medium",
+          val_install_easy: "Easy",
+          val_install_medium: "Medium",
+          val_install_medium2: "Medium",
+          val_install_hard: "Hard",
+          val_lang_rust: "Rust",
+          val_lang_c: "C",
+          val_lang_cpp: "C / C++",
+          val_lang_c2: "C",
+          val_modularity_partial: "Partial",
+          val_modularity_partial2: "Partial",
+          val_modularity_partial3: "Partial",
+          val_customization_high: "High",
+          val_customization_low: "Low",
+          val_customization_high2: "High",
+          val_skills_none: "None",
+          val_skills_sometimes: "Sometimes",
+          val_skills_none2: "None",
+          val_skills_often: "Often",
+          val_updates_modular: "Modular",
+          val_updates_centralized: "Centralized",
+          val_updates_centralized2: "Centralized",
+          val_updates_centralized3: "Centralized",
+          roadmap_title: "Our Path",
+          roadmap_concept_title: "Concept",
+          roadmap_concept_desc: "We have a concrete vision of what we want to create. It's important to understand where we're heading.",
+          roadmap_bootstrap_title: "Bootstrap",
+          roadmap_bootstrap_desc: "Our code is currently more than just a hello world.",
+          roadmap_search_title: "Finding programmers and starting the journey",
+          roadmap_search_desc: "We are actively looking for contributors to help develop our project.",
+          roadmap_kernel_title: "Kernel",
+          roadmap_kernel_desc: "The kernel must be lightweight, as it won't contain drivers. Each element will reside in its own module.",
+          roadmap_modules_title: "Modular system",
+          roadmap_modules_desc: "All modules must interact with each other and communicate through the kernel.",
+          roadmap_interface_title: "Interface",
+          roadmap_interface_desc: "Customization is one of our three main pillars upon which the entire ideology of the system is based.",
+          roadmap_software_title: "Software",
+          roadmap_software_desc: "We plan to create our own alternatives to programs on GUS, and create our own ecosystem of applications with an app store.",
+          roadmap_distribution_title: "Distribution",
+          roadmap_distribution_desc: "GUS should become popular due to its advantages.",
+          roadmap_bootloader_title: "Custom bootloader",
+          roadmap_bootloader_desc: "rust-bootloader is good, but having our own bootloader is even better.",
+          roadmap_mobile_title: "GUS for Mobile",
+          roadmap_mobile_desc: "In the future, we want to bring our OS to phones and tablets.",
+          manifesto_title: "Manifesto",
+          manifesto_minimalism_title: "Minimalism:",
+          manifesto_security_title: "Security:",
+          manifesto_flexibility_title: "Flexibility:",
+          manifesto_privacy_title: "Privacy:",
+          manifesto_control_title: "Control:",
+          manifesto_transparency_title: "Transparency:",
+          manifesto_community_title: "Community:",
+          manifesto_minimalism: "A system without unnecessary \"garbage\" and redundant processes.",
+          manifesto_security: "Rust, microkernel and complete module isolation.",
+          manifesto_flexibility: "Modular architecture for any hardware.",
+          manifesto_privacy: "No surveillance or imposed functionality.",
+          manifesto_control: "We return full power over your device to you.",
+          manifesto_transparency: "Open source and open development process.",
+          manifesto_community: "A project driven by the community, not a corporation.",
+          manifesto_text: "\"GUS gives control back to the user. No telemetry. No hidden data collection. Only transparency, security, and freedom of choice.\"",
+          community_title: "Community",
+          community_intro: "Our project relies entirely on volunteers. If you want to follow our development, subscribe to our social networks:",
+          community_forum_text: "If you want to develop the OS with us or ask a question, join our Telegram forum:",
+          community_channel_text: "We also have a Telegram channel where all news comes out fastest:",
+          footer_motto: "Optimization · Customization · Freedom | Built with Rust 🦀"
         }
       };
 
-      let currentLang = localStorage.getItem('gus-lang') || 'en';
-
+      let currentLang = localStorage.getItem('gus-lang') || 'ru';
+      
       function applyLang(lang) {
         document.documentElement.lang = lang;
         const elements = document.querySelectorAll('[data-i18n]');
-        
-        elements.forEach(el => {
-          el.classList.add('lang-switching');
-        });
-        
+        elements.forEach(el => el.classList.add('lang-switching'));
         elements.forEach(el => {
           const key = el.getAttribute('data-i18n');
           if (i18n[lang]?.[key]) {
+            // Сохраняем GUS бейджи внутри i18n-элементов
+            const existingBadge = el.querySelector('.gus-badge');
             el.textContent = i18n[lang][key];
+            // Если был бейдж — восстанавливаем его в начале
+            if (existingBadge && i18n[lang][key].includes('GUS')) {
+              const newBadge = document.createElement('span');
+              newBadge.className = 'gus-badge';
+              newBadge.textContent = 'GUS';
+              const text = el.textContent;
+              if (text.startsWith('GUS')) {
+                el.textContent = text.replace('GUS', '');
+                el.prepend(newBadge);
+              } else if (text.includes('GUS')) {
+                el.innerHTML = text.replace('GUS', '<span class="gus-badge">GUS</span>');
+              }
+            }
           }
         });
-        
-        const langTexts = document.querySelectorAll('#langText');
-        langTexts.forEach(btn => {
-          btn.textContent = lang === 'en' ? 'RU' : 'EN';
-        });
-        
         localStorage.setItem('gus-lang', lang);
-        
-        setTimeout(() => {
-          elements.forEach(el => {
-            el.classList.remove('lang-switching');
-          });
-        }, 350);
+        currentLang = lang;
+        setTimeout(() => elements.forEach(el => el.classList.remove('lang-switching')), 200);
       }
 
       document.getElementById('langToggleDesktop').addEventListener('click', () => {
-        currentLang = currentLang === 'en' ? 'ru' : 'en';
-        applyLang(currentLang);
+        applyLang(currentLang === 'ru' ? 'en' : 'ru');
       });
 
       const burger = document.getElementById('burgerBtn');
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('overlay');
-      
       function closeMenu() {
         sidebar.classList.remove('open');
         overlay.classList.remove('active');
         burger.classList.remove('open');
       }
-      
       burger.addEventListener('click', () => {
-        const isOpen = sidebar.classList.contains('open');
-        if (isOpen) {
-          closeMenu();
-        } else {
-          sidebar.classList.add('open');
-          overlay.classList.add('active');
-          burger.classList.add('open');
-        }
+        sidebar.classList.contains('open') ? closeMenu() : (sidebar.classList.add('open'), overlay.classList.add('active'), burger.classList.add('open'));
       });
-      
       overlay.addEventListener('click', closeMenu);
-      
-      document.querySelectorAll('.sidebar a').forEach(link => {
-        link.addEventListener('click', () => {
-          closeMenu();
-        });
-      });
-
-      // Проверка скролла таблицы
-      const tableWrapper = document.getElementById('tableWrapper');
-      if (tableWrapper) {
-        function checkTableScroll() {
-          const table = tableWrapper.querySelector('table');
-          if (table && table.scrollWidth > tableWrapper.clientWidth) {
-            tableWrapper.classList.add('scrollable');
-          } else {
-            tableWrapper.classList.remove('scrollable');
-          }
-        }
-        checkTableScroll();
-        window.addEventListener('resize', checkTableScroll);
-        // На мобильных показываем подсказку только при касании
-        tableWrapper.addEventListener('touchstart', function() {
-          this.classList.add('scrollable');
-        });
-        tableWrapper.addEventListener('touchend', function() {
-          setTimeout(() => {
-            checkTableScroll();
-          }, 2000);
-        });
-      }
+      document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
 
       // Intersection Observer для анимаций
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          } else {
-            entry.target.classList.remove('visible');
-          }
+          entry.target.classList.toggle('visible', entry.isIntersecting);
         });
-      }, { 
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
-      });
-      
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
       document.querySelectorAll('.section').forEach(s => observer.observe(s));
 
-      // Активная ссылка в меню
+      // Active nav link
       const sections = document.querySelectorAll('section[id]');
       const navLinks = document.querySelectorAll('.sidebar a');
-      
       function updateActiveLink() {
         let current = '';
         const scrollPos = window.scrollY + 120;
-        
         sections.forEach(s => {
-          const sectionTop = s.offsetTop;
-          const sectionBottom = sectionTop + s.offsetHeight;
-          if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
-            current = s.getAttribute('id');
-          }
+          if (scrollPos >= s.offsetTop && scrollPos < s.offsetTop + s.offsetHeight) current = s.getAttribute('id');
         });
-        
         navLinks.forEach(a => {
-          const href = a.getAttribute('href')?.substring(1);
-          if (href === current) {
-            a.classList.add('active');
-          } else {
-            a.classList.remove('active');
-          }
+          a.classList.toggle('active', a.getAttribute('href')?.substring(1) === current);
         });
       }
-      
       window.addEventListener('scroll', updateActiveLink, { passive: true });
-      window.addEventListener('load', updateActiveLink);
 
-      // Применяем сохранённый язык
+      // Полоса прогресса в Наш путь
+      function updateTimelineProgress() {
+        const progressBar = document.getElementById('timelineProgress');
+        const timelineItems = document.querySelectorAll('.timeline-item[data-timeline-done="true"]');
+        if (!progressBar || timelineItems.length === 0) return;
+        const lastDone = timelineItems[timelineItems.length - 1];
+        const container = document.getElementById('timelineContainer');
+        const containerTop = container.getBoundingClientRect().top + window.scrollY;
+        const lastDoneBottom = lastDone.getBoundingClientRect().bottom + window.scrollY - containerTop;
+        progressBar.style.top = '0';
+        progressBar.style.height = lastDoneBottom + 'px';
+      }
+      window.addEventListener('load', () => {
+        updateActiveLink();
+        updateTimelineProgress();
+      });
+      window.addEventListener('resize', updateTimelineProgress);
+
       applyLang(currentLang);
-      updateActiveLink();
     })();
   </script>
 </body>
