@@ -1,2 +1,3 @@
 # GUSite
-This is the official website of the GUS operating system.
+This is the official website of the GUS (nem operating system).
+Site: https://greatuserteam.github.io/GUSite/
