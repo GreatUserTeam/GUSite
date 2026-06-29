@@ -1,15 +1,6 @@
 (function () {
     const i18n = {
         ru: {
-            slogan: '<span class="tagline-content">Оптимизация, <br class="br1">кастомизация, <br class="br2">свобода</span>',
-            nav_home: "Старт",
-            nav_about: "О проекте",
-            nav_tech: "Архитектура",
-            nav_comparison: "Сравнение",
-            nav_roadmap: "Наш путь",
-            nav_manifesto: "Манифест",
-            nav_community: "Сообщество",
-            social_label: "Соцсети",
             hero_title_part: "OS, которую ты заслуживаешь",
             hero_subtitle: "GUS — это не дистрибутив Linux и не клон Windows. Это платформа-конструктор с микроядром, написанная на Rust.",
             how_it_works: "Как это работает",
@@ -17,8 +8,8 @@
             developers: "разработчиков",
             forum_members: "человек на форуме",
             about_title: "О проекте",
-            about_lead: "Мы не делаем дистрибутив. Мы создаём новую философию.",
-            about_text: "GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы.",
+            about_lead: "Мы создаём не просто ОС, а новую философию.",
+            about_text: "GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы. Это очень удобно, а главное — безопасно.",
             about_dynamic: "Ядро собирается конкретно под ваш компьютер. Перед установкой оно сканирует оборудование и загружает только нужные модули с нашего сервера — по сути, у каждого будет стоять уникальная система.",
             tech_title: "Технические особенности",
             tech_microkernel_title: "Микроядро",
@@ -128,15 +119,6 @@
             footer_motto: "Оптимизация · Кастомизация · Свобода | Built with Rust 🦀"
         },
         en: {
-            slogan: '<span class="tagline-content">Optimization, <br class="br1">customization, <br class="br2">freedom</span>',
-            nav_home: "Start",
-            nav_about: "About",
-            nav_tech: "Technology",
-            nav_comparison: "Comparison",
-            nav_roadmap: "Our Path",
-            nav_manifesto: "Manifesto",
-            nav_community: "Community",
-            social_label: "Socials",
             hero_title_part: "OS you deserve",
             hero_subtitle: "GUS is not a Linux distro nor a Windows clone. It's a constructor platform with a Rust microkernel.",
             how_it_works: "How it works",
@@ -144,8 +126,8 @@
             developers: "developers",
             forum_members: "forum members",
             about_title: "About the project",
-            about_lead: "We are not making a distribution. We are creating a new philosophy.",
-            about_text: "GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system.",
+            about_lead: "We are creating not just an OS, but a new philosophy.",
+            about_text: "GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated or removed without rebooting the system. It's convenient, and most importantly — secure.",
             about_dynamic: "The kernel is built specifically for your computer. Before installation, it scans the hardware and downloads only the necessary modules from our server — essentially, everyone gets a unique system.",
             tech_title: "Technical features",
             tech_microkernel_title: "Microkernel",
@@ -258,7 +240,6 @@
 
     let currentLang = localStorage.getItem('gus-lang') || 'ru';
 
-
     function applyLang(lang) {
         document.documentElement.lang = lang;
         const elements = document.querySelectorAll('[data-i18n]');
@@ -269,24 +250,20 @@
             const key = el.getAttribute('data-i18n');
 
             if (i18n[lang]?.[key]) {
-                if (key === 'slogan') {
-                    el.innerHTML = i18n[lang][key];
-                } else {
-                    const existingBadge = el.querySelector('.gus-badge');
-                    el.textContent = i18n[lang][key];
+                const existingBadge = el.querySelector('.gus-badge');
+                el.textContent = i18n[lang][key];
 
-                    if (existingBadge && i18n[lang][key].includes('GUS')) {
-                        const newBadge = document.createElement('span');
-                        newBadge.className = 'gus-badge';
-                        newBadge.textContent = 'GUS';
-                        const text = el.textContent;
+                if (existingBadge && i18n[lang][key].includes('GUS')) {
+                    const newBadge = document.createElement('span');
+                    newBadge.className = 'gus-badge';
+                    newBadge.textContent = 'GUS';
+                    const text = el.textContent;
 
-                        if (text.startsWith('GUS')) {
-                            el.textContent = text.replace('GUS', '');
-                            el.prepend(newBadge);
-                        } else if (text.includes('GUS')) {
-                            el.innerHTML = text.replace('GUS', '<span class="gus-badge">GUS</span>');
-                        }
+                    if (text.startsWith('GUS')) {
+                        el.textContent = text.replace('GUS', '');
+                        el.prepend(newBadge);
+                    } else if (text.includes('GUS')) {
+                        el.innerHTML = text.replace('GUS', '<span class="gus-badge">GUS</span>');
                     }
                 }
             }
@@ -297,67 +274,20 @@
         setTimeout(() => elements.forEach(el => el.classList.remove('lang-switching')), 200);
     }
 
-    document.getElementById('langToggleDesktop').addEventListener('click', () => {
+    document.getElementById('langToggle').addEventListener('click', () => {
         applyLang(currentLang === 'ru' ? 'en' : 'ru');
     });
 
-
-    const burger = document.getElementById('burgerBtn');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-
-    function closeMenu() {
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-        burger.classList.remove('open');
-    }
-
-    burger.addEventListener('click', () => {
-        sidebar.classList.contains('open')
-            ? closeMenu()
-            : (sidebar.classList.add('open'), overlay.classList.add('active'), burger.classList.add('open'));
-    });
-
-    overlay.addEventListener('click', closeMenu);
-    document.querySelectorAll('.sidebar a').forEach(link => link.addEventListener('click', closeMenu));
-
-
-    // Перезагрузка по клику на логотип
-    document.getElementById('logoLink').addEventListener('click', function (e) {
-        e.preventDefault();
-        window.location.reload();
-    });
-
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            entry.target.classList.toggle('visible', entry.isIntersecting);
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                entry.target.classList.add('section-revealed');
+            }
         });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.section').forEach(s => observer.observe(s));
-
-
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.sidebar a');
-
-    function updateActiveLink() {
-        let current = '';
-        const scrollPos = window.scrollY + 120;
-
-        sections.forEach(s => {
-            if (scrollPos >= s.offsetTop && scrollPos < s.offsetTop + s.offsetHeight) {
-                current = s.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(a => {
-            a.classList.toggle('active', a.getAttribute('href')?.substring(1) === current);
-        });
-    }
-
-    window.addEventListener('scroll', updateActiveLink, { passive: true });
-
 
     function updateTimelineProgress() {
         const progressBar = document.getElementById('timelineProgress');
@@ -375,12 +305,10 @@
     }
 
     window.addEventListener('load', () => {
-        updateActiveLink();
         updateTimelineProgress();
     });
 
     window.addEventListener('resize', updateTimelineProgress);
-
 
     applyLang(currentLang);
 })();
