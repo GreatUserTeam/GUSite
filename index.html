@@ -1,484 +1,3333 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>GUS — Great User System</title>
-
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='68' font-size='52' font-weight='800' fill='%23000' text-anchor='middle' font-family='Inter,sans-serif'>GUS</text></svg>"
-        type="image/svg+xml">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Great User Team · GUT</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --g-icon-size: 0.9em;
+        }
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    <link rel="stylesheet" href="./assets/css/styles.css">
+        body {
+            background: #0b0b0b;
+            color: #f0f0f0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            transition: background 0.5s ease, color 0.5s ease;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.light {
+            background: #f6f5f4;
+            color: #141414;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 32px 60px;
+            animation: fadeIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(24px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 16px 32px;
+            background: rgba(11, 11, 11, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+
+        body.light .header {
+            background: rgba(246, 245, 244, 0.2);
+            border-bottom-color: rgba(0, 0, 0, 0.08);
+        }
+
+        .header-inner {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-text {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+            transition: color 0.5s ease;
+        }
+        body.light .brand-text {
+            color: #141414;
+        }
+
+        .brand-text .highlight-t {
+            color: #ff4d30;
+            margin-left: 0.08em;
+        }
+
+        .header-g-icon {
+            height: 0.85em;
+            width: auto;
+            display: inline-block;
+            vertical-align: 0em;
+            margin-right: 0.02em;
+            overflow: visible;
+        }
+        .header-g-icon .svg-white {
+            fill: #ffffff;
+            transition: fill 0.5s ease;
+        }
+        body.light .header-g-icon .svg-white {
+            fill: #141414;
+        }
+
+        .settings-widget {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease, border-color 0.5s ease;
+            cursor: pointer;
+        }
+        body.light .settings-widget {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-widget.open {
+            width: 100px;
+        }
+
+        .settings-main-btn {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: opacity 0.3s ease, transform 0.4s ease, color 0.5s ease;
+            z-index: 2;
+        }
+        body.light .settings-main-btn {
+            color: #141414;
+        }
+        .settings-main-btn:hover {
+            color: #ff4d30;
+        }
+
+        .settings-widget.open .settings-main-btn {
+            opacity: 0;
+            pointer-events: none;
+            transform: rotate(90deg);
+        }
+
+        .settings-main-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .settings-menu {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+            padding: 0 4px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+            pointer-events: none;
+        }
+
+        .settings-widget.open .settings-menu {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.5s ease, transform 0.2s ease;
+            font-weight: 700;
+            font-size: 11px;
+        }
+        body.light .settings-btn {
+            color: #141414;
+        }
+        .settings-btn:hover {
+            background: rgba(255, 77, 48, 0.15);
+            color: #ff4d30;
+            transform: scale(1.1);
+        }
+        .settings-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .theme-icon-container {
+            position: relative;
+            width: 18px;
+            height: 18px;
+        }
+
+        .theme-icon-container svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .icon-moon {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+        body.light .icon-moon {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
+        }
+
+        .icon-sun {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+        }
+        body.light .icon-sun {
+            opacity: 1;
+            transform: rotate(0deg) scale(1);
+        }
+
+        .hero-section-container {
+            position: relative;
+            margin-bottom: 48px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .falling-icons-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        }
+
+        .hero, .stats-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        .hero-left {
+            flex: 1 1 auto;
+        }
+
+        .hero-right {
+            flex: 1 1 40%;
+            min-width: 240px;
+            padding-top: 4px;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.15em;
+        }
+
+        .hero h1 .highlight {
+            color: #ff4d30;
+        }
+
+        .g-icon-svg {
+            height: var(--g-icon-size);
+            width: auto;
+            display: inline-block;
+            vertical-align: -0.05em;
+            overflow: visible;
+            margin-right: -0.05em !important;
+        }
+
+        .g-icon-svg .svg-white {
+            fill: #ffffff;
+            transition: fill 0.5s ease;
+        }
+
+        body.light .g-icon-svg .svg-white {
+            fill: #141414;
+        }
+
+        .hero-desc {
+            font-size: 19.5px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.65);
+            transition: color 0.5s ease;
+        }
+        body.light .hero-desc {
+            color: rgba(0, 0, 0, 0.55);
+        }
+
+        .motto-glass {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            margin-top: 20px;
+            border-radius: 40px;
+            background: rgba(255, 77, 48, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 77, 48, 0.18);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: #ff4d30;
+            position: relative;
+            z-index: 2;
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        body.light .motto-glass {
+            background: rgba(255, 77, 48, 0.06);
+            border-color: rgba(255, 77, 48, 0.15);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: center;
+            margin: 40px 0 20px;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 0;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            color: #ff4d30;
+            line-height: 1;
+            margin-bottom: 8px;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            transition: color 0.5s ease;
+        }
+        body.light .stat-label {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .team-scalable-icon {
+            width: 56px;
+            height: 56px;
+            color: #ff4d30;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .team-scalable-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .team-title {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+            color: #ffffff;
+            transition: color 0.5s ease;
+            margin: 0;
+        }
+
+        body.light .team-title {
+            color: #141414;
+        }
+
+        .team-subtitle {
+            font-size: 17px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.45);
+            margin: 0 0 16px 0;
+            transition: color 0.5s ease;
+        }
+        body.light .team-subtitle {
+            color: rgba(0, 0, 0, 0.45);
+        }
+
+        .team-description {
+            font-size: 17px;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.75);
+            transition: color 0.5s ease;
+        }
+        body.light .team-description {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .team-details-btn {
+            position: relative;
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 28px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid #ff4d30;
+            border-radius: 16px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+            transition: color 0.4s ease, border-color 0.4s ease;
+            z-index: 1;
+            box-sizing: border-box;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        body.light .team-details-btn {
+            background: rgba(0, 0, 0, 0.02);
+            color: #141414;
+        }
+
+        .team-details-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ff4d30;
+            z-index: -1;
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .team-details-btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .team-details-btn:hover {
+            color: #ffffff !important;
+            border-color: #ff4d30;
+        }
+
+        .team-details-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .team-details-arrow {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .team-details-btn:hover .team-details-arrow {
+            transform: translateX(6px);
+        }
+
+        .benefits-heading {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.4;
+            margin: 0;
+        }
+        body.light .benefits-heading {
+            color: #141414;
+        }
+
+        .benefit-card-item {
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background-color: transparent;
+            border-bottom: 1px solid rgba(255, 77, 48, 0.15);
+            transition: background 0.3s ease;
+        }
+
+        .benefit-card-item:last-child {
+            border-bottom: none;
+        }
+
+        .benefit-card-item:hover {
+            background: rgba(255, 77, 48, 0.02);
+        }
+
+        .benefit-card-title {
+            color: #ffffff !important;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        body.light .benefit-card-title {
+            color: #141414 !important;
+        }
+
+        .benefit-card-title .benefit-label {
+            color: #ffffff;
+        }
+        body.light .benefit-card-title .benefit-label {
+            color: #141414;
+        }
+
+        .benefit-card-title svg {
+            width: 20px;
+            height: 20px;
+            stroke: #ff4d30 !important;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .benefit-card-item:hover .benefit-card-title svg {
+            transform: scale(1.15);
+        }
+
+        .benefit-card-subtitle {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 14px;
+            line-height: 1.45;
+        }
+        body.light .benefit-card-subtitle {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .tablet-btn-container {
+            display: none;
+        }
+
+        @media (min-width: 993px) {
+            .mobile-tablet-only {
+                display: none !important;
+            }
+
+            .desktop-only.team-section {
+                margin: 60px 0 40px;
+                display: flex;
+                gap: 48px;
+                align-items: stretch;
+            }
+
+            .desktop-only .team-left-column {
+                flex: 1 1 40%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+
+            .desktop-only .team-left-content {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+                width: 100%;
+            }
+
+            .desktop-only .team-header-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 24px;
+                margin-bottom: 16px;
+            }
+
+            .desktop-only .team-titles-col {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                gap: 2px;
+            }
+
+            .desktop-only .team-details-btn {
+                align-self: flex-start !important;
+                margin: 24px 0 0 0 !important;
+                transform: none !important;
+                width: 100%;
+                max-width: 100%;
+                padding: 12px 14px;
+                font-size: 13px;
+                gap: 8px;
+                box-sizing: border-box;
+            }
+
+            .desktop-only .team-details-btn span {
+                white-space: normal;
+                text-align: left;
+                line-height: 1.25;
+            }
+
+            .desktop-only .team-benefits-block {
+                flex: 1 1 50%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .desktop-only .benefits-heading-container {
+                padding: 0 0 16px 0;
+                text-align: left;
+            }
+
+            .desktop-only .benefits-cards-list {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .desktop-only {
+                display: none !important;
+            }
+
+            .wrapper {
+                padding: 90px 20px 48px;
+            }
+            .header {
+                padding: 14px 20px;
+            }
+            .brand-text {
+                font-size: 28px;
+            }
+            .hero {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 24px;
+            }
+            .hero-left {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-right {
+                flex: 1 1 100%;
+                width: 100%;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 60px;
+                justify-content: center;
+            }
+            .motto-glass {
+                font-size: 14px;
+                padding: 14px 30px;
+            }
+            .stat-number {
+                font-size: 44px;
+            }
+
+            .mobile-tablet-only.team-section {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                margin: 40px 0;
+            }
+
+            .mobile-tablet-only .team-header-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                margin-bottom: 16px;
+            }
+
+            .mobile-tablet-only .team-text-block {
+                text-align: center;
+            }
+
+            .mobile-tablet-only .team-title {
+                font-size: 32px;
+            }
+
+            .mobile-tablet-only .team-description {
+                font-size: 16px;
+                text-align: center;
+                margin-top: 12px;
+            }
+
+            .mobile-tablet-only .team-benefits-block {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-tablet-only .benefits-heading-container {
+                margin-bottom: 12px;
+                text-align: center;
+            }
+
+            .mobile-tablet-only > .team-details-btn {
+                align-self: center;
+                width: fit-content;
+                max-width: 100%;
+                margin: 10px auto 0;
+            }
+        }
+
+        @media (min-width: 641px) and (max-width: 992px) {
+            .mobile-tablet-only .team-benefits-block {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+                gap: 24px;
+            }
+            .mobile-tablet-only .benefits-heading-container {
+                flex: 1 1 42%;
+                margin-bottom: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+                text-align: left;
+            }
+            .mobile-tablet-only .benefits-heading {
+                text-align: left;
+                width: 100%;
+                transform: translateY(18px);
+            }
+            .mobile-tablet-only > .team-details-btn {
+                display: none !important;
+            }
+            .tablet-btn-container {
+                display: flex;
+                flex: 1;
+                align-items: center;
+                justify-content: flex-start;
+                width: 100%;
+                margin-top: 0;
+            }
+            .tablet-btn-container .team-details-btn {
+                align-self: center;
+                width: 100%;
+                max-width: 100%;
+                padding: 12px 14px;
+                font-size: 13px;
+                gap: 8px;
+            }
+            .tablet-btn-container .team-details-btn span {
+                white-space: normal;
+                text-align: left;
+                line-height: 1.25;
+            }
+            .mobile-tablet-only .benefits-cards-list {
+                flex: 1 1 58%;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .wrapper {
+                padding: 85px 16px 36px;
+            }
+            .header {
+                padding: 14px 16px;
+            }
+
+            .hero h1 {
+                font-size: 72px !important;
+                flex-direction: column;
+                letter-spacing: -2px;
+                gap: 0.05em;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .mobile-tablet-only .team-header-wrapper {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 24px;
+            }
+            .mobile-tablet-only.team-section {
+                gap: 44px;
+            }
+            .mobile-tablet-only > .team-details-btn {
+                width: 100%;
+            }
+
+            .projects-content {
+                flex-direction: column !important;
+                gap: 24px !important;
+            }
+
+            .projects-text-col {
+                order: -1;
+                width: 100% !important;
+                text-align: center !important;
+                margin-bottom: 16px !important;
+            }
+
+            .projects-gallery-col {
+                width: 100% !important;
+            }
+
+            .card-row {
+                flex-direction: column !important;
+                gap: 20px !important;
+                padding: 0 !important;
+            }
+
+            .card-wrapper {
+                width: 100% !important;
+                margin: 0 !important;
+                z-index: auto !important;
+            }
+
+            .card-wrapper:not(:first-child) {
+                margin-left: 0 !important;
+            }
+
+            .gut-card {
+                width: 100% !important;
+                height: auto !important;
+                min-height: 180px !important;
+                border-radius: 24px !important;
+                padding: 24px 20px !important;
+                border: none !important;
+                box-shadow: 0 8px 28px rgba(0, 0, 0, 0.8) !important;
+            }
+
+            body.light .gut-card {
+                border: none !important;
+                box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .card-link-btn {
+                opacity: 1 !important;
+                max-height: 44px !important;
+                margin-top: 12px !important;
+                padding: 10px 0 !important;
+                pointer-events: auto !important;
+            }
+
+            .gut-card .card-title {
+                font-size: 1.4rem !important;
+                margin-bottom: 8px !important;
+            }
+
+            .gut-card .card-desc {
+                font-size: 0.9rem !important;
+                opacity: 0.8 !important;
+            }
+
+            .gut-card.hover,
+            .gut-card.expanded,
+            .gut-card.expanded.hover {
+                border: none !important;
+                box-shadow: 0 8px 28px rgba(0, 0, 0, 0.8) !important;
+            }
+            body.light .gut-card.hover,
+            body.light .gut-card.expanded,
+            body.light .gut-card.expanded.hover {
+                border: none !important;
+                box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1) !important;
+            }
+
+            .gut-accent {
+                color: #ff4d30 !important;
+            }
+            .gut-g {
+                color: #ffffff !important;
+            }
+
+            .gut-card:hover .gut-accent,
+            .gut-card.hover .gut-accent,
+            .gut-card.expanded .gut-accent,
+            .gut-card.expanded.hover .gut-accent {
+                color: #ff4d30 !important;
+            }
+            .gut-card:hover .gut-g,
+            .gut-card.hover .gut-g,
+            .gut-card.expanded .gut-g,
+            .gut-card.expanded.hover .gut-g {
+                color: #ffffff !important;
+            }
+
+            body.light .gut-g {
+                color: #141414 !important;
+            }
+            body.light .gut-card:hover .gut-g,
+            body.light .gut-card.hover .gut-g,
+            body.light .gut-card.expanded .gut-g,
+            body.light .gut-card.expanded.hover .gut-g {
+                color: #141414 !important;
+            }
+
+            .card-link-btn:hover {
+                background: rgba(255, 77, 48, 0.1) !important;
+                color: #ffffff !important;
+            }
+            body.light .card-link-btn:hover {
+                background: rgba(255, 77, 48, 0.1) !important;
+                color: #141414 !important;
+            }
+
+            .projects-text-col .team-details-btn {
+                width: 100% !important;
+                justify-content: center !important;
+                align-self: center !important;
+            }
+        }
+
+        .projects-section {
+            margin: 80px 0 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .projects-header-center {
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .projects-main-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #ffffff;
+            line-height: 1.1;
+            transition: color 0.5s ease;
+            position: relative;
+        }
+        body.light .projects-main-title {
+            color: #141414;
+        }
+
+        .star-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 150%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .star-plus {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            animation: pulseStar 4s infinite ease-in-out;
+            opacity: 0.2;
+        }
+        .star-plus::before, .star-plus::after {
+            content: '';
+            position: absolute;
+            background: #fff;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .star-plus::before {
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+        }
+        .star-plus::after {
+            height: 100%; width: 2px;
+            background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+        }
+        body.light .star-plus::before {
+            background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+        }
+        body.light .star-plus::after {
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+        }
+        @keyframes pulseStar {
+            0%, 100% { opacity: 0.1; transform: scale(0.8); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        .star-1 { top: 10%; left: 5%; animation-delay: 0s; width: 18px; height: 18px; }
+        .star-2 { top: 70%; left: 90%; animation-delay: 1.5s; width: 22px; height: 22px; }
+        .star-3 { top: 15%; left: 80%; animation-delay: 2.5s; width: 16px; height: 16px; }
+
+        .projects-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 40px;
+            margin-bottom: 0;
+        }
+
+        .projects-text-col {
+            flex: 1 1 45%;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .projects-gallery-col {
+            flex: 1 1 55%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inline-brand {
+            font-weight: 800;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            transition: color 0.5s ease;
+        }
+        body.light .inline-brand {
+            color: #141414;
+        }
+        .inline-brand .highlight-t {
+            color: #ff4d30;
+        }
+        .inline-brand .highlight-system {
+            color: #ff4d30;
+        }
+
+        .card-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px 0;
+            width: 100%;
+            gap: 0;
+        }
+
+        .card-wrapper {
+            position: relative;
+        }
+
+        .card-wrapper:nth-child(1) { z-index: 1; }
+        .card-wrapper:nth-child(2) { z-index: 2; }
+        .card-wrapper:nth-child(3) { z-index: 3; }
+
+        .card-wrapper:not(:first-child) {
+            margin-left: -50px;
+        }
+
+        .gut-card {
+            width: 220px;
+            height: 300px;
+            background: #0a0a0a;
+            border: 2.5px solid #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            padding: 24px 16px;
+            cursor: pointer;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.5s ease, color 0.5s ease;
+            position: relative;
+        }
+
+        body.light .gut-card {
+            background: #ffffff;
+            border-color: #141414;
+            color: #141414;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .gut-card.hover {
+            border-color: #ff4d30 !important;
+            box-shadow: 0 0 40px rgba(255, 77, 48, 0.25), 0 8px 28px rgba(0, 0, 0, 0.8);
+        }
+
+        body.light .gut-card.hover {
+            box-shadow: 0 0 40px rgba(255, 77, 48, 0.25), 0 8px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .gut-card.expanded {
+            border-color: #ff4d30;
+            box-shadow: 0 0 40px rgba(255, 77, 48, 0.25), 0 8px 28px rgba(0, 0, 0, 0.8);
+        }
+
+        body.light .gut-card.expanded {
+            box-shadow: 0 0 40px rgba(255, 77, 48, 0.25), 0 8px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .gut-card.expanded.hover {
+            border-color: #ff4d30 !important;
+            box-shadow: 0 0 40px rgba(255, 77, 48, 0.25), 0 8px 28px rgba(0, 0, 0, 0.8);
+        }
+
+        body.light .gut-card.expanded.hover {
+            box-shadow: 0 0 40px rgba(255, 77, 48, 0.25), 0 8px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-content-wrap {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+        }
+
+        .gut-card .card-title {
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+        }
+
+        .gut-card .card-desc {
+            font-size: 0.9rem;
+            opacity: 0.65;
+            line-height: 1.4;
+            transition: opacity 0.3s ease;
+        }
+
+        body.light .gut-card .card-desc {
+            opacity: 0.75;
+        }
+
+        .card-wrapper:hover .card-desc,
+        .gut-card.hover .card-desc {
+            opacity: 0.95;
+        }
+
+        .card-link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: rgba(255, 77, 48, 0.1);
+            border: 1px solid #ff4d30;
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            margin-top: 0;
+            pointer-events: none;
+        }
+
+        body.light .card-link-btn {
+            color: #141414;
+        }
+
+        .gut-card:hover .card-link-btn,
+        .gut-card.hover .card-link-btn {
+            opacity: 1;
+            max-height: 44px;
+            margin-top: 16px;
+            padding: 10px 0;
+            pointer-events: auto;
+        }
+
+        .card-link-btn:hover {
+            background: rgba(255, 77, 48, 0.1);
+            color: #ffffff;
+        }
+        body.light .card-link-btn:hover {
+            background: rgba(255, 77, 48, 0.1);
+            color: #141414;
+        }
+
+        .gut-accent {
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+
+        body.light .gut-accent {
+            color: #141414 !important;
+        }
+
+        .gut-card:hover .gut-accent,
+        .gut-card.hover .gut-accent,
+        .gut-card.expanded:hover .gut-accent,
+        .gut-card.expanded.hover .gut-accent {
+            color: #ff4d30;
+        }
+
+        body.light .gut-card:hover .gut-accent,
+        body.light .gut-card.hover .gut-accent,
+        body.light .gut-card.expanded:hover .gut-accent,
+        body.light .gut-card.expanded.hover .gut-accent {
+            color: #ff4d30 !important;
+        }
+
+        .gut-g {
+            color: #ffffff;
+            font-weight: 800;
+            transition: color 0.3s ease;
+        }
+        body.light .gut-g {
+            color: #141414 !important;
+        }
+        body.light .gut-card:hover .gut-g,
+        body.light .gut-card.hover .gut-g,
+        body.light .gut-card.expanded:hover .gut-g,
+        body.light .gut-card.expanded.hover .gut-g {
+            color: #ff4d30;
+        }
+
+        @media (max-width: 768px) {
+            .gut-card { width: 190px; height: 280px; border-radius: 22px; padding: 18px 14px; }
+            .card-wrapper:not(:first-child) { margin-left: -60px; }
+            .gut-card .card-title { font-size: 1.2rem; }
+            .gut-card .card-desc { font-size: 0.8rem; }
+        }
+
+        @media (max-width: 500px) {
+            .gut-card { width: 165px; height: 260px; border-radius: 20px; padding: 16px 12px; border-width: 2px; }
+            .card-wrapper:not(:first-child) { margin-left: -70px; }
+            .gut-card .card-title { font-size: 1.1rem; }
+            .gut-card .card-desc { font-size: 0.75rem; }
+        }
+
+        .gut-stairs-section {
+            margin: 80px 0 40px;
+            width: 100%;
+            position: relative;
+        }
+
+        .gut-stairs-inner-desktop {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+        }
+
+        .gut-stairs-text-desktop {
+            flex: 1 1 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 16px;
+        }
+
+        .gut-stairs-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: #ffffff;
+            line-height: 1.1;
+            transition: color 0.5s ease;
+        }
+        body.light .gut-stairs-title {
+            color: #141414;
+        }
+
+        .gut-stairs-title .highlight {
+            color: #ff4d30;
+        }
+
+        .gut-stairs-desc {
+            font-size: 17px;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 540px;
+            margin: 0 auto;
+            transition: color 0.5s ease;
+        }
+        body.light .gut-stairs-desc {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .gut-stairs-ladder {
+            flex: 0 0 280px;
+            height: 260px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ladder-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ladder-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ladder-path {
+            stroke: #ff4d30;
+            stroke-width: 4.5;
+            fill: none;
+            stroke-linecap: square;
+            stroke-linejoin: miter;
+            stroke-dasharray: 160 100;
+            animation: stairsWalk 2.6s linear infinite;
+        }
+
+        .ladder-path-clone {
+            stroke: #ff4d30;
+            stroke-width: 4.5;
+            fill: none;
+            stroke-linecap: square;
+            stroke-linejoin: miter;
+            stroke-dasharray: 160 100;
+            stroke-dashoffset: -560;
+            animation: stairsWalk 2.6s linear infinite;
+        }
+
+        @keyframes stairsWalk {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -260; }
+        }
+
+        .gut-stairs-inner-mobile {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
+        }
+
+        .gut-stairs-top-mobile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .gut-stairs-title-mobile {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: #ffffff;
+            line-height: 1.1;
+            transition: color 0.5s ease;
+        }
+        body.light .gut-stairs-title-mobile {
+            color: #141414;
+        }
+
+        .gut-stairs-title-mobile .highlight {
+            color: #ff4d30;
+        }
+
+        .gut-stairs-desc-mobile {
+            font-size: 17px;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 540px;
+            margin: 0 auto;
+            transition: color 0.5s ease;
+        }
+        body.light .gut-stairs-desc-mobile {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .gut-stairs-ladder-mobile {
+            width: 100%;
+            max-width: 280px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 820px) {
+            .gut-stairs-inner-desktop {
+                display: none !important;
+            }
+            .gut-stairs-inner-mobile {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gut-stairs-title-mobile {
+                font-size: 36px;
+            }
+            .gut-stairs-ladder-mobile {
+                height: 160px;
+                max-width: 200px;
+            }
+            .ladder-path,
+            .ladder-path-clone {
+                stroke-width: 3.5;
+            }
+        }
+
+        .spacer-bottom {
+            height: 40vh;
+        }
+
+        .contact-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            transition: border-color 0.5s ease;
+        }
+        body.light .contact-section {
+            border-top-color: rgba(0,0,0,0.04);
+        }
+
+        .contact-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.25);
+            transition: color 0.5s ease;
+        }
+        body.light .contact-label {
+            color: rgba(0,0,0,0.2);
+        }
+
+        .socials {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f0f0f0;
+            transition: all 0.5s ease;
+            text-decoration: none;
+        }
+        body.light .social-link {
+            background: rgba(0,0,0,0.02);
+            border-color: rgba(0,0,0,0.04);
+            color: #141414;
+        }
+        .social-link:hover {
+            background: rgba(255, 77, 48, 0.08);
+            border-color: #ff4d30;
+            transform: translateY(-2px);
+            color: #ff4d30;
+        }
+        .social-link svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+        .social-link.fill-icon svg {
+            fill: currentColor;
+            stroke: none;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255,255,255,0.08);
+            letter-spacing: 0.4px;
+            transition: color 0.5s ease;
+        }
+        body.light .footer-note {
+            color: rgba(0,0,0,0.08);
+        }
+
+        html, body {
+            overflow-x: hidden !important;
+            max-width: 100%;
+        }
+
+        .wrapper {
+            overflow-x: hidden !important;
+        }
+
+        .gut-stairs-text-desktop .motto-glass {
+            margin-bottom: 12px;
+        }
+
+        .gut-stairs-top-mobile .motto-glass {
+            margin-bottom: 12px;
+        }
+
+        .gut-stairs-text-desktop .team-details-btn {
+            margin-top: 12px;
+        }
+
+        .gut-stairs-inner-mobile .team-details-btn {
+            margin-top: 12px;
+        }
+
+        .projects-text-col .all-projects-btn {
+            margin-top: 8px;
+            align-self: center;
+        }
+
+        .projects-text-col .team-description {
+            margin-bottom: 50px;
+        }
+
+        @media (max-width: 640px) {
+            .projects-text-col .all-projects-btn {
+                width: 100% !important;
+                justify-content: center !important;
+                align-self: center !important;
+            }
+        }
+
+        .join-gut-section {
+            margin: 80px 0 20px;
+            width: 100%;
+            position: relative;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            animation: fadeIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .join-gut-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            color: #ffffff;
+            margin-bottom: 16px;
+            transition: color 0.5s ease;
+        }
+        body.light .join-gut-title {
+            color: #141414;
+        }
+
+        .gut-gu {
+            color: #ffffff;
+        }
+        body.light .gut-gu {
+            color: #141414;
+        }
+
+        .gut-t {
+            color: #ff4d30;
+        }
+
+        .join-gut-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 540px;
+            margin: 24px auto 0;
+            line-height: 1.6;
+            transition: color 0.5s ease;
+        }
+        body.light .join-gut-subtitle {
+            color: rgba(0, 0, 0, 0.55);
+        }
+
+        .join-gut-content {
+            display: flex;
+            gap: 40px;
+            margin: 40px 0;
+            text-align: left;
+        }
+
+        .join-gut-column {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 32px;
+            transition: background 0.5s ease;
+        }
+        body.light .join-gut-column {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .join-gut-column-label {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #ff4d30;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 77, 48, 0.2);
+        }
+
+        .join-gut-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .join-gut-list-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+            transition: color 0.5s ease;
+        }
+        body.light .join-gut-list-item {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .join-gut-circle {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ff4d30;
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .join-gut-list-item:hover .join-gut-circle {
+            background: rgba(255, 77, 48, 0.1);
+            border-color: #ff6b50;
+        }
+
+        .join-gut-cta {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 32px;
+            line-height: 1.5;
+            transition: color 0.5s ease;
+        }
+        body.light .join-gut-cta {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .join-gut-cta .highlight-red {
+            color: #ff4d30;
+        }
+
+        .join-gut-btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .join-gut-content {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .join-gut-column {
+                padding: 24px 20px;
+            }
+
+            .join-gut-btn {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .join-gut-title {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .join-gut-title {
+                font-size: 30px;
+                letter-spacing: -1px;
+            }
+
+            .join-gut-subtitle {
+                font-size: 16px;
+            }
+
+            .join-gut-column {
+                padding: 20px 16px;
+            }
+
+            .join-gut-list-item {
+                font-size: 14px;
+            }
+
+            .join-gut-circle {
+                width: 16px;
+                height: 16px;
+                border-width: 1.5px;
+            }
+
+            .join-gut-cta {
+                font-size: 16px;
+            }
+        }
+
+        .socials-block {
+            max-width: 1100px;
+            width: 100%;
+             margin: 0 auto;
+            animation: fadeIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .socials-main-layout {
+            display: flex;
+            gap: 48px;
+            align-items: flex-start;
+        }
+
+        .socials-header-left {
+            flex: 0 0 35%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .socials-content-right {
+            flex: 1 1 65%;
+        }
+
+        .socials-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .socials-title .highlight {
+            color: #ff4d30;
+        }
+
+        .socials-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.6;
+            max-width: 400px;
+            margin-top: 0;
+        }
+
+        .follow-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            margin: 0 0 20px 0;
+            border-radius: 40px;
+            background: rgba(255, 77, 48, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 77, 48, 0.18);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: #ff4d30;
+            position: relative;
+            z-index: 2;
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+
+        .telegram-block {
+            margin-bottom: 24px;
+        }
+
+        .telegram-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            transition: color 0.5s ease;
+        }
+
+        .telegram-title svg {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            fill: #ffffff;
+            transition: fill 0.5s ease;
+        }
+
+        body.light .socials-title,
+        body.light .telegram-title,
+        body.light .other-socials-title,
+        body.light .mini-name {
+            color: #141414;
+        }
+
+        body.light .telegram-title svg {
+            fill: #141414;
+        }
+
+        body.light .socials-subtitle,
+        body.light .telegram-desc,
+        body.light .mini-desc {
+            color: rgba(0, 0, 0, 0.55);
+        }
+
+        .telegram-desc {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            transition: color 0.5s ease;
+        }
+
+        .mini-cards {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .mini-card {
+            flex: 0 1 calc(50% - 8px);
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 6px;
+            padding: 24px 16px;
+            border: 2.5px solid #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.8);
+            text-decoration: none;
+            color: #f0f0f0;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            transform: scale(1);
+            will-change: transform;
+            background: #0a0a0a;
+        }
+
+        body.light .mini-card {
+            border-color: #141414;
+            background: #ffffff;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .mini-card:hover {
+            border-color: #ff4d30;
+            box-shadow: 0 0 40px rgba(255, 77, 48, 0.25), 0 8px 28px rgba(0, 0, 0, 0.8);
+            background: rgba(255, 77, 48, 0.02);
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .mini-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .mini-card .mini-icon {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            stroke: #ff4d30;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .mini-card .mini-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            transition: color 0.5s ease;
+        }
+
+        .mini-card .mini-name .highlight-g {
+            color: #ffffff;
+        }
+
+        .mini-card .mini-name .highlight-t {
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+
+        .mini-card:hover .mini-name .highlight-t {
+            color: #ff4d30;
+        }
+
+        .mini-card .mini-desc {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.4;
+            margin-top: 4px;
+            transition: color 0.5s ease;
+        }
+
+        .mini-card-link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: rgba(255, 77, 48, 0.1);
+            border: 1px solid #ff4d30;
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            margin-top: 0;
+            pointer-events: none;
+        }
+
+        body.light .mini-card-link-btn {
+            color: #141414;
+        }
+
+        .mini-card:hover .mini-card-link-btn {
+            opacity: 1;
+            max-height: 44px;
+            margin-top: 12px;
+            padding: 10px 0;
+            pointer-events: auto;
+        }
+
+        .mini-card-link-btn:hover {
+            background: rgba(255, 77, 48, 0.2);
+            color: #ffffff;
+        }
+
+        .other-socials-block {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: border-color 0.5s ease;
+        }
+
+        body.light .other-socials-block {
+            border-top-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .other-socials-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 24px;
+            text-align: center;
+            transition: color 0.5s ease;
+        }
+
+        .social-icons-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icon-link {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: color 0.3s ease, background 0.3s ease;
+            text-decoration: none;
+        }
+
+        body.light .social-icon-link {
+            color: #141414;
+        }
+
+        .social-icon-link:hover {
+            color: #ff4d30;
+            background: rgba(255, 77, 48, 0.05);
+        }
+
+        .social-icon-link svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+            stroke: none;
+        }
+
+        .github-text-link {
+            display: inline-block;
+            margin-top: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: #ff4d30;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .github-text-link:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 820px) {
+            .socials-main-layout {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .socials-header-left {
+                flex: 1 1 100%;
+                width: 100%;
+            }
+
+            .socials-content-right {
+                flex: 1 1 100%;
+                width: 100%;
+            }
+
+            .socials-title {
+                font-size: 38px;
+            }
+
+            .socials-subtitle {
+                font-size: 16px;
+            }
+
+            .mini-cards {
+                flex-direction: column;
+            }
+
+            .mini-card {
+                flex: 1 1 auto;
+                width: 100%;
+                transform: none !important;
+            }
+
+            .mini-card:hover {
+                transform: none !important;
+            }
+
+            .social-icon-link {
+                width: 48px;
+                height: 48px;
+            }
+            .social-icon-link svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .socials-title {
+                font-size: 36px;
+            }
+
+            .telegram-title {
+                font-size: 18px;
+            }
+
+            .telegram-desc {
+                font-size: 14px;
+            }
+
+            .mini-card .mini-name {
+                font-size: 14px;
+            }
+
+            .mini-card .mini-desc {
+                font-size: 13px;
+            }
+
+            .mini-card {
+                border: none !important;
+                padding: 16px 12px !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                transform: none !important;
+                width: 100% !important;
+                flex: 1 1 auto !important;
+            }
+
+            .mini-card:hover {
+                border: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                transform: none !important;
+            }
+
+            .mini-card:hover .mini-name .highlight-t {
+                color: #ffffff;
+            }
+
+            body.light .mini-card:hover .mini-name .highlight-t {
+                color: #141414;
+            }
+
+            .social-icons-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px !important;
+                max-width: 300px;
+                margin: 0 auto;
+                justify-items: center;
+            }
+
+            .social-icon-link {
+                width: 48px;
+                height: 48px;
+            }
+            .social-icon-link svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .mini-card-link-btn {
+                opacity: 1 !important;
+                max-height: 44px !important;
+                margin-top: 12px !important;
+                padding: 10px 0 !important;
+                pointer-events: auto !important;
+            }
+        }
+
+        @media (max-width: 820px) and (orientation: landscape) {
+            .mini-card .mini-name .highlight-t {
+                color: #ff4d30;
+            }
+
+            .mini-card-link-btn {
+                opacity: 1 !important;
+                max-height: 44px !important;
+                margin-top: 12px !important;
+                padding: 10px 0 !important;
+                pointer-events: auto !important;
+            }
+
+            .mini-card {
+                border: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                transform: none !important;
+                width: 100% !important;
+                flex: 1 1 auto !important;
+            }
+
+            .mini-card:hover {
+                border: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                transform: none !important;
+            }
+
+            .social-icons-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px !important;
+                max-width: 300px;
+                margin: 0 auto;
+                justify-items: center;
+            }
+        }
+
+.team-section,
+.projects-section,
+.gut-stairs-section,
+.join-gut-section,
+.socials-block {
+    margin-top: 70px !important;
+    margin-bottom: 70px !important;
+}
+
+.join-gut-section {
+    margin-top: 80px !important;
+    margin-bottom: 90px !important;
+}
+
+.desktop-only.team-section,
+.mobile-tablet-only.team-section {
+    gap: 40px;
+}
+
+.projects-header-center {
+    margin-bottom: 35px !important;
+}
+
+.projects-text-col {
+    padding-right: 20px;
+}
+
+.socials-subtitle,
+.telegram-desc {
+    margin-bottom: 20px !important;
+}
+
+.join-gut-list {
+    gap: 14px !important;
+}
+
+@media (max-width: 992px) {
+    .team-section,
+    .projects-section,
+    .gut-stairs-section,
+    .join-gut-section,
+    .socials-block {
+        margin-top: 45px !important;
+        margin-bottom: 45px !important;
+    }
+    
+    .mobile-tablet-only.team-section {
+        gap: 25px !important;
+    }
+    
+    .projects-text-col {
+        padding-right: 0 !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .team-section,
+    .projects-section,
+    .gut-stairs-section,
+    .join-gut-section,
+    .socials-block {
+        margin-top: 35px !important;
+        margin-bottom: 35px !important;
+    }
+    
+    .join-gut-section {
+        margin-top: 45px !important;
+        margin-bottom: 50px !important;
+    }
+    
+    .projects-header-center {
+        margin-bottom: 25px !important;
+    }
+}
+
+#socialsTitleText .highlight {
+    color: #ff4d30 !important;
+}
+
+    </style>
 </head>
-
 <body>
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-socials">
-            <div class="social-grid">
-                <a href="https://www.instagram.com/greatusersystem/" target="_blank" class="social-icon-link"
-                    aria-label="Instagram">
-                    <img src="./assets/images/instagram.png" alt="Instagram">
-                </a>
 
-                <a href="https://www.facebook.com/profile.php?id=61590893377240" target="_blank" class="social-icon-link"
-                    aria-label="Facebook">
-                    <img src="./assets/images/facebook.png" alt="Facebook">
-                </a>
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <div class="brand-text">
+                    <svg class="header-g-icon" viewBox="170 110 145 145" xmlns="http://www.w3.org/2000/svg">
+                        <g fill-rule="evenodd" stroke="none">
+                            <path class="svg-white" d="M237.28036,246.18861l-4.38577,-0.53453c-7.5097,-0.91133 -15.81461,-4.07031 -20.48517,-6.22376c-15.69851,-7.23586 -29.55026,-24.85122 -33.16928,-42.1818l-0.65721,-2.83257c-0.54548,-1.83142 -1.09754,-5.94116 -1.33851,-9.98299c-1.09973,-18.30762 4.73847,-35.95804 16.1936,-48.95542c7.40673,-8.40569 18.86625,-15.86938 28.39796,-18.49602l3.50511,-1.02086c5.02107,-1.58606 13.31941,-2.52149 20.04484,-2.2608l11.28207,0.19278c7.80982,0 9.12424,0.2826 15.23408,3.27947c5.50521,2.69893 10.55476,7.45712 12.55705,11.83193c2.02639,4.42301 3.8841,5.5074 -0.93543,3.3671c-6.25224,-2.77561 -7.23805,-2.80847 -7.24681,-0.24974c-0.02191,6.78239 -5.37596,13.27122 -12.051,14.60535c-2.98372,0.59587 -4.67494,0.02191 -9.85812,-3.343c-4.98383,-3.23565 -6.05508,-3.4832 -13.36323,-3.0845c-10.15386,0.55205 -21.03723,6.49102 -26.6213,14.52649l-1.66931,2.33309c-4.06374,5.53369 -6.46035,14.80032 -6.25662,24.18963c0.14678,6.75391 0.03943,5.24233 2.47548,13.43552c2.36157,7.93688 9.34331,16.29438 17.39629,20.82254c9.63467,5.41758 25.32441,6.06603 37.32284,1.54225c5.8141,-2.19288 5.43511,-1.5532 5.35186,-9.01032l0.06572,-13.49905l-12.59868,-0.06353c-8.05518,-0.04162 -12.66002,-0.14459 -12.77174,-0.28479l0.04381,-20.15438l52.4671,0.1183v51.22717l-6.10765,4.95535c-4.23461,3.4372 -12.34456,8.34435 -16.07531,9.72887l-3.59712,1.51815c-1.29032,0.65064 -5.81191,2.01982 -9.59962,2.90705c-5.04078,1.17859 -19.18609,2.13812 -23.54995,1.59702z"/>
+                            <path fill="#f16028" d="M295.83978,162.01341c-1.14354,-0.58272 -5.60379,-2.32213 -7.07813,-3.09326c-2.14031,-1.11944 -2.74713,-1.12821 -10.07719,-4.65303c-10.19549,-4.90058 -11.86041,-3.21156 -7.18547,-6.41873c3.18089,-2.17974 3.45472,-2.43824 4.86553,-4.60046c1.66274,-2.54778 1.77446,-2.83476 2.79971,-7.17452c0.31546,-1.33851 1.48748,-1.14573 6.39244,1.04277c2.75151,1.22898 3.25537,1.72408 4.83486,4.74723c1.37795,2.64198 2.99687,4.74723 4.28281,6.97079c1.19612,2.06801 4.82829,7.59513 6.07698,9.24473c3.92134,5.18537 2.53244,7.73096 -4.91153,3.93448z"/>
+                        </g>
+                    </svg><span class="brand-u">U</span><span class="highlight-t">T</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="settings-widget" id="settingsWidget">
+                    <button class="settings-main-btn" aria-label="Настройки">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </button>
+                    <div class="settings-menu">
+                        <button class="settings-btn" id="langToggleBtn" aria-label="Язык">RU</button>
+                        <button class="settings-btn" id="themeToggleBtn" aria-label="Тема">
+                            <div class="theme-icon-container">
+                                <svg class="icon-moon" viewBox="0 0 24 24">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                </svg>
+                                <svg class="icon-sun" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-                <a href="https://x.com/GreatUserTeam" target="_blank" class="social-icon-link" aria-label="X">
-                    <img src="./assets/images/x.png" alt="X">
-                </a>
+    <div class="wrapper">
 
-                <a href="https://www.youtube.com/@GreatUserTeam" target="_blank" class="social-icon-link"
-                    aria-label="YouTube">
-                    <img src="./assets/images/youtube.png" alt="YouTube">
-                </a>
+        <div class="hero-section-container" id="heroSection">
+            <canvas class="falling-icons-canvas" id="fallingCanvas"></canvas>
 
-                <a href="https://dzen.ru/greatuserteam" target="_blank" class="social-icon-link" aria-label="Dzen">
-                    <img src="./assets/images/dzen.png" alt="Dzen">
-                </a>
+            <div class="hero">
+                <div class="hero-left">
+                    <h1>
+                        <span>
+                            <svg class="g-icon-svg" viewBox="170 110 145 145" xmlns="http://www.w3.org/2000/svg">
+                                <g fill-rule="evenodd" stroke="none">
+                                    <path class="svg-white" d="M237.28036,246.18861l-4.38577,-0.53453c-7.5097,-0.91133 -15.81461,-4.07031 -20.48517,-6.22376c-15.69851,-7.23586 -29.55026,-24.85122 -33.16928,-42.1818l-0.65721,-2.83257c-0.54548,-1.83142 -1.09754,-5.94116 -1.33851,-9.98299c-1.09973,-18.30762 4.73847,-35.95804 16.1936,-48.95542c7.40673,-8.40569 18.86625,-15.86938 28.39796,-18.49602l3.50511,-1.02086c5.02107,-1.58606 13.31941,-2.52149 20.04484,-2.2608l11.28207,0.19278c7.80982,0 9.12424,0.2826 15.23408,3.27947c5.50521,2.69893 10.55476,7.45712 12.55705,11.83193c2.02639,4.42301 3.8841,5.5074 -0.93543,3.3671c-6.25224,-2.77561 -7.23805,-2.80847 -7.24681,-0.24974c-0.02191,6.78239 -5.37596,13.27122 -12.051,14.60535c-2.98372,0.59587 -4.67494,0.02191 -9.85812,-3.343c-4.98383,-3.23565 -6.05508,-3.4832 -13.36323,-3.0845c-10.15386,0.55205 -21.03723,6.49102 -26.6213,14.52649l-1.66931,2.33309c-4.06374,5.53369 -6.46035,14.80032 -6.25662,24.18963c0.14678,6.75391 0.03943,5.24233 2.47548,13.43552c2.36157,7.93688 9.34331,16.29438 17.39629,20.82254c9.63467,5.41758 25.32441,6.06603 37.32284,1.54225c5.8141,-2.19288 5.43511,-1.5532 5.35186,-9.01032l0.06572,-13.49905l-12.59868,-0.06353c-8.05518,-0.04162 -12.66002,-0.14459 -12.77174,-0.28479l0.04381,-20.15438l52.4671,0.1183v51.22717l-6.10765,4.95535c-4.23461,3.4372 -12.34456,8.34435 -16.07531,9.72887l-3.59712,1.51815c-1.29032,0.65064 -5.81191,2.01982 -9.59962,2.90705c-5.04078,1.17859 -19.18609,2.13812 -23.54995,1.59702z"/>
+                                    <path fill="#f16028" d="M295.83978,162.01341c-1.14354,-0.58272 -5.60379,-2.32213 -7.07813,-3.09326c-2.14031,-1.11944 -2.74713,-1.12821 -10.07719,-4.65303c-10.19549,-4.90058 -11.86041,-3.21156 -7.18547,-6.41873c3.18089,-2.17974 3.45472,-2.43824 4.86553,-4.60046c1.66274,-2.54778 1.77446,-2.83476 2.79971,-7.17452c0.31546,-1.33851 1.48748,-1.14573 6.39244,1.04277c2.75151,1.22898 3.25537,1.72408 4.83486,4.74723c1.37795,2.64198 2.99687,4.74723 4.28281,6.97079c1.19612,2.06801 4.82829,7.59513 6.07698,9.24473c3.92134,5.18537 2.53244,7.73096 -4.91153,3.93448z"/>
+                                </g>
+                            </svg>reat
+                        </span>
+                        <span>User</span>
+                        <span class="highlight">Team</span>
+                    </h1>
+                    <div class="motto-glass" id="mottoText">
+                        Оптимизация · Кастомизация · Свобода
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-desc" id="heroDescText">
+                        Многие развивают свои проекты в одиночку, тратя колоссальные ресурсы на развитие, рекламу и борьбу друг с другом. Мы изменили подход и стали командой, где каждый работает над своим проектом и получает поддержку от других.
+                    </div>
+                </div>
+            </div>
 
-                <a href="https://vk.com/club239710312" target="_blank" class="social-icon-link" aria-label="VK">
-                    <img src="./assets/images/vk.png" alt="VK">
-                </a>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="2">0</div>
+                    <div class="stat-label" data-i18n="projects">Проектов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="3">0</div>
+                    <div class="stat-label" data-i18n="developers">Разработчиков</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="10">0</div>
+                    <div class="stat-label" data-i18n="users">Пользователей</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="gutDaysCounter">0</div>
+                    <div class="stat-label" data-i18n="daysGUT">Дней GUT</div>
+                </div>
             </div>
         </div>
 
-        <button class="icon-btn sidebar-lang" id="langToggle" aria-label="Сменить язык">
-            <span class="material-icons">language</span>
-        </button>
-    </nav>
+        <div class="team-section desktop-only" id="teamBlockDesktop">
+            <div class="team-left-column">
+                <div class="team-left-content">
+                    <div class="team-header-wrapper">
+                        <div class="team-scalable-icon team-icon-desktop">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <div class="team-titles-col">
+                            <h2 class="team-title" data-i18n="teamTitle">О нашей команде</h2>
+                            <div class="team-subtitle" data-i18n="teamSubtitle">Кто мы такие</div>
+                        </div>
+                    </div>
 
-    <div class="main-content" id="mainContent">
-        <main>
-            <section id="hero" class="section section-hero">
-                <h1 class="hero-title">
-                    <span class="hero-brand">Great User System</span>
-                    <span class="hero-sub" data-i18n="hero_title_part">
-                        OS, которую ты заслуживаешь
+                    <p class="team-description" data-i18n="teamDesc">
+                        Мы — программисты, дизайнеры и другие IT-специалисты, работающие на общее благо нашей команды. Вместе мы создаем востребованные цифровые продукты, которыми хочется пользоваться каждый день.
+                    </p>
+                </div>
+
+                <a href="https://www.google.com" class="team-details-btn" target="_blank" rel="noopener noreferrer">
+                    <span data-i18n="teamDetailsBtn">Подробнее о Great User Team</span>
+                    <svg class="team-details-arrow" viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="team-benefits-block">
+                <div class="benefits-heading-container">
+                    <div class="benefits-heading" data-i18n="benefitsHeading">Наша команда делает такой софт для всех видов устройств, который соответствует требованиям:</div>
+                </div>
+                <div class="benefits-cards-list">
+                    <div class="benefit-card-item">
+                        <div class="benefit-card-title">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            <span><span class="benefit-label" data-i18n="benefit1Title">Кастомизация</span></span>
+                        </div>
+                        <div class="benefit-card-subtitle" data-i18n="benefit1Desc">Пользователь сам выбирает тот интерфейс, который ему по душе, а не тот, который решила сделать корпорация.</div>
+                    </div>
+                    <div class="benefit-card-item">
+                        <div class="benefit-card-title">
+                            <svg viewBox="0 0 24 24">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                            <span><span class="benefit-label" data-i18n="benefit2Title">Оптимизация</span></span>
+                        </div>
+                        <div class="benefit-card-subtitle" data-i18n="benefit2Desc">Безупречная работа, без лагов и задержек.</div>
+                    </div>
+                    <div class="benefit-card-item">
+                        <div class="benefit-card-title">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span><span class="benefit-label" data-i18n="benefit3Title">Свобода</span></span>
+                        </div>
+                        <div class="benefit-card-subtitle" data-i18n="benefit3Desc">Никакой слежки и сбора данных. Все наши продукты обсолютно бесплатны и с открытым кодом.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-section mobile-tablet-only" id="teamBlockMobile">
+            <div class="team-text-block">
+                <div class="team-header-wrapper">
+                    <div class="team-scalable-icon team-icon-mobile">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="team-title" data-i18n="teamTitle">О нашей команде</h2>
+                        <div class="team-subtitle" data-i18n="teamSubtitle">Кто мы такие</div>
+                    </div>
+                </div>
+                <p class="team-description" data-i18n="teamDesc">
+                    Мы — программисты, дизайнеры и другие IT-специалисты, работающие на общее благо нашей команды. Вместе мы создаем востребованные цифровые продукты, которыми хочется пользоваться каждый день.
+                </p>
+            </div>
+
+            <div class="team-benefits-block">
+                <div class="benefits-heading-container">
+                    <div class="benefits-heading" data-i18n="benefitsHeading">Наша команда делает такой софт для всех видов устройств, который соответствует требованиям:</div>
+
+                    <div class="tablet-btn-container">
+                        <a href="https://www.google.com" class="team-details-btn" target="_blank" rel="noopener noreferrer">
+                            <span data-i18n="teamDetailsBtn">Подробнее о Great User Team</span>
+                            <svg class="team-details-arrow" viewBox="0 0 24 24">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="benefits-cards-list">
+                    <div class="benefit-card-item">
+                        <div class="benefit-card-title">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            <span><span class="benefit-label" data-i18n="benefit1Title">Кастомизация</span></span>
+                        </div>
+                        <div class="benefit-card-subtitle" data-i18n="benefit1Desc">Пользователь сам выбирает тот интерфейс, который ему по душе, а не тот, который решила сделать корпорация.</div>
+                    </div>
+                    <div class="benefit-card-item">
+                        <div class="benefit-card-title">
+                            <svg viewBox="0 0 24 24">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                            <span><span class="benefit-label" data-i18n="benefit2Title">Оптимизация</span></span>
+                        </div>
+                        <div class="benefit-card-subtitle" data-i18n="benefit2Desc">Безупречная работа, без лагов и задержек.</div>
+                    </div>
+                    <div class="benefit-card-item">
+                        <div class="benefit-card-title">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span><span class="benefit-label" data-i18n="benefit3Title">Свобода</span></span>
+                        </div>
+                        <div class="benefit-card-subtitle" data-i18n="benefit3Desc">Никакой слежки и сбора данных. Все наши продукты обсолютно бесплатны и с открытым кодом.</div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://www.google.com" class="team-details-btn" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="teamDetailsBtn">Подробнее о Great User Team</span>
+                <svg class="team-details-arrow" viewBox="0 0 24 24">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+
+        <div class="projects-section" id="projectsSection">
+            <div class="projects-header-center">
+                <h2 class="projects-main-title">
+                    <div class="star-container">
+                        <div class="star-plus star-1"></div>
+                        <div class="star-plus star-2"></div>
+                        <div class="star-plus star-3"></div>
+                    </div>
+                    <span style="display:inline-flex;align-items:center;gap:0.05em;">
+                        <svg class="g-icon-svg" viewBox="170 110 145 145" xmlns="http://www.w3.org/2000/svg" style="height: 0.95em; width: auto; vertical-align: -0.05em; margin-right: 0.02em;">
+                            <g fill-rule="evenodd" stroke="none">
+                                <path class="svg-white" d="M237.28036,246.18861l-4.38577,-0.53453c-7.5097,-0.91133 -15.81461,-4.07031 -20.48517,-6.22376c-15.69851,-7.23586 -29.55026,-24.85122 -33.16928,-42.1818l-0.65721,-2.83257c-0.54548,-1.83142 -1.09754,-5.94116 -1.33851,-9.98299c-1.09973,-18.30762 4.73847,-35.95804 16.1936,-48.95542c7.40673,-8.40569 18.86625,-15.86938 28.39796,-18.49602l3.50511,-1.02086c5.02107,-1.58606 13.31941,-2.52149 20.04484,-2.2608l11.28207,0.19278c7.80982,0 9.12424,0.2826 15.23408,3.27947c5.50521,2.69893 10.55476,7.45712 12.55705,11.83193c2.02639,4.42301 3.8841,5.5074 -0.93543,3.3671c-6.25224,-2.77561 -7.23805,-2.80847 -7.24681,-0.24974c-0.02191,6.78239 -5.37596,13.27122 -12.051,14.60535c-2.98372,0.59587 -4.67494,0.02191 -9.85812,-3.343c-4.98383,-3.23565 -6.05508,-3.4832 -13.36323,-3.0845c-10.15386,0.55205 -21.03723,6.49102 -26.6213,14.52649l-1.66931,2.33309c-4.06374,5.53369 -6.46035,14.80032 -6.25662,24.18963c0.14678,6.75391 0.03943,5.24233 2.47548,13.43552c2.36157,7.93688 9.34331,16.29438 17.39629,20.82254c9.63467,5.41758 25.32441,6.06603 37.32284,1.54225c5.8141,-2.19288 5.43511,-1.5532 5.35186,-9.01032l0.06572,-13.49905l-12.59868,-0.06353c-8.05518,-0.04162 -12.66002,-0.14459 -12.77174,-0.28479l0.04381,-20.15438l52.4671,0.1183v51.22717l-6.10765,4.95535c-4.23461,3.4372 -12.34456,8.34435 -16.07531,9.72887l-3.59712,1.51815c-1.29032,0.65064 -5.81191,2.01982 -9.59962,2.90705c-5.04078,1.17859 -19.18609,2.13812 -23.54995,1.59702z"/>
+                                <path fill="#f16028" d="M295.83978,162.01341c-1.14354,-0.58272 -5.60379,-2.32213 -7.07813,-3.09326c-2.14031,-1.11944 -2.74713,-1.12821 -10.07719,-4.65303c-10.19549,-4.90058 -11.86041,-3.21156 -7.18547,-6.41873c3.18089,-2.17974 3.45472,-2.43824 4.86553,-4.60046c1.66274,-2.54778 1.77446,-2.83476 2.79971,-7.17452c0.31546,-1.33851 1.48748,-1.14573 6.39244,1.04277c2.75151,1.22898 3.25537,1.72408 4.83486,4.74723c1.37795,2.64198 2.99687,4.74723 4.28281,6.97079c1.19612,2.06801 4.82829,7.59513 6.07698,9.24473c3.92134,5.18537 2.53244,7.73096 -4.91153,3.93448z"/>
+                            </g>
+                        </svg>reat
+                        <span style="margin-left:0.05em;">User</span>
+                        <span style="color:#ff4d30;margin-left:0.05em;">Space</span>
                     </span>
-                </h1>
+                </h2>
+                <div class="motto-glass" data-i18n="projectsMotto">Проекты GUT</div>
+            </div>
 
-                <p class="hero-desc" data-i18n="hero_subtitle">
-                    <span class="gus-badge">GUS</span> — это не дистрибутив Linux и не клон Windows. Это
-                    платформа-конструктор с микроядром, написанная на Rust.
-                </p>
+            <div class="projects-content">
+                <div class="projects-text-col">
+    <p class="team-description no-g-svg">
+        <span class="inline-brand">
+            <span class="gut-g">G</span><span class="brand-u">U</span><span class="highlight-t">Team</span>
+        </span>
+        <span data-i18n="projectsDesc">ведет множество проектов на самых разных стадиях реализации: от разработки первоначальной концепции до финального тестирования.</span>
+    </p>
+                </div>
 
-                <div class="hero-actions">
-                    <a href="#tech" class="btn-primary" data-i18n="how_it_works">Как это работает</a>
-                    <a href="#manifesto" class="btn-outline" data-i18n="manifesto_btn">Манифест</a>
-                    <a href="https://github.com/GreatUserTeam/GUS" target="_blank" class="btn-github" aria-label="GitHub">
-                        <img src="./assets/images/github.png" alt="GitHub">
+                <div class="projects-gallery-col">
+                    <div class="card-row">
+
+                        <div class="card-wrapper" data-index="1">
+                            <div class="gut-card" data-project="GUStay">
+                                <div class="card-content-wrap">
+                                    <div class="card-title no-g-svg"><span style="display:inline-flex;align-items:center;gap:0.02em;"><span class="gut-g">G</span><span style="font-weight:800;">U</span><span class="gut-accent">Stay</span></span></div>
+                                    <div class="card-desc" data-i18n="card1Desc">Лёгкая утилита, не дающая погаснуть экрану на любом устройстве</div>
+                                </div>
+                                <a href="https://yandex.ru" class="card-link-btn" target="_blank" rel="noopener noreferrer">
+                                    <span data-i18n="goBtn">Перейти</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card-wrapper" data-index="2">
+                            <div class="gut-card" data-project="GUSCalc">
+                                <div class="card-content-wrap">
+                                    <div class="card-title no-g-svg"><span style="display:inline-flex;align-items:center;gap:0.02em;"><span class="gut-g">G</span><span style="font-weight:800;">U</span><span class="gut-accent">S</span><span class="gut-accent">Calc</span></span></div>
+                                    <div class="card-desc" data-i18n="card2Desc">Мега кастомный калькулятор на html, доступный на всех платформах</div>
+                                </div>
+                                <a href="https://mail.ru" class="card-link-btn" target="_blank" rel="noopener noreferrer">
+                                    <span data-i18n="goBtn">Перейти</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card-wrapper" data-index="3">
+                            <div class="gut-card" data-project="GUSystem">
+                                <div class="card-content-wrap">
+                                    <div class="card-title no-g-svg"><span style="display:inline-flex;align-items:center;gap:0.02em;"><span class="gut-g">G</span><span style="font-weight:800;">U</span><span class="gut-accent">System</span></span></div>
+                                    <div class="card-desc" data-i18n="card3Desc">Микроядерная модульная операционная система для ПК на Rust</div>
+                                </div>
+                                <a href="https://t.me" class="card-link-btn" target="_blank" rel="noopener noreferrer">
+                                    <span data-i18n="goBtn">Перейти</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#" class="team-details-btn all-projects-btn" style="margin-top: 40px;">
+                <span data-i18n="allProjectsBtn">Все проекты GUT</span>
+                <svg class="team-details-arrow" viewBox="0 0 24 24">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+
+        <section class="gut-stairs-section" id="stairsSection">
+
+            <div class="gut-stairs-inner-desktop">
+                <div class="gut-stairs-text-desktop">
+                    <h2 class="gut-stairs-title">
+                        Great User <span class="highlight">Stairs</span>
+                    </h2>
+                    <div class="motto-glass" data-i18n="stairsMotto">Обновления GUT</div>
+                    <p class="gut-stairs-desc" data-i18n="stairsDesc">
+                        GUStairs — живая лента обновлений. Строим лестницу нашего прогресса: запускаем новые проекты, дорабатываем старые и растем в реальном времени.
+                    </p>
+                    <a href="#" class="team-details-btn">
+                        <span data-i18n="stairsBtn">Следить за новостями</span>
+                        <svg class="team-details-arrow" viewBox="0 0 24 24">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
                     </a>
                 </div>
 
-                <div class="stat-container">
-                    <div class="stat-item">
-                        <div class="stat-number">10</div>
-                        <div class="stat-label" data-i18n="developers">разработчиков</div>
+                <div class="gut-stairs-ladder">
+                    <div class="ladder-wrapper">
+                        <svg class="ladder-svg" viewBox="0 0 300 280" preserveAspectRatio="xMidYMid meet">
+                            <polyline class="ladder-path" points="
+                                10,260
+                                10,220
+                                50,220
+                                50,180
+                                90,180
+                                90,140
+                                130,140
+                                130,100
+                                170,100
+                                170,60
+                                210,60
+                                210,20
+                                250,20
+                            " />
+                            <polyline class="ladder-path-clone" points="
+                                10,260
+                                10,220
+                                50,220
+                                50,180
+                                90,180
+                                90,140
+                                130,140
+                                130,100
+                                170,100
+                                170,60
+                                210,60
+                                210,20
+                                250,20
+                            " />
+                        </svg>
                     </div>
+                </div>
+            </div>
 
-                    <div class="stat-item">
-                        <div class="stat-number">40</div>
-                        <div class="stat-label" data-i18n="forum_members">человек на форуме</div>
+            <div class="gut-stairs-inner-mobile">
+                <div class="gut-stairs-top-mobile">
+                    <h2 class="gut-stairs-title-mobile">
+                        Great User <span class="highlight">Stairs</span>
+                    </h2>
+                    <div class="motto-glass" data-i18n="stairsMotto">Обновления GUT</div>
+                </div>
+
+                <div class="gut-stairs-ladder-mobile">
+                    <div class="ladder-wrapper">
+                        <svg class="ladder-svg" viewBox="0 0 300 280" preserveAspectRatio="xMidYMid meet">
+                            <polyline class="ladder-path" points="
+                                10,260
+                                10,220
+                                50,220
+                                50,180
+                                90,180
+                                90,140
+                                130,140
+                                130,100
+                                170,100
+                                170,60
+                                210,60
+                                210,20
+                                250,20
+                            " />
+                            <polyline class="ladder-path-clone" points="
+                                10,260
+                                10,220
+                                50,220
+                                50,180
+                                90,180
+                                90,140
+                                130,140
+                                130,100
+                                170,100
+                                170,60
+                                210,60
+                                210,20
+                                250,20
+                            " />
+                        </svg>
                     </div>
                 </div>
 
-                <div class="hero-glow"></div>
-            </section>
-
-            <section id="about" class="section">
-                <h2 data-i18n="about_title">О проекте</h2>
-
-                <p class="about-lead" data-i18n="about_lead">
-                    Мы создаём не просто ОС, а новую философию.
+                <p class="gut-stairs-desc-mobile" data-i18n="stairsDesc">
+                    GUStairs — живая лента обновлений. Строим лестницу нашего прогресса: запускаем новые проекты, дорабатываем старые и растем в реальном времени.
                 </p>
 
-                <p class="about-text" data-i18n="about_text">
-                    <span class="gus-badge">GUS</span> — операционная система с нуля. Микроядро управляет только памятью
-                    и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или
-                    удалить без перезагрузки системы. Это очень удобно, а главное — безопасно.
+                <a href="#" class="team-details-btn">
+                    <span data-i18n="stairsBtn">Следить за новостями</span>
+                    <svg class="team-details-arrow" viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <section class="join-gut-section" id="joinGutSection">
+            <div class="join-header">
+                <h2 class="join-gut-title">
+                    Стань частью команды <span class="gut-gu">GU</span><span class="gut-t">T</span>
+                </h2>
+                <div class="motto-glass" data-i18n="joinMotto">Будь в команде</div>
+                <p class="join-gut-subtitle" data-i18n="joinSubtitle">
+                    Мы рады видеть всех в нашей команде!
                 </p>
+            </div>
 
-                <p class="about-text" data-i18n="about_dynamic">
-                    Ядро собирается конкретно под ваш компьютер. Перед установкой оно сканирует оборудование и загружает
-                    только нужные модули с нашего сервера — по сути, у каждого будет стоять уникальная система.
-                </p>
-            </section>
-
-            <section id="tech" class="section">
-                <h2 data-i18n="tech_title">Технические особенности</h2>
-
-                <div class="tech-grid-3x2">
-                    <div class="tech-step">
-                        <div class="tech-step-icon"><span class="material-icons">security</span></div>
-                        <h3 data-i18n="tech_microkernel_title">Микроядро</h3>
-                        <p data-i18n="tech_microkernel">Сбой видеодрайвера не обрушит систему. Ядро минимально и отвечает
-                            только за критически важные функции.</p>
-                    </div>
-
-                    <div class="tech-step">
-                        <div class="tech-step-icon"><span class="material-icons">code</span></div>
-                        <h3 data-i18n="tech_rust_title">Rust</h3>
-                        <p data-i18n="tech_rust">Безопасность памяти без компромиссов. Современный язык исключает целые
-                            классы уязвимостей на этапе компиляции.</p>
-                    </div>
-
-                    <div class="tech-step">
-                        <div class="tech-step-icon"><span class="material-icons">extension</span></div>
-                        <h3 data-i18n="tech_modular_title">Лёгкая модульность</h3>
-                        <p data-i18n="tech_modular">Модули общаются через быстрый IPC на Rust. Никаких тяжёлых накладных
-                            расходов, присущих старым ОС.</p>
-                    </div>
-
-                    <div class="tech-step">
-                        <div class="tech-step-icon"><span class="material-icons">inventory_2</span></div>
-                        <h3 data-i18n="tech_sandbox_title">Программа = Файл</h3>
-                        <p data-i18n="tech_sandbox">Изолированные модули, вирусам негде прятаться. Песочница на уровне
-                            ОС.</p>
-                    </div>
-
-                    <div class="tech-step">
-                        <div class="tech-step-icon"><span class="material-icons">speed</span></div>
-                        <h3>Производительность</h3>
-                        <p>Минимальные накладные расходы IPC обеспечивают быстродействие, сравнимое с монолитными ядрами.
-                        </p>
-                    </div>
-
-                    <div class="tech-step">
-                        <div class="tech-step-icon"><span class="material-icons">build_circle</span></div>
-                        <h3>Динамическая сборка</h3>
-                        <p>Ядро собирается под конкретное железо — никаких лишних драйверов и модулей в системе.</p>
-                    </div>
+            <div class="join-gut-content">
+                <div class="join-gut-column">
+                    <div class="join-gut-column-label" data-i18n="joinLabel1">Если ты...</div>
+                    <ul class="join-gut-list">
+                        <li class="join-gut-list-item">
+                            <div class="join-gut-circle"></div>
+                            <span data-i18n="joinItem1">Програмист</span>
+                        </li>
+                        <li class="join-gut-list-item">
+                            <div class="join-gut-circle"></div>
+                            <span data-i18n="joinItem2">Дизайнер</span>
+                        </li>
+                        <li class="join-gut-list-item">
+                            <div class="join-gut-circle"></div>
+                            <span data-i18n="joinItem3">Тестировщик</span>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="tech-note">
-                    <p class="tech-note-title" data-i18n="tech_why_title">
-                        Почему модульность будет быстрой в <span class="gus-badge">GUS</span>:
-                    </p>
-
-                    <p class="tech-note-desc" data-i18n="tech_why_desc">
-                        Тяжесть модульности — это миф, основанный на опыте старых ОС. В
-                        <span class="gus-badge">GUS</span> модульность станет легкой, потому что мы изначально
-                        проектируем систему как набор независимых сервисов, которые общаются через эффективные каналы
-                        (IPC), написанные на безопасном и высокопроизводительном языке Rust.
-                    </p>
+                <div class="join-gut-column">
+                    <div class="join-gut-column-label" data-i18n="joinLabel2">Если ты...</div>
+                    <ul class="join-gut-list">
+                        <li class="join-gut-list-item">
+                            <div class="join-gut-circle"></div>
+                            <span data-i18n="joinItem4">Работаешь над проектом</span>
+                        </li>
+                        <li class="join-gut-list-item">
+                            <div class="join-gut-circle"></div>
+                            <span data-i18n="joinItem5">Придумал интересную идею, но не можешь реализовать</span>
+                        </li>
+                        <li class="join-gut-list-item">
+                            <div class="join-gut-circle"></div>
+                            <span data-i18n="joinItem6">Хочешь развивать один из наших проектов</span>
+                        </li>
+                    </ul>
                 </div>
-            </section>
+            </div>
 
-            <section id="comparison" class="section">
-                <h2 data-i18n="comp_title">Сравнение операционных систем</h2>
+            <div class="join-gut-cta">
+                <span data-i18n="joinCtaPrefix">...То </span><span class="highlight-red" data-i18n="joinCtaHighlight">присоединяйся к нам!</span>
+            </div>
 
-                <p class="comp-intro" data-i18n="comp_intro">
-                    Мы сравнили <span class="gus-badge">GUS</span> с другими популярными ОС, чтобы показать
-                    принципиальные отличия в архитектуре и философии.
-                </p>
+            <div class="join-gut-btn-container">
+                <a href="#" class="team-details-btn">
+                    <span data-i18n="joinBtn">Подробнее</span>
+                    <svg class="team-details-arrow" viewBox="0 0 24 24">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </section>
 
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-i18n="col_feature">Характеристика</th>
-                                <th><span class="gus-badge">GUS</span></th>
-                                <th>Linux</th>
-                                <th>Windows</th>
-                                <th>FreeBSD</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td data-i18n="row_kernel">Тип ядра</td>
-                                <td><strong data-i18n="val_microkernel">Микроядро</strong></td>
-                                <td data-i18n="val_monolithic">Монолитное</td>
-                                <td data-i18n="val_hybrid">Гибридное</td>
-                                <td data-i18n="val_monolithic2">Монолитное</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_opensource">Открытый исходный код</td>
-                                <td><span class="check-mark">✅ Да</span></td>
-                                <td><span class="check-mark">✅ Да</span></td>
-                                <td><span class="cross-mark">❌ Нет</span></td>
-                                <td><span class="check-mark">✅ Да</span></td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_maturity">Зрелость / Стабильность</td>
-                                <td data-i18n="val_maturity_gus">Проект (в разработке)</td>
-                                <td data-i18n="val_maturity_linux">Зрелая</td>
-                                <td data-i18n="val_maturity_windows">Зрелая</td>
-                                <td data-i18n="val_maturity_freebsd">Зрелая</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_complexity">Сложность для пользователя</td>
-                                <td><strong data-i18n="val_complexity_low">Низкая (конструктор)</strong></td>
-                                <td data-i18n="val_complexity_high">Высокая</td>
-                                <td data-i18n="val_complexity_medium">Средняя</td>
-                                <td data-i18n="val_complexity_high2">Высокая</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_popularity">Популярность</td>
-                                <td data-i18n="val_popularity_gus">Очень низкая (новая ОС)</td>
-                                <td data-i18n="val_popularity_linux">Высокая</td>
-                                <td data-i18n="val_popularity_windows">Очень высокая</td>
-                                <td data-i18n="val_popularity_freebsd">Средняя</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_install">Сложность установки</td>
-                                <td><strong data-i18n="val_install_easy">Легко</strong></td>
-                                <td data-i18n="val_install_medium">Средне</td>
-                                <td data-i18n="val_install_medium2">Средне</td>
-                                <td data-i18n="val_install_hard">Сложно</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_language">Основной язык реализации</td>
-                                <td><strong data-i18n="val_lang_rust">Rust</strong></td>
-                                <td data-i18n="val_lang_c">C</td>
-                                <td data-i18n="val_lang_cpp">C / C++</td>
-                                <td data-i18n="val_lang_c2">C</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_modularity">Модульность (архитектура)</td>
-                                <td><span class="check-mark">✅ Полная</span></td>
-                                <td data-i18n="val_modularity_partial">Частичная</td>
-                                <td data-i18n="val_modularity_partial2">Частичная</td>
-                                <td data-i18n="val_modularity_partial3">Частичная</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_customization">Кастомизация системы</td>
-                                <td><span class="check-mark">✅ Максимальная</span></td>
-                                <td data-i18n="val_customization_high">Высокая</td>
-                                <td data-i18n="val_customization_low">Низкая</td>
-                                <td data-i18n="val_customization_high2">Высокая</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_skills">Необходимость навыков (ежедневно)</td>
-                                <td><strong data-i18n="val_skills_none">Не нужны</strong></td>
-                                <td data-i18n="val_skills_sometimes">Иногда</td>
-                                <td data-i18n="val_skills_none2">Не нужны</td>
-                                <td data-i18n="val_skills_often">Часто</td>
-                            </tr>
-
-                            <tr>
-                                <td data-i18n="row_updates">Управление обновлениями</td>
-                                <td><strong data-i18n="val_updates_modular">Модульное</strong></td>
-                                <td data-i18n="val_updates_centralized">Централизованное</td>
-                                <td data-i18n="val_updates_centralized2">Централизованное</td>
-                                <td data-i18n="val_updates_centralized3">Централизованное</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <p class="comp-outro" data-i18n="comp_outro">
-                    <span class="gus-badge">GUS</span> — молодой проект, но его архитектура спроектирована для будущего
-                    — максимальная безопасность, модульность и контроль пользователя.
-                </p>
-            </section>
-
-            <section id="roadmap" class="section">
-                <h2 data-i18n="roadmap_title">Наш путь</h2>
-
-                <div class="timeline" id="timelineContainer">
-                    <div class="timeline-progress" id="timelineProgress"></div>
-
-                    <div class="timeline-item done" data-timeline-done="true">
-                        <h3 data-i18n="roadmap_concept_title">Концепция</h3>
-                        <p data-i18n="roadmap_concept_desc">У нас есть конкретное представление о том, что мы хотим
-                            сделать. Важно понимать, куда двигаться.</p>
-                    </div>
-
-                    <div class="timeline-item done" data-timeline-done="true">
-                        <h3 data-i18n="roadmap_bootstrap_title">Bootstrap</h3>
-                        <p data-i18n="roadmap_bootstrap_desc">Наш код на данный момент представляет собой нечто большее,
-                            чем hello world.</p>
-                    </div>
-
-                    <div class="timeline-item done" data-timeline-done="true">
-                        <h3 data-i18n="roadmap_search_title">Поиск программистов и начало пути</h3>
-                        <p data-i18n="roadmap_search_desc">Мы в активном поиске активистов, которые помогут развивать наш
-                            проект.</p>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h3 data-i18n="roadmap_kernel_title">Ядро</h3>
-                        <p data-i18n="roadmap_kernel_desc">Ядро должно быть легким, так как не содержит драйверов. Каждый
-                            элемент в своем модуле.</p>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h3 data-i18n="roadmap_modules_title">Модульная система</h3>
-                        <p data-i18n="roadmap_modules_desc">Все модули взаимодействуют друг с другом и общаются через
-                            ядро.</p>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h3 data-i18n="roadmap_interface_title">Интерфейс</h3>
-                        <p data-i18n="roadmap_interface_desc">Кастомизация — один из трёх наших основных «китов».</p>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h3 data-i18n="roadmap_software_title">Софт</h3>
-                        <p data-i18n="roadmap_software_desc">Свои аналоги программ и собственная экосистема приложений с
-                            магазином.</p>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h3 data-i18n="roadmap_distribution_title">Распространение</h3>
-                        <p data-i18n="roadmap_distribution_desc"><span class="gus-badge">GUS</span> должен стать
-                            популярным за счет своих преимуществ.</p>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h3 data-i18n="roadmap_bootloader_title">Собственный загрузчик</h3>
-                        <p data-i18n="roadmap_bootloader_desc">Rust-bootloader это хорошо, а свой загрузчик — еще лучше.
-                        </p>
-                    </div>
-
-                    <div class="timeline-item future">
-                        <h3 data-i18n="roadmap_mobile_title"><span class="gus-badge">GUS</span> for Mobile</h3>
-                        <p data-i18n="roadmap_mobile_desc">В будущем мы хотим сделать нашу OS на телефоны и планшеты.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="manifesto" class="section">
-                <h2 data-i18n="manifesto_title">Манифест</h2>
-
-                <ul class="manifesto-list">
-                    <li>
-                        <strong data-i18n="manifesto_minimalism_title">Минимализм:</strong>
-                        <span data-i18n="manifesto_minimalism">Система без лишнего «мусора» и ненужных процессов.</span>
-                    </li>
-
-                    <li>
-                        <strong data-i18n="manifesto_security_title">Безопасность:</strong>
-                        <span data-i18n="manifesto_security">Rust, микроядро и полная изоляция модулей.</span>
-                    </li>
-
-                    <li>
-                        <strong data-i18n="manifesto_flexibility_title">Гибкость:</strong>
-                        <span data-i18n="manifesto_flexibility">Модульная архитектура под любое «железо».</span>
-                    </li>
-
-                    <li>
-                        <strong data-i18n="manifesto_privacy_title">Приватность:</strong>
-                        <span data-i18n="manifesto_privacy">Никакой слежки и навязанного функционала.</span>
-                    </li>
-
-                    <li>
-                        <strong data-i18n="manifesto_control_title">Контроль:</strong>
-                        <span data-i18n="manifesto_control">Возвращаем вам полную власть над вашим устройством.</span>
-                    </li>
-
-                    <li>
-                        <strong data-i18n="manifesto_transparency_title">Прозрачность:</strong>
-                        <span data-i18n="manifesto_transparency">Открытый код и открытый процесс разработки.</span>
-                    </li>
-
-                    <li>
-                        <strong data-i18n="manifesto_community_title">Сообщество:</strong>
-                        <span data-i18n="manifesto_community">Проект, управляемый сообществом, а не корпорацией.</span>
-                    </li>
-                </ul>
-
-                <div class="card manifesto-quote">
-                    <p data-i18n="manifesto_text">
-                        «<span class="gus-badge">GUS</span> возвращает контроль пользователю. Никакой телеметрии.
-                        Никакого скрытого сбора данных. Только прозрачность, безопасность и свобода выбора.»
+        <section class="socials-block" id="socialsBlock">
+            <div class="socials-main-layout">
+                <div class="socials-header-left">
+<h2 class="socials-title">
+    <span id="socialsTitleText">Соцсети и <span class="highlight">ресурсы</span></span>
+</h2>
+                    <div class="follow-badge" data-i18n="socialsBadge">Следите за GUT</div>
+                    <p class="socials-subtitle" data-i18n="socialsSubtitle">
+                        Будьте в курсе всех новостей Great User Team. Мы публикуем свежие материалы о наших проектах, делимся инсайтами и отвечаем на вопросы.
                     </p>
                 </div>
-            </section>
 
-            <section id="community" class="section">
-                <h2 data-i18n="community_title">Сообщество</h2>
+                <div class="socials-content-right">
+                    <div class="telegram-block">
+                        <div class="telegram-title">
+                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/>
+                            </svg>
+                            <span data-i18n="socialsTelegram">Telegram</span>
+                        </div>
+                        <div class="telegram-desc" data-i18n="socialsTelegramDesc">
+                            Здесь мы общаемся с вами чаще всего — оперативные новости, обсуждения и обратная связь.
+                        </div>
+                    </div>
 
-                <p class="community-intro" data-i18n="community_intro">
-                    Наш проект держится исключительно на добровольцах. Если вы хотите следить за нашим развитием,
-                    подписывайтесь на наши соцсети:
-                </p>
+                    <div class="mini-cards">
+                        <a href="https://t.me/GreatUserTeamForum" class="mini-card" target="_blank" rel="noopener noreferrer">
+                            <div class="mini-card-top">
+                                <svg class="mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                                <div class="mini-name"><span class="highlight-g">G</span>U<span class="highlight-t">T</span> <span data-i18n="socialsForum">Форум</span></div>
+                            </div>
+                            <div class="mini-desc" data-i18n="socialsForumDesc">Здесь вы можете задать нам любые вопросы.</div>
+                            <span class="mini-card-link-btn" data-i18n="goBtn">Перейти</span>
+                        </a>
 
-                <div class="community-links">
-                    <a href="https://www.instagram.com/greatusersystem/" target="_blank" class="community-icon-link"
-                        aria-label="Instagram">
-                        <img src="./assets/images/instagram.png" alt="Instagram">
+                        <a href="https://t.me/GreatUserTeam" class="mini-card" target="_blank" rel="noopener noreferrer">
+                            <div class="mini-card-top">
+                                <svg class="mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M3 11l18-5v12L3 14v-3z" />
+                                    <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
+                                </svg>
+                                <div class="mini-name"><span class="highlight-g">G</span>U<span class="highlight-t">T</span> <span data-i18n="socialsChannel">Канал</span></div>
+                            </div>
+                            <div class="mini-desc" data-i18n="socialsChannelDesc">Официальный канал, где новости выходят быстрее всего</div>
+                            <span class="mini-card-link-btn" data-i18n="goBtn">Перейти</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="other-socials-block">
+                <div class="other-socials-title" data-i18n="socialsOthers">Прочие соцсети</div>
+                <div class="social-icons-grid">
+                    <a href="#" class="social-icon-link" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
                     </a>
-
-                    <a href="https://www.facebook.com/profile.php?id=61590893377240" target="_blank"
-                        class="community-icon-link" aria-label="Facebook">
-                        <img src="./assets/images/facebook.png" alt="Facebook">
+                    <a href="#" class="social-icon-link" target="_blank" rel="noopener noreferrer" aria-label="X">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
                     </a>
-
-                    <a href="https://x.com/GreatUserTeam" target="_blank" class="community-icon-link" aria-label="X">
-                        <img src="./assets/images/x.png" alt="X">
+                    <a href="#" class="social-icon-link" target="_blank" rel="noopener noreferrer" aria-label="VK">
+                        <svg viewBox="85 160 340 240">
+                            <path d="M 272 376 C 168 376 108 304 105 186 H 157 C 159 272 197 308 227 316 V 186 H 276 V 261 C 306 258 337 223 347 186 H 396 C 388 232 353 267 329 281 C 353 292 392 323 406 376 H 352 C 341 337 310 307 276 303 V 376 Z"/>
+                        </svg>
                     </a>
-
-                    <a href="https://www.youtube.com/@GreatUserTeam" target="_blank" class="community-icon-link"
-                        aria-label="YouTube">
-                        <img src="./assets/images/youtube.png" alt="YouTube">
+                    <a href="#" class="social-icon-link" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
                     </a>
-
-                    <a href="https://dzen.ru/greatuserteam" target="_blank" class="community-icon-link" aria-label="Dzen">
-                        <img src="./assets/images/dzen.png" alt="Dzen">
+                    <a href="#" class="social-icon-link" target="_blank" rel="noopener noreferrer" aria-label="Дзен">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 0C12 7.8 7.8 12 0 12c7.8 0 12 4.2 12 12 0-7.8 4.2-12 12-12-7.8 0-12-4.2-12-12z"/>
+                        </svg>
                     </a>
-
-                    <a href="https://vk.com/club239710312" target="_blank" class="community-icon-link" aria-label="VK">
-                        <img src="./assets/images/vk.png" alt="VK">
+                    <a href="#" class="social-icon-link" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z"/>
+                        </svg>
                     </a>
                 </div>
 
-                <div class="community-telegram-block">
-                    <p data-i18n="community_forum_text">
-                        Если вы хотите с нами разрабатывать OS или задать вопрос, присоединяйтесь на наш телеграм форум:
-                    </p>
+                <a href="#" class="github-text-link" target="_blank" rel="noopener noreferrer">
+                    <span data-i18n="socialsGithub">GutHub GUT</span>
+                </a>
+            </div>
+        </section>
+    <script>
+        (function() {
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const langToggleBtn = document.getElementById('langToggleBtn');
+            const settingsWidget = document.getElementById('settingsWidget');
 
-                    <a href="https://t.me/GreatUserSystemForum" target="_blank" class="btn-special">
-                        <span>🗂️</span> Telegram Forum
-                    </a>
+            settingsWidget.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('open');
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.settings-widget')) {
+                    settingsWidget.classList.remove('open');
+                }
+            });
 
-                    <p data-i18n="community_channel_text">
-                        Также у нас есть телеграм канал, в котором быстрее всего выходят все новости:
-                    </p>
+            const translations = {
+                ru: {
+                    motto: "Оптимизация · Кастомизация · Свобода",
+                    heroDesc: "Многие развивают свои проекты в одиночку, тратя колоссальные ресурсы на развитие, рекламу и борьбу друг с другом. Мы изменили подход и стали командой, где каждый работает над своим проектом и получает поддержку от других.",
+                    projects: "Проектов",
+                    developers: "Разработчиков",
+                    users: "Пользователей",
+                    daysGUT: "Дней GUT",
+                    teamTitle: "О нашей команде",
+                    teamSubtitle: "Кто мы такие",
+                    teamDesc: "Мы — программисты, дизайнеры и другие IT-специалисты, работающие на общее благо нашей команды. Вместе мы создаем востребованные цифровые продукты, которыми хочется пользоваться каждый день.",
+                    teamDetailsBtn: "Подробнее о Great User Team",
+                    benefitsHeading: "Наша команда делает такой софт для всех видов устройств, который соответствует требованиям:",
+                    benefit1Title: "Кастомизация",
+                    benefit1Desc: "Пользователь сам выбирает тот интерфейс, который ему по душе, а не тот, который решила сделать корпорация.",
+                    benefit2Title: "Оптимизация",
+                    benefit2Desc: "Безупречная работа, без лагов и задержек.",
+                    benefit3Title: "Свобода",
+                    benefit3Desc: "Никакой слежки и сбора данных. Все наши продукты обсолютно бесплатны и с открытым кодом.",
+                    contactLabel: "Связаться с нами",
+                    footerNote: "Great User Team · 2026 · Оптимизация, кастомизация, свобода.",
+                    stairsMotto: "Обновления GUT",
+                    stairsDesc: "GUStairs — живая лента обновлений. Строим лестницу нашего прогресса: запускаем новые проекты, дорабатываем старые и растем в реальном времени.",
+                    stairsBtn: "Следить за новостями",
+                    allProjectsBtn: "Все проекты GUT",
+                    goBtn: "Перейти",
+                    projectsMotto: "Проекты GUT",
+                    card1Desc: "Лёгкая утилита, не дающая погаснуть экрану на любом устройстве",
+                    card2Desc: "Мега кастомный калькулятор на html, доступный на всех платформах",
+                    card3Desc: "Микроядерная модульная операционная система для ПК на Rust",
+                    projectsDesc: "ведет множество проектов на самых разных стадиях реализации: от разработки первоначальной концепции до финального тестирования.",
+                    joinMotto: "Будь в команде",
+                    joinSubtitle: "Мы рады видеть всех в нашей команде!",
+                    joinLabel1: "Если ты...",
+                    joinItem1: "Програмист",
+                    joinItem2: "Дизайнер",
+                    joinItem3: "Тестировщик",
+                    joinLabel2: "Если ты...",
+                    joinItem4: "Работаешь над проектом",
+                    joinItem5: "Придумал интересную идею, но не можешь реализовать",
+                    joinItem6: "Хочешь развивать один из наших проектов",
+                    joinCtaPrefix: "...То ",
+                    joinCtaHighlight: "присоединяйся к нам!",
+                    joinBtn: "Подробнее",
+                    socialsTitle: "Соцсети и <span class='highlight'>ресурсы</span>",
+                    socialsBadge: "Следите за GUT",
+                    socialsSubtitle: "Будьте в курсе всех новостей Great User Team. Мы публикуем свежие материалы о наших проектах, делимся инсайтами и отвечаем на вопросы.",
+                    socialsTelegram: "Telegram",
+                    socialsTelegramDesc: "Здесь мы общаемся с вами чаще всего — оперативные новости, обсуждения и обратная связь.",
+                    socialsForum: "Форум",
+                    socialsForumDesc: "Здесь вы можете задать нам любые вопросы.",
+                    socialsChannel: "Канал",
+                    socialsChannelDesc: "Официальный канал, где новости выходят быстрее всего",
+                    socialsOthers: "Прочие соцсети",
+                    socialsGithub: "GutHub GUT"
+                },
+                en: {
+                    motto: "Optimization · Customization · Freedom",
+                    heroDesc: "Many develop their projects alone, spending huge resources on development, advertising and competing with each other. We changed the approach and became a team where everyone works on their own project and gets support from others.",
+                    projects: "Projects",
+                    developers: "Developers",
+                    users: "Users",
+                    daysGUT: "Days of GUT",
+                    teamTitle: "About Our Team",
+                    teamSubtitle: "Who we are",
+                    teamDesc: "We are programmers, designers, and other IT specialists working for the common good of our team. Together we create in-demand digital products that you want to use every day.",
+                    teamDetailsBtn: "More about Great User Team",
+                    benefitsHeading: "Our team makes software for all types of devices that meets the requirements:",
+                    benefit1Title: "Customization",
+                    benefit1Desc: "The user chooses the interface they like, not the one decided by a corporation.",
+                    benefit2Title: "Optimization",
+                    benefit2Desc: "Flawless performance without lags and delays.",
+                    benefit3Title: "Freedom",
+                    benefit3Desc: "No tracking or data collection. All our products are completely free and open-source.",
+                    contactLabel: "Get in touch",
+                    footerNote: "Great User Team · 2026 · Optimization, customization, freedom.",
+                    stairsMotto: "GUT Updates",
+                    stairsDesc: "GUStairs is a living update feed. Building the ladder of our progress: launching new projects, refining old ones, and growing in real time.",
+                    stairsBtn: "Follow the news",
+                    allProjectsBtn: "All GUT Projects",
+                    goBtn: "Go",
+                    projectsMotto: "GUT Projects",
+                    card1Desc: "A light utility that keeps the screen from turning off on any device",
+                    card2Desc: "Mega customizable calculator in HTML, available on all platforms",
+                    card3Desc: "Microkernel modular operating system for PC in Rust",
+                    projectsDesc: "runs many projects at various stages of implementation: from initial concept development to final testing.",
+                    joinMotto: "Join the team",
+                    joinSubtitle: "We are glad to see everyone in our team!",
+                    joinLabel1: "If you are...",
+                    joinItem1: "Programmer",
+                    joinItem2: "Designer",
+                    joinItem3: "Tester",
+                    joinLabel2: "If you...",
+                    joinItem4: "Work on a project",
+                    joinItem5: "Have an interesting idea but can't implement it",
+                    joinItem6: "Want to develop one of our projects",
+                    joinCtaPrefix: "...Then ",
+                    joinCtaHighlight: "join us!",
+                    joinBtn: "Learn more",
+                    socialsTitle: "Socials & <span class='highlight'>Resources</span>",
+                    socialsBadge: "Follow GUT",
+                    socialsSubtitle: "Stay up to date with all the Great User Team news. We publish fresh materials about our projects, share insights and answer questions.",
+                    socialsTelegram: "Telegram",
+                    socialsTelegramDesc: "This is where we communicate with you most often — breaking news, discussions and feedback.",
+                    socialsForum: "Forum",
+                    socialsForumDesc: "Here you can ask us any questions.",
+                    socialsChannel: "Channel",
+                    socialsChannelDesc: "Official channel where news comes out fastest",
+                    socialsOthers: "Other socials",
+                    socialsGithub: "GutHub GUT"
+                }
+            };
 
-                    <a href="https://t.me/GreatUserSystem" target="_blank" class="btn-special">
-                        <span>📢</span> Telegram Channel
-                    </a>
-                </div>
-            </section>
-        </main>
+            function getCurrentTheme() {
+                return document.body.classList.contains('light') ? 'light' : 'dark';
+            }
 
-        <footer class="footer">
-            <p>
-                <strong><span class="gus-badge">GUS</span></strong> — Great User System. Open Source Project. © 2026
-            </p>
+            function setTheme(theme) {
+                if (theme === 'light') {
+                    document.body.classList.add('light');
+                } else {
+                    document.body.classList.remove('light');
+                }
+                localStorage.setItem('gut_theme', theme);
+            }
 
-            <p class="footer-link">
-                <a href="https://github.com/GreatUserTeam/GUS" target="_blank">GitHub проекта</a>
-            </p>
+            const savedTheme = localStorage.getItem('gut_theme') || 'dark';
+            setTheme(savedTheme);
 
-            <p class="footer-motto" data-i18n="footer_motto">
-                Оптимизация · Кастомизация · Свобода | Built with Rust 🦀
-            </p>
-        </footer>
-    </div>
+            themeToggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const current = getCurrentTheme();
+                setTheme(current === 'dark' ? 'light' : 'dark');
+            });
 
-    <script src="./assets/js/script.js"></script>
+            let currentLang = localStorage.getItem('gut_lang') || 'ru';
+
+            function setLanguage(lang) {
+                currentLang = lang;
+                localStorage.setItem('gut_lang', lang);
+                langToggleBtn.innerText = lang.toUpperCase();
+
+                document.querySelectorAll('[data-i18n]').forEach(elem => {
+                    const key = elem.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        elem.innerText = translations[lang][key];
+                    }
+                });
+
+                document.getElementById('mottoText').innerText = translations[lang].motto;
+                document.getElementById('heroDescText').innerText = translations[lang].heroDesc;
+            }
+
+            setLanguage(currentLang);
+
+            langToggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const newLang = currentLang === 'ru' ? 'en' : 'ru';
+                setLanguage(newLang);
+            });
+
+            function getDaysSinceGUT() {
+                const startDate = new Date('2026-06-06T00:00:00');
+                const today = new Date();
+                const diffTime = today - startDate;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays > 0 ? diffDays : 0;
+            }
+
+            function animateCounters() {
+                const daysElement = document.getElementById('gutDaysCounter');
+                if (daysElement) {
+                    daysElement.setAttribute('data-target', getDaysSinceGUT());
+                }
+
+                const counters = document.querySelectorAll('.stat-number');
+                const duration = 400;
+
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    let startTime = null;
+
+                    function updateCount(timestamp) {
+                        if (!startTime) startTime = timestamp;
+                        const progress = timestamp - startTime;
+                        const percentage = Math.min(progress / duration, 1);
+
+                        const rawValue = Math.floor((percentage * target) / 0.1) * 0.1;
+
+                        if (percentage < 1) {
+                            counter.innerText = Math.floor(rawValue).toLocaleString('ru-RU');
+                            requestAnimationFrame(updateCount);
+                        } else {
+                            counter.innerText = target.toLocaleString('ru-RU');
+                        }
+                    }
+
+                    requestAnimationFrame(updateCount);
+                });
+            }
+
+            function initFallingIcons() {
+                const container = document.getElementById('heroSection');
+                const canvas = document.getElementById('fallingCanvas');
+                if (!canvas || !container) return;
+
+                const ctx = canvas.getContext('2d');
+                let width = canvas.width = container.offsetWidth;
+                let height = canvas.height = container.offsetHeight;
+
+                window.addEventListener('resize', () => {
+                    width = canvas.width = container.offsetWidth;
+                    height = canvas.height = container.offsetHeight;
+                });
+
+                const iconPaths = [
+                    new Path2D('M -8 -5 L -14 0 L -8 5 M 8 -5 L 14 0 L 8 5 M 3 -9 L -3 9'),
+                    new Path2D('M -10 -9 A 4 4 0 0 1 -2 -11 L 10 -11 L 10 7 L -2 7 A 4 4 0 0 0 -10 9 Z M -2 -11 L -2 7'),
+                    new Path2D('M -10 -10 H -2 V -2 H -10 Z M 2 -10 H 10 V -2 H 2 Z M -10 2 H -2 V 10 H -10 Z M 2 2 H 10 V 10 H 2 Z'),
+                    new Path2D('M -3 8 H 3 V 3 H -3 Z M -9 -8 H -3 V -3 H -9 Z M 3 -8 H 9 V -3 H 3 Z M 0 3 V -1 M -6 -3 V -1 H 6 V -3'),
+                    new Path2D('M 3 10 V 8 A 4 4 0 0 0 -1 4 H -7 A 4 4 0 0 0 -11 8 V 10 M -4 0 A 4 4 0 1 0 -4 -8 A 4 4 0 0 0 -4 0 M 11 10 V 8 A 4 4 0 0 0 8 4.2 M 4 -7.9 A 4 4 0 0 1 4 0.1'),
+                    new Path2D('M -3 -3 A 3 3 0 1 0 3 3 A 3 3 0 0 0 -3 -3 M 0 -10 V -7 M 0 7 V 10 M -10 0 H -7 M 7 0 H 10 M -7 -7 L -5 -5 M 5 5 L 7 7 M -7 7 L -5 5 M 5 -5 L 7 -7'),
+                    new Path2D('M -12 0 H -7 L -4 9 L 2 -9 L 5 4 L 8 0 H 12')
+                ];
+
+                const particles = [];
+                const particleCount = 18;
+
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        speed: 0.1 + Math.random() * 0.25,
+                        size: 0.45 + Math.random() * 0.45,
+                        rotation: Math.random() * Math.PI * 2,
+                        rotSpeed: (Math.random() - 0.5) * 0.005,
+                        opacity: 0.08 + Math.random() * 0.12,
+                        iconIndex: Math.floor(Math.random() * iconPaths.length),
+                        isDot: Math.random() < 0.2
+                    });
+                }
+
+                function animate() {
+                    ctx.clearRect(0, 0, width, height);
+                    const isLight = document.body.classList.contains('light');
+
+                    particles.forEach(p => {
+                        p.y += p.speed;
+                        p.rotation += p.rotSpeed;
+
+                        if (p.y > height + 20) {
+                            p.y = -20;
+                            p.x = Math.random() * width;
+                        }
+
+                        ctx.save();
+                        ctx.translate(p.x, p.y);
+
+                        if (p.isDot) {
+                            ctx.fillStyle = `rgba(255, 77, 48, ${p.opacity * 1.5})`;
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 2.5 * p.size, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else {
+                            ctx.rotate(p.rotation);
+                            ctx.scale(p.size, p.size);
+                            ctx.strokeStyle = isLight ? `rgba(20, 20, 20, ${p.opacity * 1.2})` : `rgba(255, 255, 255, ${p.opacity})`;
+                            ctx.lineWidth = 1.6;
+                            ctx.lineCap = 'round';
+                            ctx.lineJoin = 'round';
+                            ctx.stroke(iconPaths[p.iconIndex]);
+                        }
+
+                        ctx.restore();
+                    });
+
+                    requestAnimationFrame(animate);
+                }
+
+                animate();
+            }
+
+            function initCardLinks() {
+                const cards = document.querySelectorAll('.gut-card');
+                const wrappers = document.querySelectorAll('.card-wrapper');
+
+                let lastActiveIndex = null;
+
+                function updateZIndex(activeIndex) {
+                    lastActiveIndex = activeIndex;
+
+                    wrappers.forEach(wrapper => {
+                        const index = parseInt(wrapper.getAttribute('data-index'));
+
+                        if (activeIndex === null) {
+                            wrapper.style.zIndex = index;
+                        } else if (activeIndex === index) {
+                            wrapper.style.zIndex = 10;
+                        } else if (activeIndex === 2) {
+                            wrapper.style.zIndex = 5;
+                        } else {
+                            const distance = Math.abs(index - activeIndex);
+                            wrapper.style.zIndex = 10 - distance;
+                        }
+                    });
+                }
+
+                document.addEventListener('click', function(e) {
+                    const isInsideCard = e.target.closest('.gut-card');
+                    if (!isInsideCard) {
+                        cards.forEach(c => {
+                            c.classList.remove('expanded', 'hover');
+                            c.closest('.card-wrapper')?.classList.remove('active-card');
+                        });
+                        updateZIndex(null);
+                    }
+                });
+
+                cards.forEach(card => {
+                    card.addEventListener('mouseenter', function() {
+                        const currentIndex = parseInt(this.closest('.card-wrapper').getAttribute('data-index'));
+
+                        cards.forEach(c => {
+                            if (c !== this) {
+                                c.classList.remove('expanded', 'hover');
+                                c.closest('.card-wrapper')?.classList.remove('active-card');
+                            }
+                        });
+
+                        if (!this.classList.contains('expanded')) {
+                            this.classList.add('hover');
+                        }
+
+                        updateZIndex(currentIndex);
+                    });
+
+                    card.addEventListener('mouseleave', function() {
+                        this.classList.remove('hover');
+                    });
+
+                    card.addEventListener('click', function(e) {
+                        if (e.target.closest('.card-link-btn')) return;
+
+                        const currentIndex = parseInt(this.closest('.card-wrapper').getAttribute('data-index'));
+                        const wasExpanded = this.classList.contains('expanded');
+
+                        cards.forEach(c => {
+                            c.classList.remove('expanded', 'hover');
+                            c.closest('.card-wrapper')?.classList.remove('active-card');
+                        });
+
+                        if (!wasExpanded) {
+                            this.classList.add('expanded');
+                            this.classList.remove('hover');
+                            this.closest('.card-wrapper')?.classList.add('active-card');
+                            updateZIndex(currentIndex);
+                        } else {
+                            updateZIndex(null);
+                        }
+                    });
+                });
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                animateCounters();
+                initFallingIcons();
+                initCardLinks();
+            });
+        })();
+    </script>
 </body>
 </html>
