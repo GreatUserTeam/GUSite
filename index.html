@@ -2943,21 +2943,48 @@
                 </a>
             </div>
         </section>
-    <script>
-        (function() {
-            const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const langToggleBtn = document.getElementById('langToggleBtn');
-            const settingsWidget = document.getElementById('settingsWidget');
+<script>
+    (function() {
+        // ===== АВТОМАТИЧЕСКИЙ ПОДСЧЁТ ФАЙЛОВ =====
+        async function updateStatsFromData() {
+            try {
+                // Считаем проекты
+                const projectsRes = await fetch('data/projects/');
+                const projectsText = await projectsRes.text();
+                const projectFiles = projectsText.match(/href="([^"]+\.txt)"/g) || [];
+                const projectsCount = projectFiles.length;
 
-            settingsWidget.addEventListener('click', function(e) {
-                e.stopPropagation();
-                this.classList.toggle('open');
-            });
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.settings-widget')) {
-                    settingsWidget.classList.remove('open');
+                // Считаем разработчиков
+                const creatorsRes = await fetch('data/creators/');
+                const creatorsText = await creatorsRes.text();
+                const creatorFiles = creatorsText.match(/href="([^"]+\.txt)"/g) || [];
+                const creatorsCount = creatorFiles.length;
+
+                // Обновляем атрибуты data-target
+                const statNumbers = document.querySelectorAll('.stat-number');
+                if (statNumbers.length >= 2) {
+                    statNumbers[0].setAttribute('data-target', projectsCount);
+                    statNumbers[1].setAttribute('data-target', creatorsCount);
                 }
-            });
+            } catch (e) {
+                console.warn('Не удалось загрузить список файлов:', e);
+            }
+        }
+
+        // ===== ТВОЙ СУЩЕСТВУЮЩИЙ КОД =====
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const langToggleBtn = document.getElementById('langToggleBtn');
+        const settingsWidget = document.getElementById('settingsWidget');
+
+        settingsWidget.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('open');
+        });
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.settings-widget')) {
+                settingsWidget.classList.remove('open');
+            }
+        });
 
             const translations = {
                 ru: {
@@ -3322,11 +3349,12 @@
                 });
             }
 
-            window.addEventListener('DOMContentLoaded', () => {
-                animateCounters();
-                initFallingIcons();
-                initCardLinks();
-            });
+window.addEventListener('DOMContentLoaded', async () => {
+    await updateStatsFromData();  // 👈 СНАЧАЛА считаем файлы
+    animateCounters();            // 👈 ПОТОМ анимируем
+    initFallingIcons();
+    initCardLinks();
+});
         })();
     </script>
 </body>
