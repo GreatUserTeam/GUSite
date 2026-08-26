@@ -2787,9 +2787,9 @@
 
         <section class="join-gut-section" id="joinGutSection">
             <div class="join-header">
-                <h2 class="join-gut-title">
-                    Стань частью команды <span class="gut-gu">GU</span><span class="gut-t">T</span>
-                </h2>
+                <h2 class="join-gut-title" data-i18n="joinTitle">
+    Стань частью команды <span class="gut-gu">GU</span><span class="gut-t">T</span>
+</h2>
                 <div class="motto-glass" data-i18n="joinMotto">Будь в команде</div>
                 <p class="join-gut-subtitle" data-i18n="joinSubtitle">
                     Мы рады видеть всех в нашей команде!
@@ -2852,8 +2852,8 @@
         <section class="socials-block" id="socialsBlock">
             <div class="socials-main-layout">
                 <div class="socials-header-left">
-<h2 class="socials-title">
-    <span id="socialsTitleText">Соцсети и <span class="highlight">ресурсы</span></span>
+<h2 class="socials-title" id="socialsTitleText" data-i18n="socialsTitle">
+    Соцсети и <span class="highlight">ресурсы</span>
 </h2>
                     <div class="follow-badge" data-i18n="socialsBadge">Следите за GUT</div>
                     <p class="socials-subtitle" data-i18n="socialsSubtitle">
@@ -2989,6 +2989,8 @@
 
             const translations = {
                 ru: {
+		    joinMotto: "Будь в команде",
+		    joinTitle: "Стань частью команды <span class='gut-gu'>GU</span><span class='gut-t'>T</span>",
                     motto: "Оптимизация · Кастомизация · Свобода",
                     heroDesc: "Многие развивают свои проекты в одиночку, тратя колоссальные ресурсы на развитие, рекламу и борьбу друг с другом. Мы изменили подход и стали командой, где каждый работает над своим проектом и получает поддержку от других.",
                     projects: "Проектов",
@@ -3044,6 +3046,7 @@
                     socialsGithub: "GutHub GUT"
                 },
                 en: {
+		    joinTitle: "Become part of the <span class='gut-gu'>GU</span><span class='gut-t'>T</span>",
                     motto: "Optimization · Customization · Freedom",
                     heroDesc: "Many develop their projects alone, spending huge resources on development, advertising and competing with each other. We changed the approach and became a team where everyone works on their own project and gets support from others.",
                     projects: "Projects",
@@ -3129,12 +3132,12 @@
                 localStorage.setItem('gut_lang', lang);
                 langToggleBtn.innerText = lang.toUpperCase();
 
-                document.querySelectorAll('[data-i18n]').forEach(elem => {
-                    const key = elem.getAttribute('data-i18n');
-                    if (translations[lang] && translations[lang][key]) {
-                        elem.innerText = translations[lang][key];
-                    }
-                });
+               document.querySelectorAll('[data-i18n]').forEach(elem => {
+    const key = elem.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) {
+        elem.innerHTML = translations[lang][key];  // 👈 innerHTML
+    }
+});
 
                 document.getElementById('mottoText').innerText = translations[lang].motto;
                 document.getElementById('heroDescText').innerText = translations[lang].heroDesc;
