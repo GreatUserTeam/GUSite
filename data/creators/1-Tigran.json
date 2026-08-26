@@ -1,0 +1,19 @@
+{
+    "name": "Tigran",
+    "telegram": "https://t.me/tigrankrapivin",
+    "joined": "2026-06-06",
+    "translations": {
+        "ru": {
+            "about": "Создатель GUT, ведущий разработчик почти всех проектов.",
+            "bio": "Привет, я Тигран) Хз что писать",
+            "languages": "HTML, CSS, JavaScript",
+            "specialty": "программист-вайбкодер."
+        },
+        "en": {
+            "about": "Founder of GUT, lead developer of almost all projects.",
+            "bio": "Hi, I'm Tigran) Idk what to write",
+            "languages": "HTML, CSS, JavaScript",
+            "specialty": "programmer-vibecoder."
+        }
+    }
+}
