@@ -4,16 +4,16 @@
     "joined": "2026-06-10",
     "translations": {
         "ru": {
-            "about": "Разработчик ОС и языка Sleve. Пишет свою операционную систему.",
-            "bio": "Пишу свою ОС и язык программирования Sleve. Люблю низкоуровневое программирование.",
-            "languages": "Sleve, Rust, C",
-            "specialty": "разработчик ОС, создатель языка Sleve"
+            "about": "Android-разработчик на Rust и веб-разработчик на SvelteKit.",
+            "bio": "Я пишу Android приложения на Rust и веб-сервисы на SvelteKit.",
+            "languages": "Rust, SvelteKit, TypeScript, HTML, SCSS, Lua, Python, Sleve",
+            "specialty": "Android-разработчик (Rust), веб-разработчик (SvelteKit)"
         },
         "en": {
-            "about": "OS and Sleve language developer. Writing his own operating system.",
-            "bio": "I write my own OS and the Sleve programming language. I love low-level programming.",
-            "languages": "Sleve, Rust, C",
-            "specialty": "OS developer, creator of Sleve language"
+            "about": "Android developer in Rust and web developer in SvelteKit.",
+            "bio": "I write Android apps in Rust and web services in SvelteKit.",
+            "languages": "Rust, SvelteKit, TypeScript, HTML, SCSS, Lua, Python, Sleve",
+            "specialty": "Android developer (Rust), web developer (SvelteKit)"
         }
     }
 }
