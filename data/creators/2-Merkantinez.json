@@ -1,0 +1,19 @@
+{
+    "name": "Merkantinez",
+    "telegram": "https://t.me/merkantinez",
+    "joined": "2026-06-06",
+    "translations": {
+        "ru": {
+            "about": "Разработчик C и HTML, участник GUT.",
+            "bio": "Пишу на C и HTML. Люблю делать вещи, которые работают.",
+            "languages": "C, HTML, CSS",
+            "specialty": "программист"
+        },
+        "en": {
+            "about": "C and HTML developer, GUT member.",
+            "bio": "I write in C and HTML. I like making things that work.",
+            "languages": "C, HTML, CSS",
+            "specialty": "programmer"
+        }
+    }
+}
