@@ -1,0 +1,19 @@
+{
+    "name": "Ratimir",
+    "telegram": "https://t.me/grudinskijratimir838",
+    "joined": "2026-06-10",
+    "translations": {
+        "ru": {
+            "about": "Разработчик ОС и языка Sleve. Пишет свою операционную систему.",
+            "bio": "Пишу свою ОС и язык программирования Sleve. Люблю низкоуровневое программирование.",
+            "languages": "Sleve, Rust, C",
+            "specialty": "разработчик ОС, создатель языка Sleve"
+        },
+        "en": {
+            "about": "OS and Sleve language developer. Writing his own operating system.",
+            "bio": "I write my own OS and the Sleve programming language. I love low-level programming.",
+            "languages": "Sleve, Rust, C",
+            "specialty": "OS developer, creator of Sleve language"
+        }
+    }
+}
