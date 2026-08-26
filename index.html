@@ -2946,32 +2946,29 @@
         </section>
 <script>
     (function() {
-        // ===== АВТОМАТИЧЕСКИЙ ПОДСЧЁТ ФАЙЛОВ =====
-        async function updateStatsFromData() {
-            try {
-                // Считаем проекты
-                const projectsRes = await fetch('data/projects/');
-                const projectsText = await projectsRes.text();
-                const projectFiles = projectsText.match(/href="([^"]+\.txt)"/g) || [];
-                const projectsCount = projectFiles.length;
+async function updateStatsFromData() {
+    try {
+        // Получаем список файлов в data/projects/
+        const projectsRes = await fetch('https://api.github.com/repos/GreatUserTeam/GUSite/contents/data/projects');
+        const projectsData = await projectsRes.json();
+        const projectsCount = Array.isArray(projectsData) ? projectsData.filter(f => f.name.endsWith('.txt')).length : 0;
 
-                // Считаем разработчиков
-                const creatorsRes = await fetch('data/creators/');
-                const creatorsText = await creatorsRes.text();
-                const creatorFiles = creatorsText.match(/href="([^"]+\.txt)"/g) || [];
-                const creatorsCount = creatorFiles.length;
+        // Получаем список файлов в data/creators/
+        const creatorsRes = await fetch('https://api.github.com/repos/GreatUserTeam/GUSite/contents/data/creators');
+        const creatorsData = await creatorsRes.json();
+        const creatorsCount = Array.isArray(creatorsData) ? creatorsData.filter(f => f.name.endsWith('.txt')).length : 0;
 
-                // Обновляем атрибуты data-target
-                const statNumbers = document.querySelectorAll('.stat-number');
-                if (statNumbers.length >= 2) {
-                    statNumbers[0].setAttribute('data-target', projectsCount);
-                    statNumbers[1].setAttribute('data-target', creatorsCount);
-                }
-            } catch (e) {
-                console.warn('Не удалось загрузить список файлов:', e);
-            }
+        // Обновляем атрибуты data-target
+        const statNumbers = document.querySelectorAll('.stat-number');
+        if (statNumbers.length >= 2) {
+            statNumbers[0].setAttribute('data-target', projectsCount);
+            statNumbers[1].setAttribute('data-target', creatorsCount);
         }
-
+    } catch (e) {
+        console.warn('Не удалось загрузить список файлов через GitHub API:', e);
+        // Если API не работает — ничего не делаем, оставляем старые значения
+    }
+}
         // ===== ТВОЙ СУЩЕСТВУЮЩИЙ КОД =====
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const langToggleBtn = document.getElementById('langToggleBtn');
