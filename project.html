@@ -1,164 +1,162 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Great User System · GUS</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { scrollbar-width: none; -ms-overflow-style: none; }
-    ::-webkit-scrollbar { display: none; }
-    body { background: #0b0b0b; color: #f0f0f0; font-family: "Inter", system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background .3s, color .3s; overflow-x: hidden; }
-    body.light { background: #fff; color: #000; }
-    .header { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; padding: 16px 24px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: rgba(11,11,11,.8); border-bottom: 1px solid rgba(255,255,255,.1); transition: all .3s; }
-    body.light .header { background: rgba(255,255,255,.9); border-bottom-color: rgba(0,0,0,.1); }
-    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-    .brand-logo { display: flex; align-items: center; font-size: 26px; font-weight: 800; letter-spacing: -.02em; text-decoration: none; color: #fff; }
-    body.light .brand-logo { color: #000; }
-    .brand-g { height: .85em; width: auto; margin-right: -2px; transform: translateY(1px); }
-    .svg-white { fill: #fff; transition: fill .3s; }
-    body.light .svg-white { fill: #000; }
-    .brand-t { color: #ff4d30; margin-left: 2px; }
-    .settings-widget { position: relative; border-radius: 9999px; height: 40px; width: 40px; transition: width .3s cubic-bezier(.4,0,.2,1); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); }
-    body.light .settings-widget { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.05); }
-    .settings-widget.open { width: 104px; }
-    .settings-trigger { position: absolute; right: 0; top: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: inherit; transition: transform .3s, opacity .2s; z-index: 10; }
-    .settings-trigger:hover { color: #ff4d30; }
-    .settings-widget.open .settings-trigger { opacity: 0; pointer-events: none; transform: rotate(90deg); }
-    .settings-menu { display: flex; align-items: center; justify-content: space-around; width: 100%; padding: 0 4px; opacity: 0; transform: scale(.9); pointer-events: none; transition: all .25s; }
-    .settings-widget.open .settings-menu { opacity: 1; transform: scale(1); pointer-events: auto; }
-    .settings-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; font-weight: 700; font-size: 12px; color: inherit; transition: all .2s; }
-    .settings-btn:hover { background: rgba(255,77,48,.15); color: #ff4d30; }
-    .wrapper { max-width: 1200px; margin: 0 auto; padding: 112px 16px 64px; }
-    @media (min-width: 768px) { .wrapper { padding-left: 32px; padding-right: 32px; } }
-    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 16px; margin-bottom: 32px; }
-    .hero-title { font-size: clamp(34px, 5.5vw, 64px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
-    .title-g { height: .9em; width: auto; margin-right: -4px; vertical-align: middle; }
-    .highlight-system { color: #ff4d30; }
-    .hero-motto { display: inline-flex; align-items: center; gap: 10px; padding: 12px 28px; margin-top: 20px; border-radius: 9999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; text-decoration: none; border: 1px solid rgba(255,77,48,.25); background: rgba(255,77,48,.1); color: #ff4d30; transition: all .2s; }
-    body.light .hero-motto { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.15); }
-    .hero-motto:hover { background: rgba(255,77,48,.2); }
-    .hero-desc { margin-top: 16px; font-size: clamp(16px, 2.2vw, 19.5px); line-height: 1.6; max-width: 800px; text-align: center; color: rgba(255,255,255,.65); }
-    body.light .hero-desc { color: rgba(0,0,0,.75); }
-    .tabs-nav { width: 100%; max-width: 900px; margin: 0 auto 32px; display: flex; border-bottom: 1px solid rgba(255,255,255,.1); }
-    body.light .tabs-nav { border-bottom-color: rgba(0,0,0,.1); }
-    .tab-btn { position: relative; flex: 1; padding: 14px 4px; font-size: clamp(13px, 3.3vw, 15.5px); font-weight: 600; background: none; border: none; cursor: pointer; text-align: center; white-space: nowrap; color: rgba(255,255,255,.6); transition: color .2s; }
-    body.light .tab-btn { color: rgba(0,0,0,.6); }
-    .tab-btn:hover, .tab-btn.active { color: #fff; }
-    body.light .tab-btn:hover, body.light .tab-btn.active { color: #000; }
-    .tab-btn.active { font-weight: 700; }
-    .tab-indicator { position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 80%; height: 2.5px; background: #ff4d30; border-radius: 2px 2px 0 0; display: none; }
-    @media (min-width: 640px) { .tab-indicator { width: 60%; } }
-    .tab-btn.active .tab-indicator { display: block; }
-    .tab-pane { display: none; animation: fadeIn .3s ease forwards; }
-    .tab-pane.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    .section-header { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 20px; }
-    .section-header-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #ff4d30; }
-    .section-header-title { font-size: clamp(24px, 4vw, 28px); font-weight: 700; letter-spacing: -.02em; }
-    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 900px; margin: 0 auto 32px; width: 100%; }
-    @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
-    .stat-tile { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 16px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    body.light .stat-tile { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.03); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
-    .stat-tile.featured-mobile { grid-column: span 2; }
-    @media (min-width: 640px) { .stat-tile.featured-mobile { grid-column: span 1; } }
-    .stat-value { font-size: 36px; font-weight: 800; color: #ff4d30; margin-bottom: 6px; line-height: 1; }
-    @media (min-width: 640px) { .stat-value { font-size: 32px; } }
-    .stat-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,.5); }
-    body.light .stat-label { color: rgba(0,0,0,.6); }
-    .about-text-box { max-width: 900px; margin: 0 auto 24px; display: flex; flex-direction: column; gap: 16px; font-size: clamp(16px, 1.8vw, 17px); line-height: 1.7; color: rgba(255,255,255,.75); text-align: left; }
-    body.light .about-text-box { color: rgba(0,0,0,.8); }
-    .actions-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-    .btn-pill { padding: 12px 24px; border-radius: 9999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
-    .btn-pill-primary { background: #ff4d30; color: #fff; box-shadow: 0 4px 16px rgba(255,77,48,.25); }
-    .btn-pill-primary:hover { background: #e0442b; transform: translateY(-2px); }
-    .btn-pill-secondary { border-color: rgba(255,255,255,.2); color: inherit; background: transparent; }
-    body.light .btn-pill-secondary { border-color: rgba(0,0,0,.2); }
-    .btn-pill-secondary:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); transform: translateY(-2px); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Project · GUT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { scrollbar-width: none; -ms-overflow-style: none; }
+  ::-webkit-scrollbar { display: none; }
+  body { background: #0b0b0b; color: #f0f0f0; font-family: "Inter", system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background .3s, color .3s; overflow-x: hidden; }
+  body.light { background: #fff; color: #000; }
+  .header { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; padding: 16px 24px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: rgba(11,11,11,.8); border-bottom: 1px solid rgba(255,255,255,.1); transition: all .3s; }
+  body.light .header { background: rgba(255,255,255,.9); border-bottom-color: rgba(0,0,0,.1); }
+  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  .brand-logo { display: flex; align-items: center; font-size: 26px; font-weight: 800; letter-spacing: -.02em; text-decoration: none; color: #fff; }
+  body.light .brand-logo { color: #000; }
+  .brand-g { height: .85em; width: auto; margin-right: -2px; transform: translateY(1px); }
+  .svg-white { fill: #fff; transition: fill .3s; }
+  body.light .svg-white { fill: #000; }
+  .brand-t { color: #ff4d30; margin-left: 2px; }
+  .settings-widget { position: relative; border-radius: 9999px; height: 40px; width: 40px; transition: width .3s cubic-bezier(.4,0,.2,1); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); }
+  body.light .settings-widget { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.05); }
+  .settings-widget.open { width: 104px; }
+  .settings-trigger { position: absolute; right: 0; top: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: inherit; transition: transform .3s, opacity .2s; z-index: 10; }
+  .settings-trigger:hover { color: #ff4d30; }
+  .settings-widget.open .settings-trigger { opacity: 0; pointer-events: none; transform: rotate(90deg); }
+  .settings-menu { display: flex; align-items: center; justify-content: space-around; width: 100%; padding: 0 4px; opacity: 0; transform: scale(.9); pointer-events: none; transition: all .25s; }
+  .settings-widget.open .settings-menu { opacity: 1; transform: scale(1); pointer-events: auto; }
+  .settings-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; font-weight: 700; font-size: 12px; color: inherit; transition: all .2s; }
+  .settings-btn:hover { background: rgba(255,77,48,.15); color: #ff4d30; }
+  .wrapper { max-width: 1200px; margin: 0 auto; padding: 112px 16px 64px; }
+  @media (min-width: 768px) { .wrapper { padding-left: 32px; padding-right: 32px; } }
+  .hero { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 16px; margin-bottom: 32px; }
+  .hero-title { font-size: clamp(34px, 5.5vw, 64px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
+  .title-g { height: .9em; width: auto; margin-right: -4px; vertical-align: middle; }
+  .highlight-system { color: #ff4d30; }
+  .hero-motto { display: inline-flex; align-items: center; gap: 10px; padding: 12px 28px; margin-top: 20px; border-radius: 9999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; text-decoration: none; border: 1px solid rgba(255,77,48,.25); background: rgba(255,77,48,.1); color: #ff4d30; transition: all .2s; }
+  body.light .hero-motto { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.15); }
+  .hero-motto:hover { background: rgba(255,77,48,.2); }
+  .hero-desc { margin-top: 16px; font-size: clamp(16px, 2.2vw, 19.5px); line-height: 1.6; max-width: 800px; text-align: center; color: rgba(255,255,255,.65); }
+  body.light .hero-desc { color: rgba(0,0,0,.75); }
+  .tabs-nav { width: 100%; max-width: 900px; margin: 0 auto 32px; display: flex; border-bottom: 1px solid rgba(255,255,255,.1); }
+  body.light .tabs-nav { border-bottom-color: rgba(0,0,0,.1); }
+  .tab-btn { position: relative; flex: 1; padding: 14px 4px; font-size: clamp(13px, 3.3vw, 15.5px); font-weight: 600; background: none; border: none; cursor: pointer; text-align: center; white-space: nowrap; color: rgba(255,255,255,.6); transition: color .2s; }
+  body.light .tab-btn { color: rgba(0,0,0,.6); }
+  .tab-btn:hover, .tab-btn.active { color: #fff; }
+  body.light .tab-btn:hover, body.light .tab-btn.active { color: #000; }
+  .tab-btn.active { font-weight: 700; }
+  .tab-indicator { position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 80%; height: 2.5px; background: #ff4d30; border-radius: 2px 2px 0 0; display: none; }
+  @media (min-width: 640px) { .tab-indicator { width: 60%; } }
+  .tab-btn.active .tab-indicator { display: block; }
+  .tab-pane { display: none; animation: fadeIn .3s ease forwards; }
+  .tab-pane.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .section-header { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 20px; }
+  .section-header-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #ff4d30; }
+  .section-header-title { font-size: clamp(24px, 4vw, 28px); font-weight: 700; letter-spacing: -.02em; }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 900px; margin: 0 auto 32px; width: 100%; }
+  @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+  .stat-tile { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 16px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  body.light .stat-tile { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.03); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+  .stat-tile.featured-mobile { grid-column: span 2; }
+  @media (min-width: 640px) { .stat-tile.featured-mobile { grid-column: span 1; } }
+  .stat-value { font-size: 36px; font-weight: 800; color: #ff4d30; margin-bottom: 6px; line-height: 1; }
+  @media (min-width: 640px) { .stat-value { font-size: 32px; } }
+  .stat-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,.5); }
+  body.light .stat-label { color: rgba(0,0,0,.6); }
+  .about-text-box { max-width: 900px; margin: 0 auto 24px; display: flex; flex-direction: column; gap: 16px; font-size: clamp(16px, 1.8vw, 17px); line-height: 1.7; color: rgba(255,255,255,.75); text-align: left; }
+  body.light .about-text-box { color: rgba(0,0,0,.8); }
+  .actions-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+  .btn-pill { padding: 12px 24px; border-radius: 9999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+  .btn-pill-primary { background: #ff4d30; color: #fff; box-shadow: 0 4px 16px rgba(255,77,48,.25); }
+  .btn-pill-primary:hover { background: #e0442b; transform: translateY(-2px); }
+  .btn-pill-secondary { border-color: rgba(255,255,255,.2); color: inherit; background: transparent; }
+  body.light .btn-pill-secondary { border-color: rgba(0,0,0,.2); }
+  .btn-pill-secondary:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); transform: translateY(-2px); }
 
-    /* Photos Section (чистые карточки без подписей) */
-    .photos-grid { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 1000px; margin: 0 auto; }
-    @media (min-width: 640px) { .photos-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1024px) { .photos-grid { grid-template-columns: repeat(3, 1fr); } }
-    .photo-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); cursor: pointer; transition: all .3s; }
-    body.light .photo-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); }
-    .photo-card:hover { border-color: #ff4d30; transform: scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
-    .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
-    .photo-card:hover img { transform: scale(1.06); }
-    .photo-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .25s; }
-    .photo-card:hover .photo-overlay { opacity: 1; }
-    .photo-maximize-icon { color: #fff; transform: scale(.9); transition: transform .25s; filter: drop-shadow(0 2px 8px rgba(0,0,0,.6)); }
-    .photo-card:hover .photo-maximize-icon { transform: scale(1.1); }
+  .photos-grid { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 1000px; margin: 0 auto; }
+  @media (min-width: 640px) { .photos-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .photos-grid { grid-template-columns: repeat(3, 1fr); } }
+  .photo-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); cursor: pointer; transition: all .3s; }
+  body.light .photo-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); }
+  .photo-card:hover { border-color: #ff4d30; transform: scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+  .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+  .photo-card:hover img { transform: scale(1.06); }
+  .photo-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .25s; }
+  .photo-card:hover .photo-overlay { opacity: 1; }
+  .photo-maximize-icon { color: #fff; transform: scale(.9); transition: transform .25s; filter: drop-shadow(0 2px 8px rgba(0,0,0,.6)); }
+  .photo-card:hover .photo-maximize-icon { transform: scale(1.1); }
 
-    .media-error-box { max-width: 500px; margin: 40px auto; padding: 36px 24px; border-radius: 20px; border: 1px dashed rgba(255,77,48,.4); background: rgba(255,77,48,.05); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: #ff4d30; }
-    body.light .media-error-box { border-color: rgba(255,77,48,.3); background: rgba(255,77,48,.04); }
-    .media-error-text { font-size: 16px; font-weight: 600; color: inherit; }
+  .media-error-box { max-width: 500px; margin: 40px auto; padding: 36px 24px; border-radius: 20px; border: 1px dashed rgba(255,77,48,.4); background: rgba(255,77,48,.05); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: #ff4d30; }
+  body.light .media-error-box { border-color: rgba(255,77,48,.3); background: rgba(255,77,48,.04); }
+  .media-error-text { font-size: 16px; font-weight: 600; color: inherit; }
 
-    .lightbox-modal { position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; animation: fadeIn .2s forwards; }
-    .lightbox-modal.active { display: flex; }
-    .lightbox-close-btn { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; z-index: 10; }
-    .lightbox-close-btn:hover { background: #ff4d30; transform: rotate(90deg); }
-    .lightbox-img { max-width: 90%; max-height: 85vh; border-radius: 12px; object-fit: contain; cursor: zoom-in; transition: transform .3s; }
-    .lightbox-img.zoomed { transform: scale(1.5); cursor: zoom-out; }
+  .lightbox-modal { position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; animation: fadeIn .2s forwards; }
+  .lightbox-modal.active { display: flex; }
+  .lightbox-close-btn { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; z-index: 10; }
+  .lightbox-close-btn:hover { background: #ff4d30; transform: rotate(90deg); }
+  .lightbox-img { max-width: 90%; max-height: 85vh; border-radius: 12px; object-fit: contain; cursor: zoom-in; transition: transform .3s; }
+  .lightbox-img.zoomed { transform: scale(1.5); cursor: zoom-out; }
 
-    .filter-card { max-width: 760px; margin: 0 auto 32px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02); backdrop-filter: blur(12px); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-    body.light .filter-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
-    .filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; width: 110px; flex-shrink: 0; color: rgba(255,255,255,.4); }
-    body.light .filter-title { color: rgba(0,0,0,.5); }
-    .filter-buttons-group { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
-    .filter-btn { position: relative; padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); color: rgba(255,255,255,.7); }
-    body.light .filter-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: rgba(0,0,0,.8); }
-    .filter-btn:hover { border-color: #ff4d30; color: #ff4d30; }
-    .filter-btn.active { background: #ff4d30 !important; border-color: #ff4d30 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(255,77,48,.3); }
-    .blue-indicator-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #0088ff; border-radius: 50%; box-shadow: 0 0 8px #0088ff; pointer-events: none; }
-    .releases-container { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
-    .release-item-card { border: 2px solid rgba(255,255,255,.1); background: #0a0a0a; border-radius: 24px; padding: 24px; box-shadow: 0 16px 36px rgba(0,0,0,.4); transition: border-color .3s; }
-    @media (min-width: 640px) { .release-item-card { padding: 28px; } }
-    body.light .release-item-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 16px 36px rgba(0,0,0,.05); }
-    .release-item-card:hover { border-color: rgba(255,77,48,.5); }
-    .release-top-bar { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.1); }
-    @media (min-width: 640px) { .release-top-bar { flex-direction: row; align-items: center; justify-content: space-between; } }
-    body.light .release-top-bar { border-bottom-color: rgba(0,0,0,.1); }
-    .tag-badge { padding: 4px 12px; font-size: 12px; font-weight: 700; background: rgba(255,77,48,.1); color: #ff4d30; border: 1px solid rgba(255,77,48,.25); border-radius: 9999px; align-self: flex-start; }
-    .release-main-title { font-size: clamp(18px, 2.5vw, 20px); font-weight: 800; color: inherit; }
-    .release-date-text { font-size: 13px; color: rgba(255,255,255,.4); }
-    body.light .release-date-text { color: rgba(0,0,0,.4); }
-    .release-intro-box { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.85); margin-bottom: 16px; text-align: center; }
-    body.light .release-intro-box { color: rgba(0,0,0,.85); }
-    .release-block { margin-bottom: 20px; text-align: center; }
-    .release-block-body { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.75); white-space: pre-line; }
-    body.light .release-block-body { color: rgba(0,0,0,.75); }
-    .release-actions { display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-    .missing-build-box { padding: 16px; border-radius: 16px; background: rgba(255,77,48,.1); border: 1px solid rgba(255,77,48,.25); color: #ff4d30; font-size: 14px; text-align: center; margin-bottom: 16px; }
+  .filter-card { max-width: 760px; margin: 0 auto 32px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02); backdrop-filter: blur(12px); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  body.light .filter-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+  .filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; width: 110px; flex-shrink: 0; color: rgba(255,255,255,.4); }
+  body.light .filter-title { color: rgba(0,0,0,.5); }
+  .filter-buttons-group { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+  .filter-btn { position: relative; padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); color: rgba(255,255,255,.7); }
+  body.light .filter-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: rgba(0,0,0,.8); }
+  .filter-btn:hover { border-color: #ff4d30; color: #ff4d30; }
+  .filter-btn.active { background: #ff4d30 !important; border-color: #ff4d30 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(255,77,48,.3); }
+  .blue-indicator-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #0088ff; border-radius: 50%; box-shadow: 0 0 8px #0088ff; pointer-events: none; }
+  .releases-container { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+  .release-item-card { border: 2px solid rgba(255,255,255,.1); background: #0a0a0a; border-radius: 24px; padding: 24px; box-shadow: 0 16px 36px rgba(0,0,0,.4); transition: border-color .3s; }
+  @media (min-width: 640px) { .release-item-card { padding: 28px; } }
+  body.light .release-item-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 16px 36px rgba(0,0,0,.05); }
+  .release-item-card:hover { border-color: rgba(255,77,48,.5); }
+  .release-top-bar { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  @media (min-width: 640px) { .release-top-bar { flex-direction: row; align-items: center; justify-content: space-between; } }
+  body.light .release-top-bar { border-bottom-color: rgba(0,0,0,.1); }
+  .tag-badge { padding: 4px 12px; font-size: 12px; font-weight: 700; background: rgba(255,77,48,.1); color: #ff4d30; border: 1px solid rgba(255,77,48,.25); border-radius: 9999px; align-self: flex-start; }
+  .release-main-title { font-size: clamp(18px, 2.5vw, 20px); font-weight: 800; color: inherit; }
+  .release-date-text { font-size: 13px; color: rgba(255,255,255,.4); }
+  body.light .release-date-text { color: rgba(0,0,0,.4); }
+  .release-intro-box { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.85); margin-bottom: 16px; text-align: center; white-space: pre-line; }
+  body.light .release-intro-box { color: rgba(0,0,0,.85); }
+  .release-block { margin-bottom: 20px; text-align: center; }
+  .release-block-body { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.75); white-space: pre-line; }
+  body.light .release-block-body { color: rgba(0,0,0,.75); }
+  .release-actions { display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+  .missing-build-box { padding: 16px; border-radius: 16px; background: rgba(255,77,48,.1); border: 1px solid rgba(255,77,48,.25); color: #ff4d30; font-size: 14px; text-align: center; margin-bottom: 16px; }
 
-    /* Developers section with real local avatars */
-    .developers-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
-    @media (min-width: 640px) { .developers-grid { grid-template-columns: repeat(2, 1fr); } }
-    .developer-card { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all .3s; }
-    body.light .developer-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.04); }
-    .developer-card:hover { border-color: rgba(255,77,48,.4); transform: translateY(-4px); }
-    .dev-avatar-wrapper { width: 68px; height: 68px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,77,48,.4); margin-bottom: 12px; background: rgba(255,255,255,.06); display: flex; align-items: center; justify-content: center; color: #ff4d30; font-weight: 700; font-size: 20px; }
-    .dev-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .dev-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: inherit; }
-    .dev-desc { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 20px; line-height: 1.5; }
-    body.light .dev-desc { color: rgba(0,0,0,.6); }
-    .dev-actions-group { display: flex; align-items: center; gap: 10px; margin-top: auto; }
-    .dev-profile-btn { padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: #ff4d30; color: #fff; text-decoration: none; box-shadow: 0 4px 12px rgba(255,77,48,.25); transition: all .2s; }
-    .dev-profile-btn:hover { background: #e0442b; transform: translateY(-2px); }
-    .dev-tg-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.2); color: inherit; text-decoration: none; transition: all .2s; }
-    body.light .dev-tg-btn { border-color: rgba(0,0,0,.2); }
-    .dev-tg-btn:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); }
-    .footer { display: flex; justify-content: center; align-items: center; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.06); margin-top: 64px; }
-    body.light .footer { border-top-color: rgba(0,0,0,.1); }
-    .footer-link { font-size: 15px; font-weight: 500; text-decoration: none; color: rgba(255,255,255,.3); transition: color .2s; }
-    body.light .footer-link { color: rgba(0,0,0,.4); }
-    .footer-link:hover { color: #ff4d30; }
-  </style>
+  .developers-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+  @media (min-width: 640px) { .developers-grid { grid-template-columns: repeat(2, 1fr); } }
+  .developer-card { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all .3s; }
+  body.light .developer-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.04); }
+  .developer-card:hover { border-color: rgba(255,77,48,.4); transform: translateY(-4px); }
+  .dev-avatar-wrapper { width: 68px; height: 68px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,77,48,.4); margin-bottom: 12px; background: rgba(255,255,255,.06); display: flex; align-items: center; justify-content: center; color: #ff4d30; font-weight: 700; font-size: 20px; }
+  .dev-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .dev-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: inherit; }
+  .dev-desc { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 20px; line-height: 1.5; }
+  body.light .dev-desc { color: rgba(0,0,0,.6); }
+  .dev-actions-group { display: flex; align-items: center; gap: 10px; margin-top: auto; }
+  .dev-profile-btn { padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: #ff4d30; color: #fff; text-decoration: none; box-shadow: 0 4px 12px rgba(255,77,48,.25); transition: all .2s; }
+  .dev-profile-btn:hover { background: #e0442b; transform: translateY(-2px); }
+  .dev-tg-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.2); color: inherit; text-decoration: none; transition: all .2s; }
+  body.light .dev-tg-btn { border-color: rgba(0,0,0,.2); }
+  .dev-tg-btn:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); }
+  .footer { display: flex; justify-content: center; align-items: center; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.06); margin-top: 64px; }
+  body.light .footer { border-top-color: rgba(0,0,0,.1); }
+  .footer-link { font-size: 15px; font-weight: 500; text-decoration: none; color: rgba(255,255,255,.3); transition: color .2s; }
+  body.light .footer-link { color: rgba(0,0,0,.4); }
+  .footer-link:hover { color: #ff4d30; }
+</style>
 </head>
 <body>
   <svg style="display:none">
@@ -172,7 +170,7 @@
 
   <header class="header">
     <div class="header-inner">
-      <a href="https://greatuserteam.github.io/GUSite/" class="brand-logo" id="brandLogoLink">
+      <a href="index.html" class="brand-logo" id="brandLogoLink">
         <svg class="brand-g" viewBox="170 110 145 145"><use href="#gus-logo-g"/></svg><span>U</span><span class="brand-t">T</span>
       </a>
       <div class="settings-widget" id="headerSettingsWidget">
@@ -199,7 +197,7 @@
         <span id="heroTitleText">reat User</span>
         <span class="highlight-system" id="heroTitleRed">Team</span>
       </h1>
-      <a href="https://greatuserteam.github.io/GUSite/" class="hero-motto" id="heroMotto">Проект GUT</a>
+      <a href="index.html" class="hero-motto" id="heroMotto">Проект GUT</a>
       <p class="hero-desc" id="heroDesc">Загрузка информации о проекте...</p>
     </div>
 
@@ -210,16 +208,15 @@
       <button class="tab-btn" data-tab="developers" id="tabNav-developers"><span class="tab-text">Разработчики</span><span class="tab-indicator"></span></button>
     </nav>
 
-    <!-- Tab 1: About -->
     <div class="tab-pane active" id="tabContent-about">
       <div class="section-header">
-        <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2.5" stroke-linecap="round"></line><circle cx="12" cy="8" r="0.9" fill="currentColor" stroke="none"></circle></svg></div>
+        <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2.5" stroke-linecap="round"></line></svg></div>
         <h2 class="section-header-title" id="aboutInfoTitle">О проекте</h2>
       </div>
       <div class="stats-grid">
         <div class="stat-tile featured-mobile"><div class="stat-value" id="daysCounter">0</div><div class="stat-label" id="daysCounterLabel">Дней проекта</div></div>
-        <div class="stat-tile"><div class="stat-value" id="devsCounter">2</div><div class="stat-label" id="devsCounterLabel">Разработчиков</div></div>
-        <div class="stat-tile"><div class="stat-value" id="releasesCounter">1</div><div class="stat-label" id="releasesCounterLabel">Релизов</div></div>
+        <div class="stat-tile"><div class="stat-value" id="devsCounter">0</div><div class="stat-label" id="devsCounterLabel">Разработчиков</div></div>
+        <div class="stat-tile"><div class="stat-value" id="releasesCounter">0</div><div class="stat-label" id="releasesCounterLabel">Релизов</div></div>
       </div>
       <div class="about-text-box" id="aboutTextBox"></div>
       <div class="actions-row">
@@ -228,7 +225,6 @@
       </div>
     </div>
 
-    <!-- Tab 2: Photos (No captions) -->
     <div class="tab-pane" id="tabContent-photos">
       <div class="section-header">
         <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
@@ -240,14 +236,13 @@
       </div>
     </div>
 
-    <!-- Tab 3: Download / Releases -->
     <div class="tab-pane" id="tabContent-download">
       <div class="section-header">
         <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
         <h2 class="section-header-title" id="downloadInfoTitle">Релизы</h2>
       </div>
       <div class="actions-row" style="margin-top:0;margin-bottom:28px">
-        <a href="https://github.com/GreatUserSystem/noname/releases" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-secondary" id="githubReleasesLink">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-secondary" id="githubReleasesLink">
           <span id="githubReleasesLinkText">Перейти к релизам на GitHub</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
@@ -267,7 +262,6 @@
       <div class="releases-container" id="releasesList"></div>
     </div>
 
-    <!-- Tab 4: Developers (Real local avatars from data/avatars/) -->
     <div class="tab-pane" id="tabContent-developers">
       <div class="section-header">
         <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
@@ -275,7 +269,7 @@
       </div>
       <div class="developers-grid" id="developersGrid"></div>
       <div class="actions-row" style="margin-top:32px">
-        <a href="https://greatuserteam.github.io/GUSite/about.html" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-primary" id="aboutGUTLink">
+        <a href="about.html" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-primary" id="aboutGUTLink">
           <span id="aboutGUTLinkText">О Great User Team</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
@@ -283,7 +277,7 @@
     </div>
 
     <footer class="footer">
-      <a href="https://greatuserteam.github.io/GUSite/" target="_blank" rel="noopener noreferrer" class="footer-link">Great User Team</a>
+      <a href="index.html" class="footer-link">Great User Team</a>
     </footer>
   </div>
 
@@ -295,78 +289,25 @@
   </div>
 
   <script>
-    // Known project registry for matching ID numbers to directory slugs
-    const KNOWN_PROJECTS = {
-      '1': '1-GUSystem',
-      '2': '2-GUSite',
-      '3': '3-GUSCalc'
-    };
+    // ---------- Registries ----------
+    const KNOWN_PROJECTS = { '1': '1-GUSystem', '2': '2-GUSite', '3': '3-GUSCalc' };
+    const KNOWN_CREATORS = { '1': '1-Tigran', '2': '2-Merkantinez', '3': '3-Ratimir' };
 
-    // Known creator registry for author numbers
-    const KNOWN_CREATORS = {
-      '1': '1-Tigran',
-      '2': '2-Merkantinez',
-      '3': '3-Ratimir'
-    };
-
-    // Fallback creator data when running offline or locally
-    const CREATORS_FALLBACK = {
-      '1-Tigran': {
-        name: 'Tigran',
-        telegram: 'https://t.me/TigranKrapivin',
-        translations: {
-          ru: { about: 'Создатель GUT, ведущий разработчик почти всех проектов.' },
-          en: { about: 'Founder of GUT, lead developer of almost all projects.' }
-        }
-      },
-      '2-Merkantinez': {
-        name: 'Merkantinez',
-        telegram: 'https://t.me/Merkantinez',
-        translations: {
-          ru: { about: 'Просто автор, дизайнер интерфейсов GUT.' },
-          en: { about: 'Author, UI designer and co-author of interfaces.' }
-        }
-      },
-      '3-Ratimir': {
-        name: 'Ratimir',
-        telegram: 'https://t.me/Ratimir',
-        translations: {
-          ru: { about: 'Разработчик утилит и системных модулей.' },
-          en: { about: 'Developer of utilities and system modules.' }
-        }
-      }
-    };
-
-    // Release Platforms & Types requested:
-    // Мобильные (Android и iOS)
-    // Компьютерные (Windows, macOS, Linux)
-    // Мульти (Сайт, HTML)
+    // ---------- Platforms / Types (as in old file) ----------
     const PLATFORMS_CONFIG = [
-      {
-        id: 'mobile',
-        label: { ru: 'Мобильные', en: 'Mobile' },
-        types: [
-          { id: 'android', label: { ru: 'Android', en: 'Android' } },
-          { id: 'ios', label: { ru: 'iOS', en: 'iOS' } }
-        ]
-      },
-      {
-        id: 'pc',
-        label: { ru: 'Компьютерные', en: 'Computer' },
-        types: [
-          { id: 'windows', label: { ru: 'Windows', en: 'Windows' } },
-          { id: 'macos', label: { ru: 'macOS', en: 'macOS' } },
-          { id: 'linux', label: { ru: 'Linux', en: 'Linux' } }
-        ]
-      },
-      {
-        id: 'multi',
-        label: { ru: 'Мульти', en: 'Multi' },
-        types: [
-          { id: 'site', label: { ru: 'Сайт', en: 'Website' } },
-          { id: 'html', label: { ru: 'HTML', en: 'HTML' } }
-        ]
-      }
+      { id: 'mobile', label: { ru: 'Мобильные', en: 'Mobile' }, types: [
+        { id: 'android', label: { ru: 'Android', en: 'Android' } },
+        { id: 'ios', label: { ru: 'iOS', en: 'iOS' } }
+      ]},
+      { id: 'pc', label: { ru: 'Компьютерные', en: 'Computer' }, types: [
+        { id: 'windows', label: { ru: 'Windows', en: 'Windows' } },
+        { id: 'macos', label: { ru: 'macOS', en: 'macOS' } },
+        { id: 'linux', label: { ru: 'Linux', en: 'Linux' } }
+      ]},
+      { id: 'multi', label: { ru: 'Мульти', en: 'Multi' }, types: [
+        { id: 'site', label: { ru: 'Сайт', en: 'Website' } },
+        { id: 'html', label: { ru: 'HTML', en: 'HTML' } }
+      ]}
     ];
 
     const DEFAULT_RELEASE = {
@@ -424,11 +365,12 @@ Standalone HTML page that opens locally in any browser.`,
         viewPhotosBtn: 'Посмотреть фото', releasesBtn: 'Релизы', photosInfo: 'Фото', downloadInfo: 'Релизы',
         developersInfo: 'Разработчики', githubReleasesBtn: 'Перейти к релизам на GitHub',
         platform: 'ПЛАТФОРМА', type: 'ТИП', download: 'Скачать', viewRelease: 'Релиз на GitHub',
-        loading: 'Загрузка релизов...', noBuild: (t) => "Для типа устройства \"" + t + "\" сборка отсутствует в данном релизе.",
+        loading: 'Загрузка релизов...',
+        noBuild: (t) => 'Для типа устройства "' + t + '" сборка отсутствует в данном релизе.',
         aboutGUT: 'О Great User Team', profile: 'Профиль',
         mediaError: 'Ошибка загрузки медиа',
         devRoleFallback: 'Разработчик',
-        heroDescFallback: 'Мы создаём не просто ОС, а новую философию. GUSystem должна стать системой нового поколения за счет оптимизации на уровне ядра.'
+        heroDescFallback: 'Информация о проекте готовится к публикации.'
       },
       en: {
         brandMotto: 'GUT Project',
@@ -438,15 +380,16 @@ Standalone HTML page that opens locally in any browser.`,
         viewPhotosBtn: 'View photos', releasesBtn: 'Releases', photosInfo: 'Photos', downloadInfo: 'Releases',
         developersInfo: 'Developers', githubReleasesBtn: 'Go to GitHub releases',
         platform: 'PLATFORM', type: 'TYPE', download: 'Download', viewRelease: 'GitHub Release',
-        loading: 'Loading releases...', noBuild: (t) => "Build for device type \"" + t + "\" is missing in this release.",
+        loading: 'Loading releases...',
+        noBuild: (t) => 'Build for device type "' + t + '" is missing in this release.',
         aboutGUT: 'About Great User Team', profile: 'Profile',
         mediaError: 'Media loading error',
         devRoleFallback: 'Developer',
-        heroDescFallback: 'We are creating not just an OS, but a new philosophy. GUSystem should become a new generation system through kernel-level optimization.'
+        heroDescFallback: 'Project information is being prepared.'
       }
     };
 
-    // State
+    // ---------- State ----------
     let currentLang = localStorage.getItem('gut_lang') || 'ru';
     let currentTheme = localStorage.getItem('gut_theme') || 'dark';
     let currentTab = localStorage.getItem('gut_active_tab') || 'about';
@@ -455,55 +398,46 @@ Standalone HTML page that opens locally in any browser.`,
     let rawReleases = [DEFAULT_RELEASE];
     let isSettingsOpen = false;
 
-    // Active project state
     let activeProjectData = {
       name: 'GUSystem',
       'g-svg': 'yes',
-      text: 'Great User',
+      text: 'reat User',
       red: 'Team',
       github: 'https://github.com/GreatUserSystem/noname',
       authors: '1, 2.',
-      'about-ru-1': 'Мы создаём не просто ОС, а новую философию. GUSystem должна стать системой нового поколения за счет оптимизации на уровне ядра.',
-      'about-en-1': 'We are creating not just an OS, but a new philosophy. GUSystem should become a new generation system through kernel-level optimization.',
-      'about-ru-2': 'GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы. Это очень удобно, а главное — безопасно.\n\nЯдро собирается конкретно под ваш компьютер. Перед установкой оно сканирует оборудование и загружает только нужные модули с нашего сервера — по сути, у каждого будет стоять уникальная система.',
-      'about-en-2': "GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated, or removed without rebooting the system. It's very convenient, and most importantly — secure.\n\nThe kernel is built specifically for your computer. Before installation, it scans the hardware and downloads only the necessary modules from our server — essentially, everyone will have a unique system.",
+      'about-ru-1': '',
+      'about-en-1': '',
+      'about-ru-2': '',
+      'about-en-2': '',
       'start-data': '01.06.2026'
     };
     let activeProjectSlug = '1-GUSystem';
     let loadedPhotos = [];
     let creatorsList = [];
 
-    // Helper: Parse Project .txt format
+    // ---------- Project .txt parser ----------
     function parseProjectTxt(text) {
       const lines = text.split(/\r?\n/);
       const data = {};
       let currentKey = null;
       let currentVal = [];
-
       const KNOWN_KEYS = [
         'name', 'g-svg', 'text', 'red', 'github', 'authors',
         'about-ru-1', 'about-en-1', 'about-ru-2', 'about-en-2',
         'start-data', 'start-date'
       ];
-
       for (let i = 0; i < lines.length; i++) {
         const rawLine = lines[i];
         const match = rawLine.match(/^([A-Za-z0-9_\-]+)\s*:\s*(.*)$/);
         if (match && KNOWN_KEYS.includes(match[1].toLowerCase())) {
-          if (currentKey) {
-            data[currentKey] = currentVal.join('\n').trim();
-          }
+          if (currentKey) data[currentKey] = currentVal.join('\n').trim();
           currentKey = match[1].toLowerCase();
           currentVal = match[2] ? [match[2]] : [];
         } else {
-          if (currentKey) {
-            currentVal.push(rawLine);
-          }
+          if (currentKey) currentVal.push(rawLine);
         }
       }
-      if (currentKey) {
-        data[currentKey] = currentVal.join('\n').trim();
-      }
+      if (currentKey) data[currentKey] = currentVal.join('\n').trim();
       return data;
     }
 
@@ -518,13 +452,9 @@ Standalone HTML page that opens locally in any browser.`,
       if (!str) return new Date('2026-06-01T00:00:00');
       str = str.trim();
       const dmy = str.match(/^(\d{1,2})[\.\/](\d{1,2})[\.\/](\d{4})/);
-      if (dmy) {
-        return new Date(parseInt(dmy[3], 10), parseInt(dmy[2], 10) - 1, parseInt(dmy[1], 10));
-      }
+      if (dmy) return new Date(parseInt(dmy[3], 10), parseInt(dmy[2], 10) - 1, parseInt(dmy[1], 10));
       const ymd = str.match(/^(\d{4})[\-\.\/](\d{1,2})[\-\.\/](\d{1,2})/);
-      if (ymd) {
-        return new Date(parseInt(ymd[1], 10), parseInt(ymd[2], 10) - 1, parseInt(ymd[3], 10));
-      }
+      if (ymd) return new Date(parseInt(ymd[1], 10), parseInt(ymd[2], 10) - 1, parseInt(ymd[3], 10));
       const d = new Date(str);
       return isNaN(d.getTime()) ? new Date('2026-06-01T00:00:00') : d;
     }
@@ -538,7 +468,7 @@ Standalone HTML page that opens locally in any browser.`,
       });
     }
 
-    // Release parser functions
+    // ---------- Bilingual release parser (old file logic) ----------
     function splitBilingual(text, lang) {
       if (!text) return '';
       let t = text.trim().replace(/^#+\s*/, '').replace(/^[\*\-\•]\s*/, '').trim();
@@ -546,9 +476,7 @@ Standalone HTML page that opens locally in any browser.`,
       if (lines.length === 0) return '';
       if (lines.length === 1) return lines[0];
       const hasCyr = /[а-яёА-ЯЁ]/.test(lines[0]);
-      if (hasCyr) {
-        return lang === 'ru' ? lines[0] : lines.slice(1).join('\n');
-      }
+      if (hasCyr) return lang === 'ru' ? lines[0] : lines.slice(1).join('\n');
       return lang === 'en' ? lines[0] : lines.slice(1).join('\n');
     }
 
@@ -563,13 +491,11 @@ Standalone HTML page that opens locally in any browser.`,
         if (match) {
           const rawKey = match[1].toLowerCase();
           const content = match[2].trim();
-          
           let key = rawKey;
           if (rawKey === 'pc-manjaro' || rawKey === 'pc-arch' || rawKey === 'pc-deb' || rawKey === 'linux') key = 'pc-linux';
           if (rawKey === 'pc-mac' || rawKey === 'macos') key = 'pc-macos';
           if (rawKey === 'multi-web' || rawKey === 'web') key = 'multi-html';
           if (rawKey === 'multi-archive' || rawKey === 'multi-portable' || rawKey === 'site') key = 'multi-site';
-
           platformMap[key] = {
             ru: splitBilingual(content, 'ru'),
             en: splitBilingual(content, 'en')
@@ -580,10 +506,7 @@ Standalone HTML page that opens locally in any browser.`,
       });
 
       return {
-        lead: {
-          ru: splitBilingual(leadText, 'ru'),
-          en: splitBilingual(leadText, 'en')
-        },
+        lead: { ru: splitBilingual(leadText, 'ru'), en: splitBilingual(leadText, 'en') },
         sections: platformMap
       };
     }
@@ -609,7 +532,7 @@ Standalone HTML page that opens locally in any browser.`,
 
     function hasContentForType(release, platformId, typeId) {
       const parsed = parseReleaseData(release);
-      const key = `${platformId}-${typeId}`.toLowerCase();
+      const key = (platformId + '-' + typeId).toLowerCase();
       const hasSec = Boolean(parsed.sections[key] && (parsed.sections[key].ru || parsed.sections[key].en));
       const hasAsset = Boolean(findAssetForType(release, typeId));
       return hasSec || hasAsset;
@@ -621,20 +544,15 @@ Standalone HTML page that opens locally in any browser.`,
       return releasesList.some(rel => plat.types.some(t => hasContentForType(rel, platformId, t.id)));
     }
 
-    // Theme handling
+    // ---------- Theme / Hero / Translations ----------
     function applyTheme(th) {
       currentTheme = th;
       localStorage.setItem('gut_theme', th);
       document.body.className = th === 'light' ? 'light' : '';
       const moon = document.getElementById('themeIconMoon');
       const sun = document.getElementById('themeIconSun');
-      if (th === 'light') {
-        moon.style.display = 'none';
-        sun.style.display = 'block';
-      } else {
-        moon.style.display = 'block';
-        sun.style.display = 'none';
-      }
+      if (th === 'light') { moon.style.display = 'none'; sun.style.display = 'block'; }
+      else { moon.style.display = 'block'; sun.style.display = 'none'; }
     }
 
     function updateHeroTitle() {
@@ -642,7 +560,6 @@ Standalone HTML page that opens locally in any browser.`,
       const titleText = document.getElementById('heroTitleText');
       const titleRed = document.getElementById('heroTitleRed');
       const isGSvg = (activeProjectData['g-svg'] || 'yes').toLowerCase() === 'yes';
-
       if (isGSvg) {
         gWrap.style.display = 'inline-flex';
         titleText.textContent = (activeProjectData.text || 'reat User') + ' ';
@@ -656,7 +573,7 @@ Standalone HTML page that opens locally in any browser.`,
 
     function applyTranslations() {
       const t = TRANSLATIONS[currentLang];
-      document.title = (activeProjectData.name || 'Great User System') + ' · GUT';
+      document.title = (activeProjectData.name || 'Project') + ' · GUT';
       document.getElementById('headerLangToggle').textContent = currentLang.toUpperCase();
       document.getElementById('heroMotto').textContent = t.brandMotto;
 
@@ -674,7 +591,7 @@ Standalone HTML page that opens locally in any browser.`,
       document.getElementById('developersInfoTitle').textContent = t.developersInfo;
 
       const projName = activeProjectData.name || 'Project';
-      document.getElementById('daysCounterLabel').textContent = currentLang === 'ru' ? `Дней ${projName}` : `${projName} Days`;
+      document.getElementById('daysCounterLabel').textContent = currentLang === 'ru' ? ('Дней ' + projName) : (projName + ' Days');
       document.getElementById('devsCounterLabel').textContent = t.developersLabel;
       document.getElementById('releasesCounterLabel').textContent = t.releasesLabel;
 
@@ -697,14 +614,12 @@ Standalone HTML page that opens locally in any browser.`,
     function switchTab(tabKey) {
       currentTab = tabKey;
       localStorage.setItem('gut_active_tab', tabKey);
-
       document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-tab') === tabKey);
       });
       document.querySelectorAll('.tab-pane').forEach(pane => {
-        pane.classList.toggle('active', pane.id === `tabContent-${tabKey}`);
+        pane.classList.toggle('active', pane.id === 'tabContent-' + tabKey);
       });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function renderAboutTab() {
@@ -712,7 +627,6 @@ Standalone HTML page that opens locally in any browser.`,
       box.innerHTML = '';
       const rawText = (currentLang === 'ru' ? activeProjectData['about-ru-2'] : activeProjectData['about-en-2']) || '';
       const paragraphs = rawText.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
-
       if (paragraphs.length === 0) {
         const p = document.createElement('p');
         p.textContent = currentLang === 'ru' ? 'Информация о проекте готовится к публикации.' : 'Project information is being prepared.';
@@ -765,7 +679,6 @@ Standalone HTML page that opens locally in any browser.`,
       });
     }
 
-    // Developers Tab: REAL LOCAL AVATARS ONLY (data/avatars/)
     function renderDevelopersTab() {
       const container = document.getElementById('developersGrid');
       container.innerHTML = '';
@@ -779,16 +692,14 @@ Standalone HTML page that opens locally in any browser.`,
           || (creator.translations && creator.translations.ru && creator.translations.ru.about)
           || t.devRoleFallback;
 
-        const profileUrl = `https://greatuserteam.github.io/GUSite/creator.html?id=${creator.id || creator.slug || '1-Tigran'}`;
+        const profileUrl = 'creator.html?id=' + encodeURIComponent(creator.id || creator.slug || '1-Tigran');
         const tgUrl = creator.telegram || 'https://t.me/TigranKrapivin';
-
-        // Local avatar only from data/avatars/<slug>.jpg
-        const avatarSrc = `data/avatars/${creator.slug}.jpg`;
+        const avatarSrc = 'data/avatars/' + encodeURIComponent(creator.slug) + '.jpg';
         const initial = (creator.name || 'D').charAt(0).toUpperCase();
 
         card.innerHTML = `
-          <div class="dev-avatar-wrapper" id="avatarWrap-${creator.slug}">
-            <img src="${avatarSrc}" alt="${creator.name}" onerror="this.onerror=null;this.style.display='none';this.parentElement.textContent='${initial}'" loading="lazy" decoding="async">
+          <div class="dev-avatar-wrapper" data-initial="${initial}">
+            <img src="${avatarSrc}" alt="${creator.name}" loading="lazy" decoding="async">
           </div>
           <h3 class="dev-name">${creator.name}</h3>
           <p class="dev-desc">${bio}</p>
@@ -801,6 +712,12 @@ Standalone HTML page that opens locally in any browser.`,
             </a>
           </div>
         `;
+        const img = card.querySelector('img');
+        img.addEventListener('error', () => {
+          img.style.display = 'none';
+          const wrap = card.querySelector('.dev-avatar-wrapper');
+          if (wrap) wrap.textContent = initial;
+        }, { once: true });
         container.appendChild(card);
       });
     }
@@ -813,15 +730,13 @@ Standalone HTML page that opens locally in any browser.`,
 
       PLATFORMS_CONFIG.forEach(plat => {
         const btn = document.createElement('button');
-        btn.className = `filter-btn ${plat.id === currentPlatform ? 'active' : ''}`;
+        btn.className = 'filter-btn ' + (plat.id === currentPlatform ? 'active' : '');
         btn.textContent = plat.label[currentLang] || plat.label.ru;
-
         if (hasContentForPlatform(rawReleases, plat.id)) {
           const dot = document.createElement('span');
           dot.className = 'blue-indicator-dot';
           btn.appendChild(dot);
         }
-
         btn.addEventListener('click', () => {
           currentPlatform = plat.id;
           currentType = plat.types[0].id;
@@ -834,16 +749,13 @@ Standalone HTML page that opens locally in any browser.`,
       const activePlatObj = PLATFORMS_CONFIG.find(p => p.id === currentPlatform) || PLATFORMS_CONFIG[0];
       activePlatObj.types.forEach(type => {
         const btn = document.createElement('button');
-        btn.className = `filter-btn ${type.id === currentType ? 'active' : ''}`;
+        btn.className = 'filter-btn ' + (type.id === currentType ? 'active' : '');
         btn.textContent = type.label[currentLang] || type.label.ru;
-
-        const hasTypeBuild = rawReleases.some(rel => hasContentForType(rel, currentPlatform, type.id));
-        if (hasTypeBuild) {
+        if (rawReleases.some(rel => hasContentForType(rel, currentPlatform, type.id))) {
           const dot = document.createElement('span');
           dot.className = 'blue-indicator-dot';
           btn.appendChild(dot);
         }
-
         btn.addEventListener('click', () => {
           currentType = type.id;
           renderReleasesFilters();
@@ -863,7 +775,7 @@ Standalone HTML page that opens locally in any browser.`,
 
       rawReleases.forEach(release => {
         const parsed = parseReleaseData(release);
-        const secKey = `${currentPlatform}-${currentType}`.toLowerCase();
+        const secKey = (currentPlatform + '-' + currentType).toLowerCase();
         const sectionContent = parsed.sections[secKey] ? parsed.sections[secKey][currentLang] : '';
         const asset = findAssetForType(release, currentType);
 
@@ -889,11 +801,7 @@ Standalone HTML page that opens locally in any browser.`,
         }
 
         if (sectionContent) {
-          innerHTML += `
-            <div class="release-block">
-              <div class="release-block-body">${sectionContent}</div>
-            </div>
-          `;
+          innerHTML += `<div class="release-block"><div class="release-block-body">${sectionContent}</div></div>`;
         } else if (!asset) {
           innerHTML += `<div class="missing-build-box">${t.noBuild(typeLabel)}</div>`;
         }
@@ -919,7 +827,7 @@ Standalone HTML page that opens locally in any browser.`,
       });
     }
 
-    // Lightbox modal logic
+    // ---------- Lightbox ----------
     const lightboxModal = document.getElementById('lightboxModal');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
@@ -929,39 +837,24 @@ Standalone HTML page that opens locally in any browser.`,
       lightboxImg.classList.remove('zoomed');
       lightboxModal.classList.add('active');
     }
-
     function closeLightbox() {
       lightboxModal.classList.remove('active');
       lightboxImg.src = '';
     }
-
-    lightboxCloseBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeLightbox();
-    });
-
-    lightboxModal.addEventListener('click', (e) => {
-      if (e.target === lightboxModal) closeLightbox();
-    });
-
-    lightboxImg.addEventListener('click', (e) => {
-      e.stopPropagation();
-      lightboxImg.classList.toggle('zoomed');
-    });
-
+    lightboxCloseBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+    lightboxModal.addEventListener('click', (e) => { if (e.target === lightboxModal) closeLightbox(); });
+    lightboxImg.addEventListener('click', (e) => { e.stopPropagation(); lightboxImg.classList.toggle('zoomed'); });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && lightboxModal.classList.contains('active')) {
-        closeLightbox();
-      }
+      if (e.key === 'Escape' && lightboxModal.classList.contains('active')) closeLightbox();
     });
 
-    // Load project data by parameter (?id=1 / ?id=2 / ?id=3)
+    // ---------- Data loading ----------
     async function loadProjectData() {
       const params = new URLSearchParams(window.location.search);
       const idParam = params.get('id') || '1';
       activeProjectSlug = KNOWN_PROJECTS[idParam] || idParam;
 
-      const txtUrl = `data/projects/${activeProjectSlug}.txt`;
+      const txtUrl = 'data/projects/' + activeProjectSlug + '.txt';
       try {
         const res = await fetch(txtUrl);
         if (res.ok) {
@@ -970,13 +863,13 @@ Standalone HTML page that opens locally in any browser.`,
           activeProjectData = { ...activeProjectData, ...parsed };
         }
       } catch (err) {
-        console.warn('Could not load project text from server, using embedded default:', err);
+        console.warn('Could not load project text, using default:', err);
       }
 
       updateHeroTitle();
 
       const ghLink = activeProjectData.github || 'https://github.com/GreatUserSystem/noname';
-      document.getElementById('githubReleasesLink').href = ghLink.endsWith('/releases') ? ghLink : `${ghLink}/releases`;
+      document.getElementById('githubReleasesLink').href = ghLink.endsWith('/releases') ? ghLink : (ghLink + '/releases');
 
       const startDateStr = activeProjectData['start-data'] || activeProjectData['start-date'] || '01.06.2026';
       const startDate = parseDate(startDateStr);
@@ -985,51 +878,46 @@ Standalone HTML page that opens locally in any browser.`,
       document.getElementById('daysCounter').textContent = String(diffDays);
 
       const authorIds = parseAuthors(activeProjectData.authors);
-      document.getElementById('devsCounter').textContent = String(authorIds.length || 2);
+      document.getElementById('devsCounter').textContent = String(authorIds.length || 0);
 
       creatorsList = [];
       for (const id of authorIds) {
         const creatorSlug = KNOWN_CREATORS[id] || id;
+        let loaded = null;
         try {
-          const res = await fetch(`data/creators/${creatorSlug}.json`);
-          if (res.ok) {
-            const cData = await res.json();
-            creatorsList.push({ ...cData, id, slug: creatorSlug });
-            continue;
-          }
+          const res = await fetch('data/creators/' + creatorSlug + '.json');
+          if (res.ok) loaded = await res.json();
         } catch (e) {}
-
-        if (CREATORS_FALLBACK[creatorSlug]) {
-          creatorsList.push({ ...CREATORS_FALLBACK[creatorSlug], id, slug: creatorSlug });
-        } else {
-          creatorsList.push({
-            name: `Developer ${id}`,
-            id,
-            slug: creatorSlug,
+        if (!loaded) {
+          loaded = {
+            name: 'Developer ' + id,
             telegram: 'https://t.me/TigranKrapivin',
-            translations: { ru: { about: 'Разработчик команды GUT' }, en: { about: 'GUT team developer' } }
-          });
+            translations: {
+              ru: { about: 'Разработчик команды GUT' },
+              en: { about: 'GUT team developer' }
+            }
+          };
         }
+        creatorsList.push({ ...loaded, id, slug: creatorSlug });
       }
 
-      // Load Photos from data/photos/project/<slug>/
+      // Load photos from data/photos/project/<slug>/
       const numPrefix = activeProjectSlug.split('-')[0] || '1';
       const candidates = [
-        `data/photos/project/${activeProjectSlug}/${numPrefix}.0.jpg`,
-        `data/photos/project/${activeProjectSlug}/${numPrefix}.1.jpg`,
-        `data/photos/project/${activeProjectSlug}/${numPrefix}.2.jpg`,
-        `data/photos/project/${activeProjectSlug}/${numPrefix}.3.jpg`,
-        `data/photos/project/${activeProjectSlug}/1.jpg`,
-        `data/photos/project/${activeProjectSlug}/2.jpg`
+        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.0.jpg',
+        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.1.jpg',
+        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.2.jpg',
+        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.3.jpg',
+        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.4.jpg',
+        'data/photos/project/' + activeProjectSlug + '/1.jpg',
+        'data/photos/project/' + activeProjectSlug + '/2.jpg',
+        'data/photos/project/' + activeProjectSlug + '/3.jpg'
       ];
-
       loadedPhotos = [];
-      for (const url of candidates) {
-        const valid = await checkImage(url);
-        if (valid && !loadedPhotos.includes(valid)) {
-          loadedPhotos.push(valid);
-        }
-      }
+      const results = await Promise.all(candidates.map(checkImage));
+      results.forEach(url => {
+        if (url && !loadedPhotos.includes(url)) loadedPhotos.push(url);
+      });
 
       fetchGitHubReleases(ghLink);
     }
@@ -1042,7 +930,7 @@ Standalone HTML page that opens locally in any browser.`,
         if (match) {
           const owner = match[1];
           const repo = match[2];
-          const apiUrl = `https://api.github.com/repos/${owner}/${repo}/releases`;
+          const apiUrl = 'https://api.github.com/repos/' + owner + '/' + repo + '/releases';
           const ctrl = new AbortController();
           const timer = setTimeout(() => ctrl.abort(), 4000);
           const res = await fetch(apiUrl, { signal: ctrl.signal });
@@ -1066,6 +954,7 @@ Standalone HTML page that opens locally in any browser.`,
       renderReleases();
     }
 
+    // ---------- Events ----------
     function initEvents() {
       const widget = document.getElementById('headerSettingsWidget');
       const trigger = document.getElementById('headerSettingsTrigger');
@@ -1074,30 +963,25 @@ Standalone HTML page that opens locally in any browser.`,
         isSettingsOpen = !isSettingsOpen;
         widget.classList.toggle('open', isSettingsOpen);
       });
-
       document.addEventListener('click', (e) => {
         if (isSettingsOpen && !widget.contains(e.target)) {
           isSettingsOpen = false;
           widget.classList.remove('open');
         }
       });
-
-      document.getElementById('headerLangToggle').addEventListener('click', () => {
+      document.getElementById('headerLangToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
         currentLang = currentLang === 'ru' ? 'en' : 'ru';
         localStorage.setItem('gut_lang', currentLang);
         applyTranslations();
       });
-
-      document.getElementById('headerThemeToggle').addEventListener('click', () => {
+      document.getElementById('headerThemeToggle').addEventListener('click', (e) => {
+        e.stopPropagation();
         applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
       });
-
       document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          switchTab(btn.getAttribute('data-tab'));
-        });
+        btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
       });
-
       document.getElementById('btnGoPhotos').addEventListener('click', () => switchTab('photos'));
       document.getElementById('btnGoReleases').addEventListener('click', () => switchTab('download'));
       document.getElementById('btnPhotosToReleases').addEventListener('click', () => switchTab('download'));
