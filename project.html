@@ -450,23 +450,29 @@
 
     async function loadProjectPhotos(folderName) {
       projectPhotos = [];
-      let consecutiveFailures = 0;
 
-      for (let index = 1; index <= 10; index++) {
-        if (consecutiveFailures >= 2) break;
-        const imgPath = `data/photos/project/${folderName}/${index}.0.jpg`;
-        try {
-          const res = await fetch(imgPath, { method: 'HEAD' });
-          if (res.ok) {
-            projectPhotos.push(imgPath);
-            consecutiveFailures = 0;
-          } else {
-            consecutiveFailures++;
-          }
-        } catch (e) {
-          consecutiveFailures++;
-        }
+      if (!projectData.github) {
+        renderPhotos();
+        return;
       }
+
+      const repoPath = projectData.github.replace('https://github.com/', '').replace(/\/$/, '');
+      const photosFolderPath = `data/photos/project/${folderName}`;
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${repoPath}/contents/${photosFolderPath}`);
+
+        if (res.ok) {
+          const files = await res.json();
+
+          if (Array.isArray(files)) {
+            projectPhotos = files
+              .filter(item => item.type === 'file' && /\.(jpg|jpeg|png|webp|gif)$/i.test(item.name))
+              .map(item => item.download_url);
+          }
+        }
+      } catch (e) {}
+
       renderPhotos();
     }
 
