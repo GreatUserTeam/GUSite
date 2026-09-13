@@ -1,7 +1,7 @@
 Name:
 G-svg: yes
-Red: reat
-Text: User Team
+Text: Great User
+Red: Team
 GitHub: https://github.com/GreatUserSystem/noname
 Authors: 1, 2.
 About-ru-1:
