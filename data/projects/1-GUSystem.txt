@@ -15,3 +15,4 @@ About-en-2: GUS is an operating system from scratch. The microkernel manages onl
 
 The kernel is built specifically for your computer. Before installation, it scans the hardware and downloads only the necessary modules from our server — essentially, everyone will have a unique system.
 Start-data: 01.06.2026
+
