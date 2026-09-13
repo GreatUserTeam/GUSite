@@ -152,6 +152,13 @@
     .footer-link { font-size: 15px; font-weight: 500; text-decoration: none; color: rgba(255,255,255,.3); transition: color .2s; }
     body.light .footer-link { color: rgba(0,0,0,.4); }
     .footer-link:hover { color: #ff4d30; }
+
+    /* Ошибка 404 */
+    .not-found-container { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 64px 16px; min-height: 50vh; }
+    .not-found-container.active { display: flex; }
+    .not-found-code { font-size: clamp(64px, 10vw, 96px); font-weight: 800; color: #ff4d30; line-height: 1; margin-bottom: 12px; }
+    .not-found-text { font-size: clamp(18px, 3vw, 24px); font-weight: 700; margin-bottom: 24px; color: rgba(255,255,255,.8); }
+    body.light .not-found-text { color: rgba(0,0,0,.8); }
   </style>
 </head>
 <body>
@@ -185,96 +192,100 @@
   </header>
 
   <div class="wrapper">
-    <div class="hero">
-      <h1 class="hero-title" id="heroTitleContainer">
-        <!-- Заполняется динамически -->
-      </h1>
-      <a href="index.html" class="hero-motto" id="heroMottoBadge">Проект GUT</a>
-      <p class="hero-desc" id="heroDescText">Загрузка информации о проекте...</p>
-    </div>
+    <div id="mainContentBlock">
+      <div class="hero">
+        <h1 class="hero-title" id="heroTitleContainer"></h1>
+        <a href="index.html" class="hero-motto" id="heroMottoBadge">Проект GUT</a>
+        <p class="hero-desc" id="heroDescText">Загрузка информации о проекте...</p>
+      </div>
 
-    <nav class="tabs-nav" id="mainTabsNav">
-      <button class="tab-btn active" data-tab="about" id="tabNav-about"><span class="tab-text">О проекте</span><span class="tab-indicator"></span></button>
-      <button class="tab-btn" data-tab="photos" id="tabNav-photos"><span class="tab-text">Фото</span><span class="tab-indicator"></span></button>
-      <button class="tab-btn" data-tab="download" id="tabNav-download"><span class="tab-text">Релизы</span><span class="tab-indicator"></span></button>
-      <button class="tab-btn" data-tab="developers" id="tabNav-developers"><span class="tab-text">Разработчики</span><span class="tab-indicator"></span></button>
-    </nav>
+      <nav class="tabs-nav" id="mainTabsNav">
+        <button class="tab-btn active" data-tab="about" id="tabNav-about"><span class="tab-text">О проекте</span><span class="tab-indicator"></span></button>
+        <button class="tab-btn" data-tab="photos" id="tabNav-photos"><span class="tab-text">Фото</span><span class="tab-indicator"></span></button>
+        <button class="tab-btn" data-tab="download" id="tabNav-download"><span class="tab-text">Релизы</span><span class="tab-indicator"></span></button>
+        <button class="tab-btn" data-tab="developers" id="tabNav-developers"><span class="tab-text">Разработчики</span><span class="tab-indicator"></span></button>
+      </nav>
 
-    <!-- Tab 1: About -->
-    <div class="tab-pane active" id="tabContent-about">
-      <div class="section-header">
-        <div class="section-header-icon">
-          <!-- Исправлена точка у значка i -->
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="11"></line><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"></circle></svg>
+      <!-- Tab 1: About -->
+      <div class="tab-pane active" id="tabContent-about">
+        <div class="section-header">
+          <div class="section-header-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="11"></line><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"></circle></svg>
+          </div>
+          <h2 class="section-header-title" id="aboutInfoTitle">О проекте</h2>
         </div>
-        <h2 class="section-header-title" id="aboutInfoTitle">О проекте</h2>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-tile featured-mobile"><div class="stat-value" id="daysCounter">0</div><div class="stat-label" id="daysCounterLabel">Дней проекта</div></div>
-        <div class="stat-tile"><div class="stat-value" id="devsCounter">0</div><div class="stat-label" id="devsCounterLabel">Разработчиков</div></div>
-        <div class="stat-tile"><div class="stat-value" id="releasesCounter">0</div><div class="stat-label" id="releasesCounterLabel">Релизов</div></div>
-      </div>
-      <div class="about-text-box" id="aboutTextBox">
-        <!-- Тексты из файла проекта -->
-      </div>
-      <div class="actions-row">
-        <button class="btn-pill btn-pill-secondary" id="aboutToPhotosBtn" onclick="navigateToTab('photos',true)">Посмотреть фото</button>
-        <button class="btn-pill btn-pill-primary" id="aboutToReleasesBtn" onclick="navigateToTab('download',true)">Релизы</button>
-      </div>
-    </div>
-
-    <!-- Tab 2: Photos -->
-    <div class="tab-pane" id="tabContent-photos">
-      <div class="section-header">
-        <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
-        <h2 class="section-header-title" id="photosInfoTitle">Фото</h2>
-      </div>
-      <div class="photos-grid" id="photosGrid"></div>
-      <div class="actions-row" style="margin-top:32px">
-        <button class="btn-pill btn-pill-primary" id="photosToReleasesBtn" onclick="navigateToTab('download',true)">Релизы</button>
-      </div>
-    </div>
-
-    <!-- Tab 3: Releases -->
-    <div class="tab-pane" id="tabContent-download">
-      <div class="section-header">
-        <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
-        <h2 class="section-header-title" id="downloadInfoTitle">Релизы</h2>
-      </div>
-      <div style="text-align:center;margin-bottom:24px">
-        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-secondary" id="ghReleasesLink">
-          <span id="ghReleasesLinkText">Перейти к релизам на GitHub</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </a>
-      </div>
-      <div class="filter-card">
-        <div class="filter-row">
-          <span class="filter-title" id="filterLabelPlatform">ПЛАТФОРМА</span>
-          <div class="filter-buttons-group" id="platformFilterButtons"></div>
+        <div class="stats-grid">
+          <div class="stat-tile featured-mobile"><div class="stat-value" id="daysCounter">0</div><div class="stat-label" id="daysCounterLabel">Дней проекта</div></div>
+          <div class="stat-tile"><div class="stat-value" id="devsCounter">0</div><div class="stat-label" id="devsCounterLabel">Разработчиков</div></div>
+          <div class="stat-tile"><div class="stat-value" id="releasesCounter">0</div><div class="stat-label" id="releasesCounterLabel">Релизов</div></div>
         </div>
-        <div class="filter-row">
-          <span class="filter-title" id="filterLabelType">ТИП</span>
-          <div class="filter-buttons-group" id="typeFilterButtons"></div>
+        <div class="about-text-box" id="aboutTextBox"></div>
+        <div class="actions-row">
+          <button class="btn-pill btn-pill-secondary" id="aboutToPhotosBtn" onclick="navigateToTab('photos',true)">Посмотреть фото</button>
+          <button class="btn-pill btn-pill-primary" id="aboutToReleasesBtn" onclick="navigateToTab('download',true)">Релизы</button>
         </div>
       </div>
-      <div class="releases-container" id="releasesListContainer">
-        <div style="text-align:center;color:rgba(255,255,255,.5);padding:40px" id="releasesLoadingState">Загрузка релизов...</div>
+
+      <!-- Tab 2: Photos -->
+      <div class="tab-pane" id="tabContent-photos">
+        <div class="section-header">
+          <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
+          <h2 class="section-header-title" id="photosInfoTitle">Фото</h2>
+        </div>
+        <div class="photos-grid" id="photosGrid"></div>
+        <div class="actions-row" style="margin-top:32px">
+          <button class="btn-pill btn-pill-primary" id="photosToReleasesBtn" onclick="navigateToTab('download',true)">Релизы</button>
+        </div>
+      </div>
+
+      <!-- Tab 3: Releases -->
+      <div class="tab-pane" id="tabContent-download">
+        <div class="section-header">
+          <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
+          <h2 class="section-header-title" id="downloadInfoTitle">Релизы</h2>
+        </div>
+        <div style="text-align:center;margin-bottom:24px">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-secondary" id="ghReleasesLink">
+            <span id="ghReleasesLinkText">Перейти к релизам на GitHub</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+        <div class="filter-card">
+          <div class="filter-row">
+            <span class="filter-title" id="filterLabelPlatform">ПЛАТФОРМА</span>
+            <div class="filter-buttons-group" id="platformFilterButtons"></div>
+          </div>
+          <div class="filter-row">
+            <span class="filter-title" id="filterLabelType">ТИП</span>
+            <div class="filter-buttons-group" id="typeFilterButtons"></div>
+          </div>
+        </div>
+        <div class="releases-container" id="releasesListContainer">
+          <div style="text-align:center;color:rgba(255,255,255,.5);padding:40px" id="releasesLoadingState">Загрузка релизов...</div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Developers -->
+      <div class="tab-pane" id="tabContent-developers">
+        <div class="section-header">
+          <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <h2 class="section-header-title" id="developersInfoTitle">Разработчики</h2>
+        </div>
+        <div class="developers-grid" id="developersGrid"></div>
+        <div class="actions-row" style="margin-top:32px">
+          <a href="about.html" class="btn-pill btn-pill-primary" id="aboutGUTLink">
+            <span id="aboutGUTLinkText">О Great User Team</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
       </div>
     </div>
 
-    <!-- Tab 4: Developers -->
-    <div class="tab-pane" id="tabContent-developers">
-      <div class="section-header">
-        <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
-        <h2 class="section-header-title" id="developersInfoTitle">Разработчики</h2>
-      </div>
-      <div class="developers-grid" id="developersGrid"></div>
-      <div class="actions-row" style="margin-top:32px">
-        <a href="about.html" class="btn-pill btn-pill-primary" id="aboutGUTLink">
-          <span id="aboutGUTLinkText">О Great User Team</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </a>
-      </div>
+    <!-- Страница 404 (Не найдено) -->
+    <div class="not-found-container" id="notFoundBlock">
+      <div class="not-found-code">404</div>
+      <div class="not-found-text" id="notFoundText">Такой страницы не существует</div>
+      <a href="index.html" class="btn-pill btn-pill-primary" id="notFoundHomeBtn">На главную</a>
     </div>
 
     <footer class="footer">
@@ -328,7 +339,8 @@
         developersInfo: 'Разработчики', githubReleasesBtn: 'Перейти к релизам на GitHub',
         platform: 'ПЛАТФОРМА', type: 'ТИП', download: 'Скачать', viewRelease: 'Релиз на GitHub',
         loading: 'Загрузка релизов...', noBuild: (t) => `Для типа устройства "${t}" сборка отсутствует в данном релизе.`,
-        aboutGUT: 'О Great User Team', profile: 'Профиль', mediaError: 'Ошибка загрузки медиа'
+        aboutGUT: 'О Great User Team', profile: 'Профиль', mediaError: 'Ошибка загрузки медиа',
+        notFound: 'Такой страницы не существует', goHome: 'На главную'
       },
       en: {
         brandMotto: 'GUT Project',
@@ -338,7 +350,8 @@
         developersInfo: 'Developers', githubReleasesBtn: 'Go to GitHub releases',
         platform: 'PLATFORM', type: 'TYPE', download: 'Download', viewRelease: 'GitHub Release',
         loading: 'Loading releases...', noBuild: (t) => `Build for device type "${t}" is missing in this release.`,
-        aboutGUT: 'About Great User Team', profile: 'Profile', mediaError: 'Media loading error'
+        aboutGUT: 'About Great User Team', profile: 'Profile', mediaError: 'Media loading error',
+        notFound: 'This page does not exist', goHome: 'To Homepage'
       }
     };
 
@@ -356,6 +369,11 @@
     function getProjectId() {
       const params = new URLSearchParams(window.location.search);
       return parseInt(params.get('id')) || 1;
+    }
+
+    function show404() {
+      document.getElementById('mainContentBlock').style.display = 'none';
+      document.getElementById('notFoundBlock').classList.add('active');
     }
 
     function parseProjectTxt(txt) {
@@ -401,36 +419,41 @@
 
     async function loadProjectData() {
       const id = getProjectId();
-      const fileName = PROJECT_FILES[id - 1] || PROJECT_FILES[0];
-      
-      try {
-        const res = await fetch(`data/projects/${fileName}.txt`);
-        if (!res.ok) throw new Error();
-        const text = await res.text();
-        projectData = parseProjectTxt(text);
-      } catch (e) {
-        projectData = {
-          name: fileName, gSvg: true, text: "Great User", red: "System", github: "https://github.com",
-          authors: ["1"], aboutRu: ["Информация о проекте загружается..."], aboutEn: ["Loading project info..."],
-          startDate: "01.06.2026"
-        };
+      const fileName = PROJECT_FILES[id - 1];
+
+      if (!fileName) {
+        show404();
+        return;
       }
 
-      await loadProjectPhotos(fileName);
-      await loadDevelopersData(projectData.authors);
-      
-      renderProjectHeader();
-      renderAboutTab();
-      calculateDays();
-      fetchGitHubReleases();
+      try {
+        const res = await fetch(`data/projects/${fileName}.txt`);
+        if (!res.ok) {
+          show404();
+          return;
+        }
+        const text = await res.text();
+        projectData = parseProjectTxt(text);
+
+        renderProjectHeader();
+        renderAboutTab();
+        calculateDays();
+
+        await loadProjectPhotos(fileName);
+        await loadDevelopersData(projectData.authors);
+        fetchGitHubReleases();
+
+      } catch (e) {
+        show404();
+      }
     }
 
     async function loadProjectPhotos(folderName) {
       projectPhotos = [];
-      let index = 1;
       let consecutiveFailures = 0;
 
-      while (index <= 10 && consecutiveFailures < 2) {
+      for (let index = 1; index <= 10; index++) {
+        if (consecutiveFailures >= 2) break;
         const imgPath = `data/photos/project/${folderName}/${index}.0.jpg`;
         try {
           const res = await fetch(imgPath, { method: 'HEAD' });
@@ -443,8 +466,8 @@
         } catch (e) {
           consecutiveFailures++;
         }
-        index++;
       }
+      renderPhotos();
     }
 
     async function loadDevelopersData(authorIds) {
@@ -459,9 +482,7 @@
             json.creatorFile = creatorFile;
             developersData.push(json);
           }
-        } catch (e) {
-          console.error("Error loading developer:", e);
-        }
+        } catch (e) {}
       }
       const devsEl = document.getElementById('devsCounter');
       if (devsEl) devsEl.textContent = developersData.length;
@@ -474,7 +495,7 @@
       if (projectData.gSvg) {
         html += `<span style="display:inline-flex;align-items:center;gap:2px"><svg class="title-g" viewBox="170 110 145 145"><use href="#gus-logo-g"/></svg></span>`;
       }
-      html += `<span>${projectData.text}</span> <span class="highlight-system">${projectData.red}</span>`;
+      html += `<span>${projectData.text || ''}</span> <span class="highlight-system">${projectData.red || ''}</span>`;
       titleContainer.innerHTML = html;
 
       const ghLink = document.getElementById('ghReleasesLink');
@@ -482,8 +503,8 @@
     }
 
     function renderAboutTab() {
-      const descText = currentLang === 'ru' ? projectData.aboutRu[0] : (projectData.aboutEn[0] || projectData.aboutRu[0]);
-      document.getElementById('heroDescText').textContent = descText || '';
+      const descText = currentLang === 'ru' ? (projectData.aboutRu[0] || '') : (projectData.aboutEn[0] || projectData.aboutRu[0] || '');
+      document.getElementById('heroDescText').textContent = descText;
 
       const box = document.getElementById('aboutTextBox');
       box.innerHTML = '';
@@ -740,6 +761,9 @@
 
       document.getElementById('developersInfoTitle').textContent = t.developersInfo;
       document.getElementById('aboutGUTLinkText').textContent = t.aboutGUT;
+
+      document.getElementById('notFoundText').textContent = t.notFound;
+      document.getElementById('notFoundHomeBtn').textContent = t.goHome;
 
       renderAboutTab();
       renderPhotos();
