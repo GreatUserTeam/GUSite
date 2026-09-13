@@ -8,7 +8,7 @@ About-ru-1:
 About-en-1:
 We are creating not just an OS, but a new philosophy. GUSystem should become a new generation system through kernel-level optimization.
 About-ru-2:
-GUS — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы. Это очень удобно, а главное — безопасно.
+GUSystem — операционная система с нуля. Микроядро управляет только памятью и IPC. Драйверы и сервисы изолированы в UserSpace. Каждый компонент можно заменить, обновить или удалить без перезагрузки системы. Это очень удобно, а главное — безопасно.
 
 Ядро собирается конкретно под ваш компьютер. Перед установкой оно сканирует оборудование и загружает только нужные модули с нашего сервера — по сути, у каждого будет стоять уникальная система.
 About-en-2: GUS is an operating system from scratch. The microkernel manages only memory and IPC. Drivers and services are isolated in UserSpace. Each component can be replaced, updated, or removed without rebooting the system. It's very convenient, and most importantly — secure.
