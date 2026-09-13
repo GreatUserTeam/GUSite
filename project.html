@@ -1,162 +1,158 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Project · GUT</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { scrollbar-width: none; -ms-overflow-style: none; }
-  ::-webkit-scrollbar { display: none; }
-  body { background: #0b0b0b; color: #f0f0f0; font-family: "Inter", system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background .3s, color .3s; overflow-x: hidden; }
-  body.light { background: #fff; color: #000; }
-  .header { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; padding: 16px 24px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: rgba(11,11,11,.8); border-bottom: 1px solid rgba(255,255,255,.1); transition: all .3s; }
-  body.light .header { background: rgba(255,255,255,.9); border-bottom-color: rgba(0,0,0,.1); }
-  .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  .brand-logo { display: flex; align-items: center; font-size: 26px; font-weight: 800; letter-spacing: -.02em; text-decoration: none; color: #fff; }
-  body.light .brand-logo { color: #000; }
-  .brand-g { height: .85em; width: auto; margin-right: -2px; transform: translateY(1px); }
-  .svg-white { fill: #fff; transition: fill .3s; }
-  body.light .svg-white { fill: #000; }
-  .brand-t { color: #ff4d30; margin-left: 2px; }
-  .settings-widget { position: relative; border-radius: 9999px; height: 40px; width: 40px; transition: width .3s cubic-bezier(.4,0,.2,1); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); }
-  body.light .settings-widget { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.05); }
-  .settings-widget.open { width: 104px; }
-  .settings-trigger { position: absolute; right: 0; top: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: inherit; transition: transform .3s, opacity .2s; z-index: 10; }
-  .settings-trigger:hover { color: #ff4d30; }
-  .settings-widget.open .settings-trigger { opacity: 0; pointer-events: none; transform: rotate(90deg); }
-  .settings-menu { display: flex; align-items: center; justify-content: space-around; width: 100%; padding: 0 4px; opacity: 0; transform: scale(.9); pointer-events: none; transition: all .25s; }
-  .settings-widget.open .settings-menu { opacity: 1; transform: scale(1); pointer-events: auto; }
-  .settings-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; font-weight: 700; font-size: 12px; color: inherit; transition: all .2s; }
-  .settings-btn:hover { background: rgba(255,77,48,.15); color: #ff4d30; }
-  .wrapper { max-width: 1200px; margin: 0 auto; padding: 112px 16px 64px; }
-  @media (min-width: 768px) { .wrapper { padding-left: 32px; padding-right: 32px; } }
-  .hero { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 16px; margin-bottom: 32px; }
-  .hero-title { font-size: clamp(34px, 5.5vw, 64px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
-  .title-g { height: .9em; width: auto; margin-right: -4px; vertical-align: middle; }
-  .highlight-system { color: #ff4d30; }
-  .hero-motto { display: inline-flex; align-items: center; gap: 10px; padding: 12px 28px; margin-top: 20px; border-radius: 9999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; text-decoration: none; border: 1px solid rgba(255,77,48,.25); background: rgba(255,77,48,.1); color: #ff4d30; transition: all .2s; }
-  body.light .hero-motto { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.15); }
-  .hero-motto:hover { background: rgba(255,77,48,.2); }
-  .hero-desc { margin-top: 16px; font-size: clamp(16px, 2.2vw, 19.5px); line-height: 1.6; max-width: 800px; text-align: center; color: rgba(255,255,255,.65); }
-  body.light .hero-desc { color: rgba(0,0,0,.75); }
-  .tabs-nav { width: 100%; max-width: 900px; margin: 0 auto 32px; display: flex; border-bottom: 1px solid rgba(255,255,255,.1); }
-  body.light .tabs-nav { border-bottom-color: rgba(0,0,0,.1); }
-  .tab-btn { position: relative; flex: 1; padding: 14px 4px; font-size: clamp(13px, 3.3vw, 15.5px); font-weight: 600; background: none; border: none; cursor: pointer; text-align: center; white-space: nowrap; color: rgba(255,255,255,.6); transition: color .2s; }
-  body.light .tab-btn { color: rgba(0,0,0,.6); }
-  .tab-btn:hover, .tab-btn.active { color: #fff; }
-  body.light .tab-btn:hover, body.light .tab-btn.active { color: #000; }
-  .tab-btn.active { font-weight: 700; }
-  .tab-indicator { position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 80%; height: 2.5px; background: #ff4d30; border-radius: 2px 2px 0 0; display: none; }
-  @media (min-width: 640px) { .tab-indicator { width: 60%; } }
-  .tab-btn.active .tab-indicator { display: block; }
-  .tab-pane { display: none; animation: fadeIn .3s ease forwards; }
-  .tab-pane.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-  .section-header { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 20px; }
-  .section-header-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #ff4d30; }
-  .section-header-title { font-size: clamp(24px, 4vw, 28px); font-weight: 700; letter-spacing: -.02em; }
-  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 900px; margin: 0 auto 32px; width: 100%; }
-  @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
-  .stat-tile { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 16px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  body.light .stat-tile { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.03); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
-  .stat-tile.featured-mobile { grid-column: span 2; }
-  @media (min-width: 640px) { .stat-tile.featured-mobile { grid-column: span 1; } }
-  .stat-value { font-size: 36px; font-weight: 800; color: #ff4d30; margin-bottom: 6px; line-height: 1; }
-  @media (min-width: 640px) { .stat-value { font-size: 32px; } }
-  .stat-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,.5); }
-  body.light .stat-label { color: rgba(0,0,0,.6); }
-  .about-text-box { max-width: 900px; margin: 0 auto 24px; display: flex; flex-direction: column; gap: 16px; font-size: clamp(16px, 1.8vw, 17px); line-height: 1.7; color: rgba(255,255,255,.75); text-align: left; }
-  body.light .about-text-box { color: rgba(0,0,0,.8); }
-  .actions-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-  .btn-pill { padding: 12px 24px; border-radius: 9999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
-  .btn-pill-primary { background: #ff4d30; color: #fff; box-shadow: 0 4px 16px rgba(255,77,48,.25); }
-  .btn-pill-primary:hover { background: #e0442b; transform: translateY(-2px); }
-  .btn-pill-secondary { border-color: rgba(255,255,255,.2); color: inherit; background: transparent; }
-  body.light .btn-pill-secondary { border-color: rgba(0,0,0,.2); }
-  .btn-pill-secondary:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); transform: translateY(-2px); }
-
-  .photos-grid { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 1000px; margin: 0 auto; }
-  @media (min-width: 640px) { .photos-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .photos-grid { grid-template-columns: repeat(3, 1fr); } }
-  .photo-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); cursor: pointer; transition: all .3s; }
-  body.light .photo-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); }
-  .photo-card:hover { border-color: #ff4d30; transform: scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
-  .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
-  .photo-card:hover img { transform: scale(1.06); }
-  .photo-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .25s; }
-  .photo-card:hover .photo-overlay { opacity: 1; }
-  .photo-maximize-icon { color: #fff; transform: scale(.9); transition: transform .25s; filter: drop-shadow(0 2px 8px rgba(0,0,0,.6)); }
-  .photo-card:hover .photo-maximize-icon { transform: scale(1.1); }
-
-  .media-error-box { max-width: 500px; margin: 40px auto; padding: 36px 24px; border-radius: 20px; border: 1px dashed rgba(255,77,48,.4); background: rgba(255,77,48,.05); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: #ff4d30; }
-  body.light .media-error-box { border-color: rgba(255,77,48,.3); background: rgba(255,77,48,.04); }
-  .media-error-text { font-size: 16px; font-weight: 600; color: inherit; }
-
-  .lightbox-modal { position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; animation: fadeIn .2s forwards; }
-  .lightbox-modal.active { display: flex; }
-  .lightbox-close-btn { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; z-index: 10; }
-  .lightbox-close-btn:hover { background: #ff4d30; transform: rotate(90deg); }
-  .lightbox-img { max-width: 90%; max-height: 85vh; border-radius: 12px; object-fit: contain; cursor: zoom-in; transition: transform .3s; }
-  .lightbox-img.zoomed { transform: scale(1.5); cursor: zoom-out; }
-
-  .filter-card { max-width: 760px; margin: 0 auto 32px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02); backdrop-filter: blur(12px); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-  body.light .filter-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
-  .filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; width: 110px; flex-shrink: 0; color: rgba(255,255,255,.4); }
-  body.light .filter-title { color: rgba(0,0,0,.5); }
-  .filter-buttons-group { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
-  .filter-btn { position: relative; padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); color: rgba(255,255,255,.7); }
-  body.light .filter-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: rgba(0,0,0,.8); }
-  .filter-btn:hover { border-color: #ff4d30; color: #ff4d30; }
-  .filter-btn.active { background: #ff4d30 !important; border-color: #ff4d30 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(255,77,48,.3); }
-  .blue-indicator-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #0088ff; border-radius: 50%; box-shadow: 0 0 8px #0088ff; pointer-events: none; }
-  .releases-container { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
-  .release-item-card { border: 2px solid rgba(255,255,255,.1); background: #0a0a0a; border-radius: 24px; padding: 24px; box-shadow: 0 16px 36px rgba(0,0,0,.4); transition: border-color .3s; }
-  @media (min-width: 640px) { .release-item-card { padding: 28px; } }
-  body.light .release-item-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 16px 36px rgba(0,0,0,.05); }
-  .release-item-card:hover { border-color: rgba(255,77,48,.5); }
-  .release-top-bar { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.1); }
-  @media (min-width: 640px) { .release-top-bar { flex-direction: row; align-items: center; justify-content: space-between; } }
-  body.light .release-top-bar { border-bottom-color: rgba(0,0,0,.1); }
-  .tag-badge { padding: 4px 12px; font-size: 12px; font-weight: 700; background: rgba(255,77,48,.1); color: #ff4d30; border: 1px solid rgba(255,77,48,.25); border-radius: 9999px; align-self: flex-start; }
-  .release-main-title { font-size: clamp(18px, 2.5vw, 20px); font-weight: 800; color: inherit; }
-  .release-date-text { font-size: 13px; color: rgba(255,255,255,.4); }
-  body.light .release-date-text { color: rgba(0,0,0,.4); }
-  .release-intro-box { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.85); margin-bottom: 16px; text-align: center; white-space: pre-line; }
-  body.light .release-intro-box { color: rgba(0,0,0,.85); }
-  .release-block { margin-bottom: 20px; text-align: center; }
-  .release-block-body { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.75); white-space: pre-line; }
-  body.light .release-block-body { color: rgba(0,0,0,.75); }
-  .release-actions { display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-  .missing-build-box { padding: 16px; border-radius: 16px; background: rgba(255,77,48,.1); border: 1px solid rgba(255,77,48,.25); color: #ff4d30; font-size: 14px; text-align: center; margin-bottom: 16px; }
-
-  .developers-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
-  @media (min-width: 640px) { .developers-grid { grid-template-columns: repeat(2, 1fr); } }
-  .developer-card { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all .3s; }
-  body.light .developer-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.04); }
-  .developer-card:hover { border-color: rgba(255,77,48,.4); transform: translateY(-4px); }
-  .dev-avatar-wrapper { width: 68px; height: 68px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,77,48,.4); margin-bottom: 12px; background: rgba(255,255,255,.06); display: flex; align-items: center; justify-content: center; color: #ff4d30; font-weight: 700; font-size: 20px; }
-  .dev-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .dev-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: inherit; }
-  .dev-desc { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 20px; line-height: 1.5; }
-  body.light .dev-desc { color: rgba(0,0,0,.6); }
-  .dev-actions-group { display: flex; align-items: center; gap: 10px; margin-top: auto; }
-  .dev-profile-btn { padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: #ff4d30; color: #fff; text-decoration: none; box-shadow: 0 4px 12px rgba(255,77,48,.25); transition: all .2s; }
-  .dev-profile-btn:hover { background: #e0442b; transform: translateY(-2px); }
-  .dev-tg-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.2); color: inherit; text-decoration: none; transition: all .2s; }
-  body.light .dev-tg-btn { border-color: rgba(0,0,0,.2); }
-  .dev-tg-btn:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); }
-  .footer { display: flex; justify-content: center; align-items: center; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.06); margin-top: 64px; }
-  body.light .footer { border-top-color: rgba(0,0,0,.1); }
-  .footer-link { font-size: 15px; font-weight: 500; text-decoration: none; color: rgba(255,255,255,.3); transition: color .2s; }
-  body.light .footer-link { color: rgba(0,0,0,.4); }
-  .footer-link:hover { color: #ff4d30; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>GUS Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { scrollbar-width: none; -ms-overflow-style: none; }
+    ::-webkit-scrollbar { display: none; }
+    body { background: #0b0b0b; color: #f0f0f0; font-family: "Inter", system-ui, -apple-system, sans-serif; min-height: 100vh; transition: background .3s, color .3s; overflow-x: hidden; }
+    body.light { background: #fff; color: #000; }
+    .header { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; padding: 16px 24px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: rgba(11,11,11,.8); border-bottom: 1px solid rgba(255,255,255,.1); transition: all .3s; }
+    body.light .header { background: rgba(255,255,255,.9); border-bottom-color: rgba(0,0,0,.1); }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .brand-logo { display: flex; align-items: center; font-size: 26px; font-weight: 800; letter-spacing: -.02em; text-decoration: none; color: #fff; }
+    body.light .brand-logo { color: #000; }
+    .brand-g { height: .85em; width: auto; margin-right: -2px; transform: translateY(1px); }
+    .svg-white { fill: #fff; transition: fill .3s; }
+    body.light .svg-white { fill: #000; }
+    .brand-t { color: #ff4d30; margin-left: 2px; }
+    .settings-widget { position: relative; border-radius: 9999px; height: 40px; width: 40px; transition: width .3s cubic-bezier(.4,0,.2,1); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); }
+    body.light .settings-widget { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.05); }
+    .settings-widget.open { width: 104px; }
+    .settings-trigger { position: absolute; right: 0; top: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; color: inherit; transition: transform .3s, opacity .2s; z-index: 10; }
+    .settings-trigger:hover { color: #ff4d30; }
+    .settings-widget.open .settings-trigger { opacity: 0; pointer-events: none; transform: rotate(90deg); }
+    .settings-menu { display: flex; align-items: center; justify-content: space-around; width: 100%; padding: 0 4px; opacity: 0; transform: scale(.9); pointer-events: none; transition: all .25s; }
+    .settings-widget.open .settings-menu { opacity: 1; transform: scale(1); pointer-events: auto; }
+    .settings-btn { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: none; border: none; cursor: pointer; font-weight: 700; font-size: 12px; color: inherit; transition: all .2s; }
+    .settings-btn:hover { background: rgba(255,77,48,.15); color: #ff4d30; }
+    .wrapper { max-width: 1200px; margin: 0 auto; padding: 112px 16px 64px; }
+    @media (min-width: 768px) { .wrapper { padding-left: 32px; padding-right: 32px; } }
+    .hero { display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 16px; margin-bottom: 32px; }
+    .hero-title { font-size: clamp(34px, 5.5vw, 64px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; }
+    .title-g { height: .9em; width: auto; margin-right: -4px; vertical-align: middle; }
+    .highlight-system { color: #ff4d30; }
+    .hero-motto { display: inline-flex; align-items: center; gap: 10px; padding: 12px 28px; margin-top: 20px; border-radius: 9999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; text-decoration: none; border: 1px solid rgba(255,77,48,.25); background: rgba(255,77,48,.1); color: #ff4d30; transition: all .2s; }
+    body.light .hero-motto { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.15); }
+    .hero-motto:hover { background: rgba(255,77,48,.2); }
+    .hero-desc { margin-top: 16px; font-size: clamp(16px, 2.2vw, 19.5px); line-height: 1.6; max-width: 800px; text-align: center; color: rgba(255,255,255,.65); }
+    body.light .hero-desc { color: rgba(0,0,0,.75); }
+    .tabs-nav { width: 100%; max-width: 900px; margin: 0 auto 32px; display: flex; border-bottom: 1px solid rgba(255,255,255,.1); }
+    body.light .tabs-nav { border-bottom-color: rgba(0,0,0,.1); }
+    .tab-btn { position: relative; flex: 1; padding: 14px 4px; font-size: clamp(13px, 3.3vw, 15.5px); font-weight: 600; background: none; border: none; cursor: pointer; text-align: center; white-space: nowrap; color: rgba(255,255,255,.6); transition: color .2s; }
+    body.light .tab-btn { color: rgba(0,0,0,.6); }
+    .tab-btn:hover, .tab-btn.active { color: #fff; }
+    body.light .tab-btn:hover, body.light .tab-btn.active { color: #000; }
+    .tab-btn.active { font-weight: 700; }
+    .tab-indicator { position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 80%; height: 2.5px; background: #ff4d30; border-radius: 2px 2px 0 0; display: none; }
+    @media (min-width: 640px) { .tab-indicator { width: 60%; } }
+    .tab-btn.active .tab-indicator { display: block; }
+    .tab-pane { display: none; animation: fadeIn .3s ease forwards; }
+    .tab-pane.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .section-header { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 20px; }
+    .section-header-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #ff4d30; }
+    .section-header-title { font-size: clamp(24px, 4vw, 28px); font-weight: 700; letter-spacing: -.02em; }
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 900px; margin: 0 auto 32px; width: 100%; }
+    @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+    .stat-tile { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 16px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    body.light .stat-tile { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.03); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+    .stat-tile.featured-mobile { grid-column: span 2; }
+    @media (min-width: 640px) { .stat-tile.featured-mobile { grid-column: span 1; } }
+    .stat-value { font-size: 36px; font-weight: 800; color: #ff4d30; margin-bottom: 6px; line-height: 1; }
+    @media (min-width: 640px) { .stat-value { font-size: 32px; } }
+    .stat-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,.5); }
+    body.light .stat-label { color: rgba(0,0,0,.6); }
+    .about-text-box { max-width: 900px; margin: 0 auto 24px; display: flex; flex-direction: column; gap: 16px; font-size: clamp(16px, 1.8vw, 17px); line-height: 1.7; color: rgba(255,255,255,.75); text-align: left; }
+    body.light .about-text-box { color: rgba(0,0,0,.8); }
+    .actions-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+    .btn-pill { padding: 12px 24px; border-radius: 9999px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+    .btn-pill-primary { background: #ff4d30; color: #fff; box-shadow: 0 4px 16px rgba(255,77,48,.25); }
+    .btn-pill-primary:hover { background: #e0442b; transform: translateY(-2px); }
+    .btn-pill-secondary { border-color: rgba(255,255,255,.2); color: inherit; background: transparent; }
+    body.light .btn-pill-secondary { border-color: rgba(0,0,0,.2); }
+    .btn-pill-secondary:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); transform: translateY(-2px); }
+    .photos-grid { display: grid; grid-template-columns: 1fr; gap: 20px; max-width: 1000px; margin: 0 auto; }
+    @media (min-width: 640px) { .photos-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .photos-grid { grid-template-columns: repeat(3, 1fr); } }
+    .photo-card { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); cursor: pointer; transition: all .3s; }
+    body.light .photo-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); }
+    .photo-card:hover { border-color: #ff4d30; transform: scale(1.02); box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+    .photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+    .photo-card:hover img { transform: scale(1.06); }
+    .photo-maximize-icon { position: absolute; bottom: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,.5); color: #fff; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .2s; }
+    .photo-card:hover .photo-maximize-icon { opacity: 1; }
+    .lightbox-modal { position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; animation: fadeIn .2s forwards; }
+    .lightbox-modal.active { display: flex; }
+    .lightbox-close-btn { position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; z-index: 10; }
+    .lightbox-close-btn:hover { background: #ff4d30; transform: rotate(90deg); }
+    .lightbox-img { max-width: 90%; max-height: 85vh; border-radius: 12px; object-fit: contain; cursor: zoom-in; transition: transform .3s; }
+    .lightbox-img.zoomed { transform: scale(1.5); cursor: zoom-out; }
+    .filter-card { max-width: 760px; margin: 0 auto 32px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.02); backdrop-filter: blur(12px); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+    body.light .filter-card { border-color: rgba(0,0,0,.1); background: rgba(0,0,0,.02); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+    .filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .filter-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; width: 96px; flex-shrink: 0; color: rgba(255,255,255,.4); }
+    body.light .filter-title { color: rgba(0,0,0,.5); }
+    .filter-buttons-group { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+    .filter-btn { position: relative; padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.04); color: rgba(255,255,255,.7); }
+    body.light .filter-btn { border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.05); color: rgba(0,0,0,.8); }
+    .filter-btn:hover { border-color: #ff4d30; color: #ff4d30; }
+    .filter-btn.active { background: #ff4d30 !important; border-color: #ff4d30 !important; color: #fff !important; box-shadow: 0 4px 14px rgba(255,77,48,.3); }
+    .blue-indicator-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #0088ff; border-radius: 50%; box-shadow: 0 0 8px #0088ff; pointer-events: none; }
+    .releases-container { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    .release-item-card { border: 2px solid rgba(255,255,255,.1); background: #0a0a0a; border-radius: 24px; padding: 24px; box-shadow: 0 16px 36px rgba(0,0,0,.4); transition: border-color .3s; }
+    @media (min-width: 640px) { .release-item-card { padding: 28px; } }
+    body.light .release-item-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 16px 36px rgba(0,0,0,.05); }
+    .release-item-card:hover { border-color: rgba(255,77,48,.5); }
+    .release-top-bar { display: flex; flex-direction: column; gap: 12px; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.1); }
+    @media (min-width: 640px) { .release-top-bar { flex-direction: row; align-items: center; justify-content: space-between; } }
+    body.light .release-top-bar { border-bottom-color: rgba(0,0,0,.1); }
+    .tag-badge { padding: 4px 12px; font-size: 12px; font-weight: 700; background: rgba(255,77,48,.1); color: #ff4d30; border: 1px solid rgba(255,77,48,.25); border-radius: 9999px; align-self: flex-start; }
+    .release-main-title { font-size: clamp(18px, 2.5vw, 20px); font-weight: 800; color: inherit; }
+    .release-date-text { font-size: 13px; color: rgba(255,255,255,.5); font-weight: 500; }
+    body.light .release-date-text { color: rgba(0,0,0,.5); }
+    .lead-notes-box { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 16px 20px; font-size: 15px; line-height: 1.6; margin-bottom: 20px; color: rgba(255,255,255,.8); }
+    body.light .lead-notes-box { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.08); color: rgba(0,0,0,.8); }
+    .section-desc-line { font-size: 15px; line-height: 1.6; margin-bottom: 12px; color: rgba(255,255,255,.8); }
+    body.light .section-desc-line { color: rgba(0,0,0,.8); }
+    .release-actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .dl-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 9999px; font-size: 13px; font-weight: 600; text-decoration: none; background: #ff4d30; color: #fff; box-shadow: 0 4px 12px rgba(255,77,48,.25); transition: all .2s; }
+    .dl-btn:hover { background: #e0442b; transform: translateY(-1px); }
+    .link-ext-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 9999px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid rgba(255,77,48,.4); color: #ff4d30; transition: all .2s; }
+    .link-ext-btn:hover { background: rgba(255,77,48,.1); transform: translateY(-1px); }
+    .view-gh-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 9999px; font-size: 13px; font-weight: 600; text-decoration: none; border: 1px solid rgba(255,255,255,.15); color: inherit; transition: all .2s; }
+    body.light .view-gh-btn { border-color: rgba(0,0,0,.15); }
+    .view-gh-btn:hover { border-color: #ff4d30; color: #ff4d30; }
+    .missing-build-box { padding: 16px; border-radius: 16px; background: rgba(255,77,48,.1); border: 1px solid rgba(255,77,48,.25); color: #ff4d30; font-size: 14px; text-align: center; margin-bottom: 16px; }
+    .media-error-box { padding: 32px; border-radius: 16px; border: 1px dashed rgba(255,77,48,.4); color: #ff4d30; font-size: 15px; font-weight: 600; text-align: center; width: 100%; grid-column: 1 / -1; }
+    .developers-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+    @media (min-width: 640px) { .developers-grid { grid-template-columns: repeat(2, 1fr); } }
+    .developer-card { border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all .3s; }
+    body.light .developer-card { border-color: rgba(0,0,0,.1); background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.04); }
+    .developer-card:hover { border-color: rgba(255,77,48,.4); transform: translateY(-4px); }
+    .dev-avatar-wrapper { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; border: 2px solid rgba(255,77,48,.4); margin-bottom: 12px; background: #1a1a1a; }
+    .dev-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+    .dev-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: inherit; }
+    .dev-desc { font-size: 14px; color: rgba(255,255,255,.6); margin-bottom: 20px; }
+    body.light .dev-desc { color: rgba(0,0,0,.6); }
+    .dev-actions-group { display: flex; align-items: center; gap: 10px; margin-top: auto; }
+    .dev-profile-btn { padding: 8px 16px; border-radius: 9999px; font-size: 12px; font-weight: 600; background: #ff4d30; color: #fff; text-decoration: none; box-shadow: 0 4px 12px rgba(255,77,48,.25); transition: all .2s; }
+    .dev-profile-btn:hover { background: #e0442b; transform: translateY(-2px); }
+    .dev-tg-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.2); color: inherit; text-decoration: none; transition: all .2s; }
+    body.light .dev-tg-btn { border-color: rgba(0,0,0,.2); }
+    .dev-tg-btn:hover { border-color: #ff4d30; color: #ff4d30; background: rgba(255,77,48,.05); }
+    .footer { display: flex; justify-content: center; align-items: center; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.06); margin-top: 64px; }
+    body.light .footer { border-top-color: rgba(0,0,0,.1); }
+    .footer-link { font-size: 15px; font-weight: 500; text-decoration: none; color: rgba(255,255,255,.3); transition: color .2s; }
+    body.light .footer-link { color: rgba(0,0,0,.4); }
+    .footer-link:hover { color: #ff4d30; }
+  </style>
 </head>
 <body>
   <svg style="display:none">
@@ -191,14 +187,10 @@
   <div class="wrapper">
     <div class="hero">
       <h1 class="hero-title" id="heroTitleContainer">
-        <span style="display:inline-flex;align-items:center;gap:2px" id="heroTitleGWrap">
-          <svg class="title-g" viewBox="170 110 145 145"><use href="#gus-logo-g"/></svg>
-        </span>
-        <span id="heroTitleText">reat User</span>
-        <span class="highlight-system" id="heroTitleRed">Team</span>
+        <!-- Заполняется динамически -->
       </h1>
-      <a href="index.html" class="hero-motto" id="heroMotto">Проект GUT</a>
-      <p class="hero-desc" id="heroDesc">Загрузка информации о проекте...</p>
+      <a href="index.html" class="hero-motto" id="heroMottoBadge">Проект GUT</a>
+      <p class="hero-desc" id="heroDescText">Загрузка информации о проекте...</p>
     </div>
 
     <nav class="tabs-nav" id="mainTabsNav">
@@ -208,9 +200,13 @@
       <button class="tab-btn" data-tab="developers" id="tabNav-developers"><span class="tab-text">Разработчики</span><span class="tab-indicator"></span></button>
     </nav>
 
+    <!-- Tab 1: About -->
     <div class="tab-pane active" id="tabContent-about">
       <div class="section-header">
-        <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2.5" stroke-linecap="round"></line></svg></div>
+        <div class="section-header-icon">
+          <!-- Исправлена точка у значка i -->
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="11"></line><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"></circle></svg>
+        </div>
         <h2 class="section-header-title" id="aboutInfoTitle">О проекте</h2>
       </div>
       <div class="stats-grid">
@@ -218,50 +214,55 @@
         <div class="stat-tile"><div class="stat-value" id="devsCounter">0</div><div class="stat-label" id="devsCounterLabel">Разработчиков</div></div>
         <div class="stat-tile"><div class="stat-value" id="releasesCounter">0</div><div class="stat-label" id="releasesCounterLabel">Релизов</div></div>
       </div>
-      <div class="about-text-box" id="aboutTextBox"></div>
+      <div class="about-text-box" id="aboutTextBox">
+        <!-- Тексты из файла проекта -->
+      </div>
       <div class="actions-row">
-        <button class="btn-pill btn-pill-primary" id="btnGoPhotos">Посмотреть фото</button>
-        <button class="btn-pill btn-pill-secondary" id="btnGoReleases">Релизы</button>
+        <button class="btn-pill btn-pill-secondary" id="aboutToPhotosBtn" onclick="navigateToTab('photos',true)">Посмотреть фото</button>
+        <button class="btn-pill btn-pill-primary" id="aboutToReleasesBtn" onclick="navigateToTab('download',true)">Релизы</button>
       </div>
     </div>
 
+    <!-- Tab 2: Photos -->
     <div class="tab-pane" id="tabContent-photos">
       <div class="section-header">
         <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
         <h2 class="section-header-title" id="photosInfoTitle">Фото</h2>
       </div>
       <div class="photos-grid" id="photosGrid"></div>
-      <div class="actions-row">
-        <button class="btn-pill btn-pill-primary" id="btnPhotosToReleases">Релизы</button>
+      <div class="actions-row" style="margin-top:32px">
+        <button class="btn-pill btn-pill-primary" id="photosToReleasesBtn" onclick="navigateToTab('download',true)">Релизы</button>
       </div>
     </div>
 
+    <!-- Tab 3: Releases -->
     <div class="tab-pane" id="tabContent-download">
       <div class="section-header">
         <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
         <h2 class="section-header-title" id="downloadInfoTitle">Релизы</h2>
       </div>
-      <div class="actions-row" style="margin-top:0;margin-bottom:28px">
-        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-secondary" id="githubReleasesLink">
-          <span id="githubReleasesLinkText">Перейти к релизам на GitHub</span>
+      <div style="text-align:center;margin-bottom:24px">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-secondary" id="ghReleasesLink">
+          <span id="ghReleasesLinkText">Перейти к релизам на GitHub</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
       </div>
-
       <div class="filter-card">
         <div class="filter-row">
-          <div class="filter-title" id="platformFilterTitle">ПЛАТФОРМА</div>
+          <span class="filter-title" id="filterLabelPlatform">ПЛАТФОРМА</span>
           <div class="filter-buttons-group" id="platformFilterButtons"></div>
         </div>
         <div class="filter-row">
-          <div class="filter-title" id="typeFilterTitle">ТИП</div>
+          <span class="filter-title" id="filterLabelType">ТИП</span>
           <div class="filter-buttons-group" id="typeFilterButtons"></div>
         </div>
       </div>
-
-      <div class="releases-container" id="releasesList"></div>
+      <div class="releases-container" id="releasesListContainer">
+        <div style="text-align:center;color:rgba(255,255,255,.5);padding:40px" id="releasesLoadingState">Загрузка релизов...</div>
+      </div>
     </div>
 
+    <!-- Tab 4: Developers -->
     <div class="tab-pane" id="tabContent-developers">
       <div class="section-header">
         <div class="section-header-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
@@ -269,7 +270,7 @@
       </div>
       <div class="developers-grid" id="developersGrid"></div>
       <div class="actions-row" style="margin-top:32px">
-        <a href="about.html" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-primary" id="aboutGUTLink">
+        <a href="about.html" class="btn-pill btn-pill-primary" id="aboutGUTLink">
           <span id="aboutGUTLinkText">О Great User Team</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
@@ -281,304 +282,440 @@
     </footer>
   </div>
 
+  <!-- Lightbox -->
   <div class="lightbox-modal" id="lightboxModal">
-    <button class="lightbox-close-btn" id="lightboxCloseBtn" aria-label="Close">
+    <button class="lightbox-close-btn" id="lightboxCloseBtn" aria-label="Закрыть">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
-    <img class="lightbox-img" id="lightboxImg" src="" alt="" loading="lazy" decoding="async">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
   </div>
 
   <script>
-    // ---------- Registries ----------
-    const KNOWN_PROJECTS = { '1': '1-GUSystem', '2': '2-GUSite', '3': '3-GUSCalc' };
-    const KNOWN_CREATORS = { '1': '1-Tigran', '2': '2-Merkantinez', '3': '3-Ratimir' };
-
-    // ---------- Platforms / Types (as in old file) ----------
-    const PLATFORMS_CONFIG = [
-      { id: 'mobile', label: { ru: 'Мобильные', en: 'Mobile' }, types: [
-        { id: 'android', label: { ru: 'Android', en: 'Android' } },
-        { id: 'ios', label: { ru: 'iOS', en: 'iOS' } }
-      ]},
-      { id: 'pc', label: { ru: 'Компьютерные', en: 'Computer' }, types: [
-        { id: 'windows', label: { ru: 'Windows', en: 'Windows' } },
-        { id: 'macos', label: { ru: 'macOS', en: 'macOS' } },
-        { id: 'linux', label: { ru: 'Linux', en: 'Linux' } }
-      ]},
-      { id: 'multi', label: { ru: 'Мульти', en: 'Multi' }, types: [
-        { id: 'site', label: { ru: 'Сайт', en: 'Website' } },
-        { id: 'html', label: { ru: 'HTML', en: 'HTML' } }
-      ]}
+    const PROJECT_FILES = [
+      "1-GUSystem",
+      "2-GUSite",
+      "3-GUSCalc"
     ];
 
-    const DEFAULT_RELEASE = {
-      tag_name: 'v1.0.0',
-      name: 'Release 1.0.0',
-      published_at: '2026-06-01T12:00:00Z',
-      html_url: 'https://github.com/GreatUserSystem/noname/releases/tag/v1.0.0',
-      body: `Релиз первой стабильной версии системы.
-Release of the first stable version of the system.
-
-[MOBILE-ANDROID]
-Первая рабочая версия GUSystem под мобильные устройства Android (.apk).
-First working build of GUSystem for Android mobile devices (.apk).
-
-[MOBILE-IOS]
-Сборка для мобильных устройств iOS (.ipa).
-Build for iOS mobile devices (.ipa).
-
-[PC-WINDOWS]
-Установочный пакет для настольных компьютеров на Windows (.exe).
-Desktop release installation package for Windows PC (.exe).
-
-[PC-MACOS]
-Сборка для компьютеров Apple под управлением macOS (.dmg).
-Package for Apple computers running macOS (.dmg).
-
-[PC-LINUX]
-Сборка для дистрибутивов Linux (AppImage / DEB / Arch).
-Build for Linux distributions (AppImage / DEB / Arch).
-
-[MULTI-SITE]
-Полная веб-версия портала и сайта в виде архива.
-Full web version of portal and website as an archive.
-
-[MULTI-HTML]
-Автономная HTML-страница, открываемая локально в любом браузере.
-Standalone HTML page that opens locally in any browser.`,
-      assets: [
-        { name: 'GUSystem-v1.0.0.apk', browser_download_url: 'https://github.com/GreatUserSystem/noname/releases/download/v1.0.0/GUSystem-v1.0.0.apk' },
-        { name: 'GUSystem-v1.0.0.ipa', browser_download_url: 'https://github.com/GreatUserSystem/noname/releases/download/v1.0.0/GUSystem-v1.0.0.ipa' },
-        { name: 'GUSystem-Setup.exe', browser_download_url: 'https://github.com/GreatUserSystem/noname/releases/download/v1.0.0/GUSystem-Setup.exe' },
-        { name: 'GUSystem-macOS.dmg', browser_download_url: 'https://github.com/GreatUserSystem/noname/releases/download/v1.0.0/GUSystem-macOS.dmg' },
-        { name: 'GUSystem.AppImage', browser_download_url: 'https://github.com/GreatUserSystem/noname/releases/download/v1.0.0/GUSystem.AppImage' },
-        { name: 'GUSite-archive.zip', browser_download_url: 'https://github.com/GreatUserSystem/noname/releases/download/v1.0.0/GUSite-archive.zip' },
-        { name: 'GUSystem.html', browser_download_url: 'https://github.com/GreatUserSystem/noname/releases/download/v1.0.0/GUSystem.html' }
-      ]
+    const CREATOR_MAP = {
+      "1": "1-Tigran",
+      "2": "2-Merkantinez",
+      "3": "3-Ratimir"
     };
+
+    const PLATFORMS_CONFIG = [
+      { id: 'mobile', label: { ru: 'Мобильные', en: 'Mobile' }, types: [
+        { id: 'android', label: { ru: 'Android', en: 'Android' }, keys: ['android', 'андроид'] },
+        { id: 'ios', label: { ru: 'iOS', en: 'iOS' }, keys: ['ios', 'айос', 'iphone', 'ipad', 'apple'] }
+      ]},
+      { id: 'pc', label: { ru: 'Компьютерные', en: 'Desktop' }, types: [
+        { id: 'windows', label: { ru: 'Windows', en: 'Windows' }, keys: ['windows', 'виндовс', 'win'] },
+        { id: 'macos', label: { ru: 'macOS', en: 'macOS' }, keys: ['macos', 'mac', 'макос', 'мак'] },
+        { id: 'linux', label: { ru: 'Linux', en: 'Linux' }, keys: ['linux', 'линукс'] }
+      ]},
+      { id: 'multi', label: { ru: 'Мульти', en: 'Multi' }, types: [
+        { id: 'site', label: { ru: 'Сайт', en: 'Website' }, keys: ['сайт', 'site', 'website', 'веб-сайт', 'вебсайт', 'web'] },
+        { id: 'html', label: { ru: 'HTML', en: 'HTML' }, keys: ['html', 'аштмл', 'хтмл', 'веб-версия', 'вебверсия'] }
+      ]}
+    ];
 
     const TRANSLATIONS = {
       ru: {
         brandMotto: 'Проект GUT',
         menuAbout: 'О проекте', menuPhotos: 'Фото', menuDownload: 'Релизы', menuDevelopers: 'Разработчики',
-        aboutInfo: 'О проекте',
-        daysLabel: 'Дней проекта', developersLabel: 'Разработчиков', releasesLabel: 'Релизов',
+        aboutInfo: 'О проекте', daysLabel: 'Дней проекта', developersLabel: 'Разработчиков', releasesLabel: 'Релизов',
         viewPhotosBtn: 'Посмотреть фото', releasesBtn: 'Релизы', photosInfo: 'Фото', downloadInfo: 'Релизы',
         developersInfo: 'Разработчики', githubReleasesBtn: 'Перейти к релизам на GitHub',
         platform: 'ПЛАТФОРМА', type: 'ТИП', download: 'Скачать', viewRelease: 'Релиз на GitHub',
-        loading: 'Загрузка релизов...',
-        noBuild: (t) => 'Для типа устройства "' + t + '" сборка отсутствует в данном релизе.',
-        aboutGUT: 'О Great User Team', profile: 'Профиль',
-        mediaError: 'Ошибка загрузки медиа',
-        devRoleFallback: 'Разработчик',
-        heroDescFallback: 'Информация о проекте готовится к публикации.'
+        loading: 'Загрузка релизов...', noBuild: (t) => `Для типа устройства "${t}" сборка отсутствует в данном релизе.`,
+        aboutGUT: 'О Great User Team', profile: 'Профиль', mediaError: 'Ошибка загрузки медиа'
       },
       en: {
         brandMotto: 'GUT Project',
         menuAbout: 'About', menuPhotos: 'Photos', menuDownload: 'Releases', menuDevelopers: 'Developers',
-        aboutInfo: 'About the project',
-        daysLabel: 'Project Days', developersLabel: 'Developers', releasesLabel: 'Releases',
+        aboutInfo: 'About the project', daysLabel: 'Days of Project', developersLabel: 'Developers', releasesLabel: 'Releases',
         viewPhotosBtn: 'View photos', releasesBtn: 'Releases', photosInfo: 'Photos', downloadInfo: 'Releases',
         developersInfo: 'Developers', githubReleasesBtn: 'Go to GitHub releases',
         platform: 'PLATFORM', type: 'TYPE', download: 'Download', viewRelease: 'GitHub Release',
-        loading: 'Loading releases...',
-        noBuild: (t) => 'Build for device type "' + t + '" is missing in this release.',
-        aboutGUT: 'About Great User Team', profile: 'Profile',
-        mediaError: 'Media loading error',
-        devRoleFallback: 'Developer',
-        heroDescFallback: 'Project information is being prepared.'
+        loading: 'Loading releases...', noBuild: (t) => `Build for device type "${t}" is missing in this release.`,
+        aboutGUT: 'About Great User Team', profile: 'Profile', mediaError: 'Media loading error'
       }
     };
 
-    // ---------- State ----------
     let currentLang = localStorage.getItem('gut_lang') || 'ru';
     let currentTheme = localStorage.getItem('gut_theme') || 'dark';
     let currentTab = localStorage.getItem('gut_active_tab') || 'about';
     let currentPlatform = 'mobile';
     let currentType = 'android';
-    let rawReleases = [DEFAULT_RELEASE];
+    let rawReleases = [];
+    let projectData = {};
+    let projectPhotos = [];
+    let developersData = [];
     let isSettingsOpen = false;
 
-    let activeProjectData = {
-      name: 'GUSystem',
-      'g-svg': 'yes',
-      text: 'reat User',
-      red: 'Team',
-      github: 'https://github.com/GreatUserSystem/noname',
-      authors: '1, 2.',
-      'about-ru-1': '',
-      'about-en-1': '',
-      'about-ru-2': '',
-      'about-en-2': '',
-      'start-data': '01.06.2026'
-    };
-    let activeProjectSlug = '1-GUSystem';
-    let loadedPhotos = [];
-    let creatorsList = [];
+    function getProjectId() {
+      const params = new URLSearchParams(window.location.search);
+      return parseInt(params.get('id')) || 1;
+    }
 
-    // ---------- Project .txt parser ----------
-    function parseProjectTxt(text) {
-      const lines = text.split(/\r?\n/);
-      const data = {};
+    function parseProjectTxt(txt) {
+      const data = {
+        name: '', gSvg: false, text: '', red: '', github: '', authors: [],
+        aboutRu: [], aboutEn: [], startDate: ''
+      };
+
+      const lines = txt.split('\n');
       let currentKey = null;
-      let currentVal = [];
-      const KNOWN_KEYS = [
-        'name', 'g-svg', 'text', 'red', 'github', 'authors',
-        'about-ru-1', 'about-en-1', 'about-ru-2', 'about-en-2',
-        'start-data', 'start-date'
-      ];
-      for (let i = 0; i < lines.length; i++) {
-        const rawLine = lines[i];
-        const match = rawLine.match(/^([A-Za-z0-9_\-]+)\s*:\s*(.*)$/);
-        if (match && KNOWN_KEYS.includes(match[1].toLowerCase())) {
-          if (currentKey) data[currentKey] = currentVal.join('\n').trim();
-          currentKey = match[1].toLowerCase();
-          currentVal = match[2] ? [match[2]] : [];
-        } else {
-          if (currentKey) currentVal.push(rawLine);
+
+      lines.forEach(line => {
+        const trimmed = line.trim();
+        if (line.startsWith('Name:')) { data.name = line.replace('Name:', '').trim(); currentKey = null; }
+        else if (line.startsWith('G-svg:')) { data.gSvg = line.replace('G-svg:', '').trim().toLowerCase() === 'yes'; currentKey = null; }
+        else if (line.startsWith('Text:')) { data.text = line.replace('Text:', '').trim(); currentKey = null; }
+        else if (line.startsWith('Red:')) { data.red = line.replace('Red:', '').trim(); currentKey = null; }
+        else if (line.startsWith('GitHub:')) { data.github = line.replace('GitHub:', '').trim(); currentKey = null; }
+        else if (line.startsWith('Authors:')) {
+          const auths = line.replace('Authors:', '').replace('.', '').trim();
+          data.authors = auths.split(',').map(a => a.trim()).filter(Boolean);
+          currentKey = null;
         }
-      }
-      if (currentKey) data[currentKey] = currentVal.join('\n').trim();
+        else if (line.startsWith('Start-data:')) { data.startDate = line.replace('Start-data:', '').trim(); currentKey = null; }
+        else if (line.match(/^About-ru-\d+:/)) {
+          currentKey = 'ru';
+          const val = line.replace(/^About-ru-\d+:/, '').trim();
+          if (val) data.aboutRu.push(val);
+        }
+        else if (line.match(/^About-en-\d+:/)) {
+          currentKey = 'en';
+          const val = line.replace(/^About-en-\d+:/, '').trim();
+          if (val) data.aboutEn.push(val);
+        }
+        else if (trimmed) {
+          if (currentKey === 'ru') data.aboutRu.push(trimmed);
+          else if (currentKey === 'en') data.aboutEn.push(trimmed);
+        }
+      });
+
       return data;
     }
 
-    function parseAuthors(str) {
-      if (!str) return ['1', '2'];
-      return str.split(',')
-        .map(s => s.trim().replace(/[\.\;]$/, '').trim())
-        .filter(Boolean);
+    async function loadProjectData() {
+      const id = getProjectId();
+      const fileName = PROJECT_FILES[id - 1] || PROJECT_FILES[0];
+      
+      try {
+        const res = await fetch(`data/projects/${fileName}.txt`);
+        if (!res.ok) throw new Error();
+        const text = await res.text();
+        projectData = parseProjectTxt(text);
+      } catch (e) {
+        projectData = {
+          name: fileName, gSvg: true, text: "Great User", red: "System", github: "https://github.com",
+          authors: ["1"], aboutRu: ["Информация о проекте загружается..."], aboutEn: ["Loading project info..."],
+          startDate: "01.06.2026"
+        };
+      }
+
+      await loadProjectPhotos(fileName);
+      await loadDevelopersData(projectData.authors);
+      
+      renderProjectHeader();
+      renderAboutTab();
+      calculateDays();
+      fetchGitHubReleases();
     }
 
-    function parseDate(str) {
-      if (!str) return new Date('2026-06-01T00:00:00');
-      str = str.trim();
-      const dmy = str.match(/^(\d{1,2})[\.\/](\d{1,2})[\.\/](\d{4})/);
-      if (dmy) return new Date(parseInt(dmy[3], 10), parseInt(dmy[2], 10) - 1, parseInt(dmy[1], 10));
-      const ymd = str.match(/^(\d{4})[\-\.\/](\d{1,2})[\-\.\/](\d{1,2})/);
-      if (ymd) return new Date(parseInt(ymd[1], 10), parseInt(ymd[2], 10) - 1, parseInt(ymd[3], 10));
-      const d = new Date(str);
-      return isNaN(d.getTime()) ? new Date('2026-06-01T00:00:00') : d;
+    async function loadProjectPhotos(folderName) {
+      projectPhotos = [];
+      let index = 1;
+      let consecutiveFailures = 0;
+
+      while (index <= 10 && consecutiveFailures < 2) {
+        const imgPath = `data/photos/project/${folderName}/${index}.0.jpg`;
+        try {
+          const res = await fetch(imgPath, { method: 'HEAD' });
+          if (res.ok) {
+            projectPhotos.push(imgPath);
+            consecutiveFailures = 0;
+          } else {
+            consecutiveFailures++;
+          }
+        } catch (e) {
+          consecutiveFailures++;
+        }
+        index++;
+      }
     }
 
-    function checkImage(url) {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve(url);
-        img.onerror = () => resolve(null);
-        img.src = url;
+    async function loadDevelopersData(authorIds) {
+      developersData = [];
+      for (const id of authorIds) {
+        const creatorFile = CREATOR_MAP[id] || `${id}-Creator`;
+        try {
+          const res = await fetch(`data/creators/${creatorFile}.json`);
+          if (res.ok) {
+            const json = await res.json();
+            json.avatar = `data/avatars/${creatorFile}.jpg`;
+            json.creatorFile = creatorFile;
+            developersData.push(json);
+          }
+        } catch (e) {
+          console.error("Error loading developer:", e);
+        }
+      }
+      const devsEl = document.getElementById('devsCounter');
+      if (devsEl) devsEl.textContent = developersData.length;
+      renderDevelopersTab();
+    }
+
+    function renderProjectHeader() {
+      const titleContainer = document.getElementById('heroTitleContainer');
+      let html = '';
+      if (projectData.gSvg) {
+        html += `<span style="display:inline-flex;align-items:center;gap:2px"><svg class="title-g" viewBox="170 110 145 145"><use href="#gus-logo-g"/></svg></span>`;
+      }
+      html += `<span>${projectData.text}</span> <span class="highlight-system">${projectData.red}</span>`;
+      titleContainer.innerHTML = html;
+
+      const ghLink = document.getElementById('ghReleasesLink');
+      if (ghLink) ghLink.href = projectData.github ? `${projectData.github}/releases` : '#';
+    }
+
+    function renderAboutTab() {
+      const descText = currentLang === 'ru' ? projectData.aboutRu[0] : (projectData.aboutEn[0] || projectData.aboutRu[0]);
+      document.getElementById('heroDescText').textContent = descText || '';
+
+      const box = document.getElementById('aboutTextBox');
+      box.innerHTML = '';
+      const paragraphs = currentLang === 'ru' ? projectData.aboutRu.slice(1) : (projectData.aboutEn.slice(1).length ? projectData.aboutEn.slice(1) : projectData.aboutRu.slice(1));
+      
+      paragraphs.forEach(pText => {
+        const p = document.createElement('p');
+        p.textContent = pText;
+        box.appendChild(p);
       });
     }
 
-    // ---------- Bilingual release parser (old file logic) ----------
+    function calculateDays() {
+      if (!projectData.startDate) return;
+      const parts = projectData.startDate.split('.');
+      if (parts.length === 3) {
+        const start = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        const now = new Date();
+        const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+        document.getElementById('daysCounter').textContent = diff > 0 ? diff : 0;
+      }
+    }
+
+    function renderPhotos() {
+      const grid = document.getElementById('photosGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      if (projectPhotos.length === 0) {
+        grid.innerHTML = `<div class="media-error-box">${TRANSLATIONS[currentLang].mediaError}</div>`;
+        return;
+      }
+
+      projectPhotos.forEach(src => {
+        const card = document.createElement('div');
+        card.className = 'photo-card';
+        card.innerHTML = `<img src="${src}" alt="Media" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'media-error-box\\'>${TRANSLATIONS[currentLang].mediaError}</div>';"><div class="photo-maximize-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>`;
+        card.addEventListener('click', () => {
+          const img = card.querySelector('img');
+          if (img && img.src) openLightbox(src);
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    function renderDevelopersTab() {
+      const grid = document.getElementById('developersGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      developersData.forEach(dev => {
+        const card = document.createElement('div');
+        card.className = 'developer-card';
+        const trans = dev.translations ? (dev.translations[currentLang] || dev.translations['ru']) : {};
+        
+        card.innerHTML = `
+          <div class="dev-avatar-wrapper">
+            <img src="${dev.avatar}" alt="${dev.name}" onerror="this.src='https://i.pravatar.cc/150?u=${dev.name}'" loading="lazy">
+          </div>
+          <h3 class="dev-name">${dev.name}</h3>
+          <p class="dev-desc">${trans.about || trans.specialty || ''}</p>
+          <div class="dev-actions-group">
+            <a href="creator.html?id=${dev.creatorFile}" class="dev-profile-btn">${TRANSLATIONS[currentLang].profile}</a>
+            ${dev.telegram ? `<a href="${dev.telegram}" target="_blank" rel="noopener noreferrer" class="dev-tg-btn" title="Telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>` : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
     function splitBilingual(text, lang) {
       if (!text) return '';
       let t = text.trim().replace(/^#+\s*/, '').replace(/^[\*\-\•]\s*/, '').trim();
-      const lines = t.split('\n').map(l => l.trim()).filter(Boolean);
-      if (lines.length === 0) return '';
-      if (lines.length === 1) return lines[0];
-      const hasCyr = /[а-яёА-ЯЁ]/.test(lines[0]);
-      if (hasCyr) return lang === 'ru' ? lines[0] : lines.slice(1).join('\n');
-      return lang === 'en' ? lines[0] : lines.slice(1).join('\n');
+      if (t.includes(' / ')) {
+        const p = t.split(' / ');
+        return lang === 'ru' ? p[0].trim() : (p[1] || p[0]).trim();
+      }
+      return t;
     }
 
-    function parseReleaseData(release) {
-      const body = release.body || '';
-      const platformMap = {};
-      const sections = body.split(/(?=\[[A-Z0-9_\-]+\])/i);
-      let leadText = '';
-
-      sections.forEach(sec => {
-        const match = sec.match(/^\[([A-Z0-9_\-]+)\]([\s\S]*)$/i);
-        if (match) {
-          const rawKey = match[1].toLowerCase();
-          const content = match[2].trim();
-          let key = rawKey;
-          if (rawKey === 'pc-manjaro' || rawKey === 'pc-arch' || rawKey === 'pc-deb' || rawKey === 'linux') key = 'pc-linux';
-          if (rawKey === 'pc-mac' || rawKey === 'macos') key = 'pc-macos';
-          if (rawKey === 'multi-web' || rawKey === 'web') key = 'multi-html';
-          if (rawKey === 'multi-archive' || rawKey === 'multi-portable' || rawKey === 'site') key = 'multi-site';
-          platformMap[key] = {
-            ru: splitBilingual(content, 'ru'),
-            en: splitBilingual(content, 'en')
-          };
-        } else if (!leadText) {
-          leadText = sec.trim();
+    function matchDeviceType(headerText) {
+      const clean = headerText.toLowerCase().replace(/^#+/, '').replace(/\*/g, '').trim();
+      const tokens = clean.split(/[\/\s,\-|()]+/).map(t => t.trim()).filter(Boolean);
+      for (const plat of PLATFORMS_CONFIG) {
+        for (const dt of plat.types) {
+          for (const key of dt.keys) {
+            if (tokens.includes(key) || clean.includes(key)) return dt.id;
+          }
         }
-      });
-
-      return {
-        lead: { ru: splitBilingual(leadText, 'ru'), en: splitBilingual(leadText, 'en') },
-        sections: platformMap
-      };
-    }
-
-    function findAssetForType(release, typeId) {
-      if (!release.assets || !release.assets.length) return null;
-      const patterns = {
-        android: [/\.apk$/i, /\.aab$/i],
-        ios: [/\.ipa$/i],
-        windows: [/\.exe$/i, /\.msi$/i, /win.*\.zip$/i],
-        macos: [/\.dmg$/i, /\.pkg$/i, /mac.*\.zip$/i, /\.app\.zip$/i],
-        linux: [/\.AppImage$/i, /\.deb$/i, /\.rpm$/i, /\.mn$/i, /\.pkg\.tar/i, /linux.*\.tar\.gz$/i],
-        site: [/site.*\.zip$/i, /archive.*\.zip$/i, /web.*\.zip$/i, /portable.*\.zip$/i],
-        html: [/\.html$/i, /\.htm$/i]
-      };
-      const typePatterns = patterns[typeId] || [];
-      for (const pat of typePatterns) {
-        const found = release.assets.find(a => pat.test(a.name));
-        if (found) return found;
       }
       return null;
     }
 
-    function hasContentForType(release, platformId, typeId) {
-      const parsed = parseReleaseData(release);
-      const key = (platformId + '-' + typeId).toLowerCase();
-      const hasSec = Boolean(parsed.sections[key] && (parsed.sections[key].ru || parsed.sections[key].en));
-      const hasAsset = Boolean(findAssetForType(release, typeId));
-      return hasSec || hasAsset;
+    function parseReleaseData(release, lang) {
+      const body = release.body || '';
+      const lines = body.split('\n');
+      const sections = {};
+      const leadLines = [];
+      let currentTypeKey = null;
+      let bodyTitle = null;
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('#')) {
+          const hm = trimmed.match(/^(#+)\s*(.+)$/);
+          if (hm) {
+            const text = hm[2];
+            const matched = matchDeviceType(text);
+            if (matched) {
+              currentTypeKey = matched;
+              sections[currentTypeKey] = { title: text, descLines: [], links: [], files: [] };
+              continue;
+            } else if (!currentTypeKey && !bodyTitle) {
+              bodyTitle = text.trim();
+              continue;
+            }
+          }
+        }
+
+        if (currentTypeKey && sections[currentTypeKey]) {
+          if (!trimmed || trimmed === '---' || trimmed.match(/^-{3,}$/)) continue;
+          const bm = trimmed.match(/^\s*(?:[\*\-\•]\s*)?\*\*(.+?)\*\*[:\s]*(.*)$/);
+          if (bm) {
+            const rawLabel = bm[1].trim();
+            const rawTarget = bm[2].trim();
+            if (/(?:файлы|files)/i.test(rawLabel)) {
+              const fileNames = rawTarget.split(',').map(f => f.trim()).filter(Boolean);
+              fileNames.forEach(fn => {
+                const asset = (release.assets || []).find(a => a.name.toLowerCase() === fn.toLowerCase());
+                const downloadUrl = asset ? asset.browser_download_url : (release.html_url.replace('/tag/', '/download/') + '/' + fn);
+                sections[currentTypeKey].files.push({ label: splitBilingual(rawLabel, lang), filename: fn, downloadUrl });
+              });
+              continue;
+            }
+            const urlMatch = rawTarget.match(/(https?:\/\/[^\s]+)/i);
+            if (urlMatch) {
+              sections[currentTypeKey].links.push({ label: splitBilingual(rawLabel, lang), url: urlMatch[1] });
+              continue;
+            }
+            const fileExtMatch = rawTarget.match(/\.([a-zA-Z0-9]+)$/);
+            if (fileExtMatch) {
+              const asset = (release.assets || []).find(a => a.name.toLowerCase() === rawTarget.toLowerCase());
+              const downloadUrl = asset ? asset.browser_download_url : (release.html_url.replace('/tag/', '/download/') + '/' + rawTarget);
+              sections[currentTypeKey].files.push({ label: splitBilingual(rawLabel, lang), filename: rawTarget, downloadUrl });
+              continue;
+            }
+            sections[currentTypeKey].descLines.push(splitBilingual(rawLabel, lang) + ': ' + splitBilingual(rawTarget, lang));
+            continue;
+          }
+          const directUrlMatch = trimmed.match(/(https?:\/\/[^\s]+)/i);
+          if (directUrlMatch) {
+            const url = directUrlMatch[1].replace(/[.,;:)]+$/, '');
+            const label = trimmed.replace(url, '').replace(/[\*#:-]/g, '').trim() || (lang === 'ru' ? 'Ссылка' : 'Link');
+            sections[currentTypeKey].links.push({ label: splitBilingual(label, lang), url });
+            continue;
+          }
+          sections[currentTypeKey].descLines.push(splitBilingual(trimmed, lang));
+        } else {
+          if (trimmed && !trimmed.startsWith('#') && !trimmed.match(/^---/)) leadLines.push(trimmed);
+        }
+      }
+
+      let releaseTitle = release.name || release.tag_name;
+      if (bodyTitle) releaseTitle = splitBilingual(bodyTitle, lang);
+
+      return {
+        tag: release.tag_name || 'v1.0.0',
+        title: releaseTitle,
+        date: release.published_at ? new Date(release.published_at).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '',
+        leadNotes: leadLines.map(l => splitBilingual(l, lang)).filter(Boolean),
+        sections,
+        htmlUrl: release.html_url
+      };
     }
 
-    function hasContentForPlatform(releasesList, platformId) {
+    function hasContentForType(releases, typeId) {
+      return releases.some(rel => !!parseReleaseData(rel, 'ru').sections[typeId]);
+    }
+
+    function hasContentForPlatform(releases, platformId) {
       const plat = PLATFORMS_CONFIG.find(p => p.id === platformId);
-      if (!plat) return false;
-      return releasesList.some(rel => plat.types.some(t => hasContentForType(rel, platformId, t.id)));
+      return plat ? plat.types.some(t => hasContentForType(releases, t.id)) : false;
     }
 
-    // ---------- Theme / Hero / Translations ----------
-    function applyTheme(th) {
-      currentTheme = th;
-      localStorage.setItem('gut_theme', th);
-      document.body.className = th === 'light' ? 'light' : '';
-      const moon = document.getElementById('themeIconMoon');
-      const sun = document.getElementById('themeIconSun');
-      if (th === 'light') { moon.style.display = 'none'; sun.style.display = 'block'; }
-      else { moon.style.display = 'block'; sun.style.display = 'none'; }
-    }
-
-    function updateHeroTitle() {
-      const gWrap = document.getElementById('heroTitleGWrap');
-      const titleText = document.getElementById('heroTitleText');
-      const titleRed = document.getElementById('heroTitleRed');
-      const isGSvg = (activeProjectData['g-svg'] || 'yes').toLowerCase() === 'yes';
-      if (isGSvg) {
-        gWrap.style.display = 'inline-flex';
-        titleText.textContent = (activeProjectData.text || 'reat User') + ' ';
-        titleRed.textContent = activeProjectData.red || 'Team';
-      } else {
-        gWrap.style.display = 'none';
-        titleText.textContent = (activeProjectData.name || activeProjectData.text || 'GUS') + ' ';
-        titleRed.textContent = activeProjectData.red || '';
+    function navigateToTab(tabId, toTop) {
+      currentTab = tabId;
+      localStorage.setItem('gut_active_tab', tabId);
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+      });
+      document.querySelectorAll('.tab-pane').forEach(pane => {
+        pane.classList.toggle('active', pane.id === 'tabContent-' + tabId);
+      });
+      if (toTop) {
+        requestAnimationFrame(() => {
+          const nav = document.getElementById('mainTabsNav');
+          const header = document.querySelector('.header');
+          const headerHeight = header ? header.getBoundingClientRect().height : 70;
+          let tabsTop = 0;
+          if (nav) {
+            const rect = nav.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            tabsTop = Math.max(0, Math.round(rect.top + scrollTop - headerHeight));
+          }
+          window.scrollTo({ top: tabsTop, behavior: 'smooth' });
+        });
       }
     }
 
-    function applyTranslations() {
-      const t = TRANSLATIONS[currentLang];
-      document.title = (activeProjectData.name || 'Project') + ' · GUT';
-      document.getElementById('headerLangToggle').textContent = currentLang.toUpperCase();
-      document.getElementById('heroMotto').textContent = t.brandMotto;
+    function applyTheme(theme) {
+      currentTheme = theme;
+      localStorage.setItem('gut_theme', theme);
+      const moon = document.getElementById('themeIconMoon');
+      const sun = document.getElementById('themeIconSun');
+      if (theme === 'light') {
+        document.body.classList.add('light');
+        if (moon) moon.style.display = 'none';
+        if (sun) sun.style.display = 'block';
+      } else {
+        document.body.classList.remove('light');
+        if (moon) moon.style.display = 'block';
+        if (sun) sun.style.display = 'none';
+      }
+    }
 
-      const heroDesc = (currentLang === 'ru' ? activeProjectData['about-ru-1'] : activeProjectData['about-en-1']) || t.heroDescFallback;
-      document.getElementById('heroDesc').textContent = heroDesc;
+    function applyLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('gut_lang', lang);
+      const t = TRANSLATIONS[lang];
+
+      document.getElementById('headerLangToggle').textContent = lang.toUpperCase();
+      document.getElementById('heroMottoBadge').textContent = t.brandMotto;
 
       document.querySelector('#tabNav-about .tab-text').textContent = t.menuAbout;
       document.querySelector('#tabNav-photos .tab-text').textContent = t.menuPhotos;
@@ -586,248 +723,31 @@ Standalone HTML page that opens locally in any browser.`,
       document.querySelector('#tabNav-developers .tab-text').textContent = t.menuDevelopers;
 
       document.getElementById('aboutInfoTitle').textContent = t.aboutInfo;
-      document.getElementById('photosInfoTitle').textContent = t.photosInfo;
-      document.getElementById('downloadInfoTitle').textContent = t.downloadInfo;
-      document.getElementById('developersInfoTitle').textContent = t.developersInfo;
+      document.getElementById('aboutToPhotosBtn').textContent = t.viewPhotosBtn;
+      document.getElementById('aboutToReleasesBtn').textContent = t.releasesBtn;
 
-      const projName = activeProjectData.name || 'Project';
-      document.getElementById('daysCounterLabel').textContent = currentLang === 'ru' ? ('Дней ' + projName) : (projName + ' Days');
+      document.getElementById('daysCounterLabel').textContent = t.daysLabel;
       document.getElementById('devsCounterLabel').textContent = t.developersLabel;
       document.getElementById('releasesCounterLabel').textContent = t.releasesLabel;
 
-      document.getElementById('btnGoPhotos').textContent = t.viewPhotosBtn;
-      document.getElementById('btnGoReleases').textContent = t.releasesBtn;
-      document.getElementById('btnPhotosToReleases').textContent = t.releasesBtn;
-      document.getElementById('githubReleasesLinkText').textContent = t.githubReleasesBtn;
+      document.getElementById('photosInfoTitle').textContent = t.photosInfo;
+      document.getElementById('photosToReleasesBtn').textContent = t.releasesBtn;
+
+      document.getElementById('downloadInfoTitle').textContent = t.downloadInfo;
+      document.getElementById('ghReleasesLinkText').textContent = t.githubReleasesBtn;
+      document.getElementById('filterLabelPlatform').textContent = t.platform;
+      document.getElementById('filterLabelType').textContent = t.type;
+
+      document.getElementById('developersInfoTitle').textContent = t.developersInfo;
       document.getElementById('aboutGUTLinkText').textContent = t.aboutGUT;
 
-      document.getElementById('platformFilterTitle').textContent = t.platform;
-      document.getElementById('typeFilterTitle').textContent = t.type;
-
       renderAboutTab();
-      renderPhotosTab();
+      renderPhotos();
       renderDevelopersTab();
-      renderReleasesFilters();
+      renderFilters();
       renderReleases();
     }
 
-    function switchTab(tabKey) {
-      currentTab = tabKey;
-      localStorage.setItem('gut_active_tab', tabKey);
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabKey);
-      });
-      document.querySelectorAll('.tab-pane').forEach(pane => {
-        pane.classList.toggle('active', pane.id === 'tabContent-' + tabKey);
-      });
-    }
-
-    function renderAboutTab() {
-      const box = document.getElementById('aboutTextBox');
-      box.innerHTML = '';
-      const rawText = (currentLang === 'ru' ? activeProjectData['about-ru-2'] : activeProjectData['about-en-2']) || '';
-      const paragraphs = rawText.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
-      if (paragraphs.length === 0) {
-        const p = document.createElement('p');
-        p.textContent = currentLang === 'ru' ? 'Информация о проекте готовится к публикации.' : 'Project information is being prepared.';
-        box.appendChild(p);
-      } else {
-        paragraphs.forEach(paragraph => {
-          const p = document.createElement('p');
-          p.textContent = paragraph;
-          box.appendChild(p);
-        });
-      }
-    }
-
-    function renderPhotosTab() {
-      const container = document.getElementById('photosGrid');
-      container.innerHTML = '';
-
-      if (!loadedPhotos || loadedPhotos.length === 0) {
-        const errBox = document.createElement('div');
-        errBox.className = 'media-error-box';
-        errBox.innerHTML = `
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <line x1="21" y1="21" x2="9" y2="9"></line>
-            <line x1="3" y1="3" x2="21" y2="21"></line>
-          </svg>
-          <div class="media-error-text">${TRANSLATIONS[currentLang].mediaError}</div>
-        `;
-        container.appendChild(errBox);
-        return;
-      }
-
-      loadedPhotos.forEach((src) => {
-        const card = document.createElement('div');
-        card.className = 'photo-card';
-        card.innerHTML = `
-          <img src="${src}" alt="" loading="lazy" decoding="async">
-          <div class="photo-overlay">
-            <svg class="photo-maximize-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <polyline points="9 21 3 21 3 15"></polyline>
-              <line x1="21" y1="3" x2="14" y2="10"></line>
-              <line x1="3" y1="21" x2="10" y2="14"></line>
-            </svg>
-          </div>
-        `;
-        card.addEventListener('click', () => openLightbox(src));
-        container.appendChild(card);
-      });
-    }
-
-    function renderDevelopersTab() {
-      const container = document.getElementById('developersGrid');
-      container.innerHTML = '';
-      const t = TRANSLATIONS[currentLang];
-
-      creatorsList.forEach(creator => {
-        const card = document.createElement('div');
-        card.className = 'developer-card';
-
-        const bio = (creator.translations && creator.translations[currentLang] && creator.translations[currentLang].about)
-          || (creator.translations && creator.translations.ru && creator.translations.ru.about)
-          || t.devRoleFallback;
-
-        const profileUrl = 'creator.html?id=' + encodeURIComponent(creator.id || creator.slug || '1-Tigran');
-        const tgUrl = creator.telegram || 'https://t.me/TigranKrapivin';
-        const avatarSrc = 'data/avatars/' + encodeURIComponent(creator.slug) + '.jpg';
-        const initial = (creator.name || 'D').charAt(0).toUpperCase();
-
-        card.innerHTML = `
-          <div class="dev-avatar-wrapper" data-initial="${initial}">
-            <img src="${avatarSrc}" alt="${creator.name}" loading="lazy" decoding="async">
-          </div>
-          <h3 class="dev-name">${creator.name}</h3>
-          <p class="dev-desc">${bio}</p>
-          <div class="dev-actions-group">
-            <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="dev-profile-btn">${t.profile}</a>
-            <a href="${tgUrl}" target="_blank" rel="noopener noreferrer" class="dev-tg-btn" aria-label="Telegram">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
-              </svg>
-            </a>
-          </div>
-        `;
-        const img = card.querySelector('img');
-        img.addEventListener('error', () => {
-          img.style.display = 'none';
-          const wrap = card.querySelector('.dev-avatar-wrapper');
-          if (wrap) wrap.textContent = initial;
-        }, { once: true });
-        container.appendChild(card);
-      });
-    }
-
-    function renderReleasesFilters() {
-      const platContainer = document.getElementById('platformFilterButtons');
-      const typeContainer = document.getElementById('typeFilterButtons');
-      platContainer.innerHTML = '';
-      typeContainer.innerHTML = '';
-
-      PLATFORMS_CONFIG.forEach(plat => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn ' + (plat.id === currentPlatform ? 'active' : '');
-        btn.textContent = plat.label[currentLang] || plat.label.ru;
-        if (hasContentForPlatform(rawReleases, plat.id)) {
-          const dot = document.createElement('span');
-          dot.className = 'blue-indicator-dot';
-          btn.appendChild(dot);
-        }
-        btn.addEventListener('click', () => {
-          currentPlatform = plat.id;
-          currentType = plat.types[0].id;
-          renderReleasesFilters();
-          renderReleases();
-        });
-        platContainer.appendChild(btn);
-      });
-
-      const activePlatObj = PLATFORMS_CONFIG.find(p => p.id === currentPlatform) || PLATFORMS_CONFIG[0];
-      activePlatObj.types.forEach(type => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn ' + (type.id === currentType ? 'active' : '');
-        btn.textContent = type.label[currentLang] || type.label.ru;
-        if (rawReleases.some(rel => hasContentForType(rel, currentPlatform, type.id))) {
-          const dot = document.createElement('span');
-          dot.className = 'blue-indicator-dot';
-          btn.appendChild(dot);
-        }
-        btn.addEventListener('click', () => {
-          currentType = type.id;
-          renderReleasesFilters();
-          renderReleases();
-        });
-        typeContainer.appendChild(btn);
-      });
-    }
-
-    function renderReleases() {
-      const container = document.getElementById('releasesList');
-      container.innerHTML = '';
-      const t = TRANSLATIONS[currentLang];
-      const activePlatObj = PLATFORMS_CONFIG.find(p => p.id === currentPlatform) || PLATFORMS_CONFIG[0];
-      const activeTypeObj = activePlatObj.types.find(tp => tp.id === currentType) || activePlatObj.types[0];
-      const typeLabel = activeTypeObj.label[currentLang] || activeTypeObj.label.ru;
-
-      rawReleases.forEach(release => {
-        const parsed = parseReleaseData(release);
-        const secKey = (currentPlatform + '-' + currentType).toLowerCase();
-        const sectionContent = parsed.sections[secKey] ? parsed.sections[secKey][currentLang] : '';
-        const asset = findAssetForType(release, currentType);
-
-        const card = document.createElement('div');
-        card.className = 'release-item-card';
-
-        const dateStr = release.published_at
-          ? new Date(release.published_at).toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-          : '';
-
-        let innerHTML = `
-          <div class="release-top-bar">
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-              <span class="tag-badge">${release.tag_name || 'v1.0.0'}</span>
-              <span class="release-main-title">${release.name || release.tag_name || 'Release'}</span>
-            </div>
-            <span class="release-date-text">${dateStr}</span>
-          </div>
-        `;
-
-        if (parsed.lead[currentLang]) {
-          innerHTML += `<div class="release-intro-box">${parsed.lead[currentLang]}</div>`;
-        }
-
-        if (sectionContent) {
-          innerHTML += `<div class="release-block"><div class="release-block-body">${sectionContent}</div></div>`;
-        } else if (!asset) {
-          innerHTML += `<div class="missing-build-box">${t.noBuild(typeLabel)}</div>`;
-        }
-
-        innerHTML += `<div class="release-actions">`;
-        if (asset && asset.browser_download_url) {
-          innerHTML += `
-            <a href="${asset.browser_download_url}" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-primary">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              <span>${t.download} (${asset.name})</span>
-            </a>
-          `;
-        }
-        innerHTML += `
-          <a href="${release.html_url}" target="_blank" rel="noopener noreferrer" class="btn-pill btn-pill-secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-            <span>${t.viewRelease}</span>
-          </a>
-        </div>`;
-
-        card.innerHTML = innerHTML;
-        container.appendChild(card);
-      });
-    }
-
-    // ---------- Lightbox ----------
     const lightboxModal = document.getElementById('lightboxModal');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
@@ -837,162 +757,201 @@ Standalone HTML page that opens locally in any browser.`,
       lightboxImg.classList.remove('zoomed');
       lightboxModal.classList.add('active');
     }
+
     function closeLightbox() {
       lightboxModal.classList.remove('active');
-      lightboxImg.src = '';
+      lightboxImg.classList.remove('zoomed');
     }
-    lightboxCloseBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+
+    lightboxCloseBtn.addEventListener('click', closeLightbox);
     lightboxModal.addEventListener('click', (e) => { if (e.target === lightboxModal) closeLightbox(); });
     lightboxImg.addEventListener('click', (e) => { e.stopPropagation(); lightboxImg.classList.toggle('zoomed'); });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && lightboxModal.classList.contains('active')) closeLightbox();
     });
 
-    // ---------- Data loading ----------
-    async function loadProjectData() {
-      const params = new URLSearchParams(window.location.search);
-      const idParam = params.get('id') || '1';
-      activeProjectSlug = KNOWN_PROJECTS[idParam] || idParam;
+    function renderFilters() {
+      const platContainer = document.getElementById('platformFilterButtons');
+      const typeContainer = document.getElementById('typeFilterButtons');
+      if (!platContainer || !typeContainer) return;
+      
+      platContainer.innerHTML = '';
+      typeContainer.innerHTML = '';
 
-      const txtUrl = 'data/projects/' + activeProjectSlug + '.txt';
-      try {
-        const res = await fetch(txtUrl);
-        if (res.ok) {
-          const txt = await res.text();
-          const parsed = parseProjectTxt(txt);
-          activeProjectData = { ...activeProjectData, ...parsed };
+      PLATFORMS_CONFIG.forEach(plat => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn ' + (plat.id === currentPlatform ? 'active' : '');
+        btn.innerHTML = '<span>' + plat.label[currentLang] + '</span>';
+        if (hasContentForPlatform(rawReleases, plat.id)) {
+          const dot = document.createElement('span');
+          dot.className = 'blue-indicator-dot';
+          btn.appendChild(dot);
         }
-      } catch (err) {
-        console.warn('Could not load project text, using default:', err);
-      }
-
-      updateHeroTitle();
-
-      const ghLink = activeProjectData.github || 'https://github.com/GreatUserSystem/noname';
-      document.getElementById('githubReleasesLink').href = ghLink.endsWith('/releases') ? ghLink : (ghLink + '/releases');
-
-      const startDateStr = activeProjectData['start-data'] || activeProjectData['start-date'] || '01.06.2026';
-      const startDate = parseDate(startDateStr);
-      const now = new Date();
-      const diffDays = Math.max(0, Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
-      document.getElementById('daysCounter').textContent = String(diffDays);
-
-      const authorIds = parseAuthors(activeProjectData.authors);
-      document.getElementById('devsCounter').textContent = String(authorIds.length || 0);
-
-      creatorsList = [];
-      for (const id of authorIds) {
-        const creatorSlug = KNOWN_CREATORS[id] || id;
-        let loaded = null;
-        try {
-          const res = await fetch('data/creators/' + creatorSlug + '.json');
-          if (res.ok) loaded = await res.json();
-        } catch (e) {}
-        if (!loaded) {
-          loaded = {
-            name: 'Developer ' + id,
-            telegram: 'https://t.me/TigranKrapivin',
-            translations: {
-              ru: { about: 'Разработчик команды GUT' },
-              en: { about: 'GUT team developer' }
-            }
-          };
-        }
-        creatorsList.push({ ...loaded, id, slug: creatorSlug });
-      }
-
-      // Load photos from data/photos/project/<slug>/
-      const numPrefix = activeProjectSlug.split('-')[0] || '1';
-      const candidates = [
-        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.0.jpg',
-        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.1.jpg',
-        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.2.jpg',
-        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.3.jpg',
-        'data/photos/project/' + activeProjectSlug + '/' + numPrefix + '.4.jpg',
-        'data/photos/project/' + activeProjectSlug + '/1.jpg',
-        'data/photos/project/' + activeProjectSlug + '/2.jpg',
-        'data/photos/project/' + activeProjectSlug + '/3.jpg'
-      ];
-      loadedPhotos = [];
-      const results = await Promise.all(candidates.map(checkImage));
-      results.forEach(url => {
-        if (url && !loadedPhotos.includes(url)) loadedPhotos.push(url);
+        btn.addEventListener('click', () => {
+          currentPlatform = plat.id;
+          const activePlat = PLATFORMS_CONFIG.find(p => p.id === currentPlatform);
+          if (activePlat && activePlat.types.length > 0) currentType = activePlat.types[0].id;
+          renderFilters();
+          renderReleases();
+        });
+        platContainer.appendChild(btn);
       });
 
-      fetchGitHubReleases(ghLink);
+      const activePlat = PLATFORMS_CONFIG.find(p => p.id === currentPlatform) || PLATFORMS_CONFIG[0];
+      activePlat.types.forEach(typeObj => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn ' + (typeObj.id === currentType ? 'active' : '');
+        btn.innerHTML = '<span>' + typeObj.label[currentLang] + '</span>';
+        if (hasContentForType(rawReleases, typeObj.id)) {
+          const dot = document.createElement('span');
+          dot.className = 'blue-indicator-dot';
+          btn.appendChild(dot);
+        }
+        btn.addEventListener('click', () => {
+          currentType = typeObj.id;
+          renderFilters();
+          renderReleases();
+        });
+        typeContainer.appendChild(btn);
+      });
     }
 
-    async function fetchGitHubReleases(repoUrl) {
-      if (!repoUrl) return;
-      try {
-        const clean = repoUrl.replace(/\/releases\/?$/, '').replace(/\/$/, '');
-        const match = clean.match(/github\.com\/([^\/]+)\/([^\/]+)/);
-        if (match) {
-          const owner = match[1];
-          const repo = match[2];
-          const apiUrl = 'https://api.github.com/repos/' + owner + '/' + repo + '/releases';
-          const ctrl = new AbortController();
-          const timer = setTimeout(() => ctrl.abort(), 4000);
-          const res = await fetch(apiUrl, { signal: ctrl.signal });
-          clearTimeout(timer);
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data) && data.length > 0) {
-              rawReleases = data;
-              document.getElementById('releasesCounter').textContent = String(rawReleases.length);
-              renderReleasesFilters();
-              renderReleases();
-              return;
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('Could not fetch releases from GitHub API, using fallback:', e);
+    function renderReleases() {
+      const container = document.getElementById('releasesListContainer');
+      const t = TRANSLATIONS[currentLang];
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!rawReleases || rawReleases.length === 0) {
+        container.innerHTML = '<div class="missing-build-box">' + t.noBuild(currentType) + '</div>';
+        return;
       }
-      document.getElementById('releasesCounter').textContent = String(rawReleases.length);
-      renderReleasesFilters();
+
+      rawReleases.forEach(rel => {
+        const parsed = parseReleaseData(rel, currentLang);
+        const activeSection = parsed.sections[currentType];
+        const activePlat = PLATFORMS_CONFIG.find(p => p.id === currentPlatform) || PLATFORMS_CONFIG[0];
+        const typeObj = activePlat.types.find(to => to.id === currentType);
+        const typeLabel = typeObj ? typeObj.label[currentLang] : currentType;
+
+        const card = document.createElement('div');
+        card.className = 'release-item-card';
+
+        let leadHtml = parsed.leadNotes && parsed.leadNotes.length > 0 ? `<div class="lead-notes-box">${parsed.leadNotes.join('<br>')}</div>` : '';
+
+        let sectionHtml = '';
+        if (activeSection) {
+          let descLinesHtml = activeSection.descLines && activeSection.descLines.length > 0 ? activeSection.descLines.map(d => `<div class="section-desc-line">${d}</div>`).join('') : '';
+
+          let buttonsHtml = '';
+          if (activeSection.files && activeSection.files.length > 0) {
+            buttonsHtml += activeSection.files.map(f => `
+              <a href="${f.downloadUrl}" target="_blank" rel="noopener noreferrer" class="dl-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>${f.label || t.download}: ${f.filename}</span>
+              </a>
+            `).join('');
+          }
+
+          if (activeSection.links && activeSection.links.length > 0) {
+            buttonsHtml += activeSection.links.map(l => `
+              <a href="${l.url}" target="_blank" rel="noopener noreferrer" class="link-ext-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span>${l.label}</span>
+              </a>
+            `).join('');
+          }
+
+          buttonsHtml += `
+            <a href="${parsed.htmlUrl}" target="_blank" rel="noopener noreferrer" class="view-gh-btn">
+              <span>${t.viewRelease}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          `;
+
+          sectionHtml = descLinesHtml + '<div class="release-actions-row">' + buttonsHtml + '</div>';
+        } else {
+          sectionHtml = `
+            <div class="missing-build-box">${t.noBuild(typeLabel)}</div>
+            <div class="release-actions-row">
+              <a href="${parsed.htmlUrl}" target="_blank" rel="noopener noreferrer" class="view-gh-btn">
+                <span>${t.viewRelease}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="release-top-bar">
+            <span class="tag-badge">${parsed.tag}</span>
+            <h3 class="release-main-title">${parsed.title}</h3>
+            <span class="release-date-text">${parsed.date}</span>
+          </div>
+          ${leadHtml}
+          ${sectionHtml}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function fetchGitHubReleases() {
+      if (!projectData.github) return;
+      const repoPath = projectData.github.replace('https://github.com/', '').replace(/\/$/, '');
+      try {
+        const res = await fetch(`https://api.github.com/repos/${repoPath}/releases`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (Array.isArray(data)) rawReleases = data;
+        else rawReleases = [];
+      } catch (err) {
+        rawReleases = [];
+      }
+      const counterEl = document.getElementById('releasesCounter');
+      if (counterEl) counterEl.textContent = rawReleases.length;
+      renderFilters();
       renderReleases();
     }
 
-    // ---------- Events ----------
-    function initEvents() {
-      const widget = document.getElementById('headerSettingsWidget');
-      const trigger = document.getElementById('headerSettingsTrigger');
-      trigger.addEventListener('click', (e) => {
+    document.addEventListener('DOMContentLoaded', () => {
+      const settingsWidget = document.getElementById('headerSettingsWidget');
+      const settingsTrigger = document.getElementById('headerSettingsTrigger');
+      const langToggle = document.getElementById('headerLangToggle');
+      const themeToggle = document.getElementById('headerThemeToggle');
+
+      settingsTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
         isSettingsOpen = !isSettingsOpen;
-        widget.classList.toggle('open', isSettingsOpen);
+        settingsWidget.classList.toggle('open', isSettingsOpen);
       });
+
       document.addEventListener('click', (e) => {
-        if (isSettingsOpen && !widget.contains(e.target)) {
+        if (!settingsWidget.contains(e.target)) {
           isSettingsOpen = false;
-          widget.classList.remove('open');
+          settingsWidget.classList.remove('open');
         }
       });
-      document.getElementById('headerLangToggle').addEventListener('click', (e) => {
+
+      langToggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        currentLang = currentLang === 'ru' ? 'en' : 'ru';
-        localStorage.setItem('gut_lang', currentLang);
-        applyTranslations();
+        applyLanguage(currentLang === 'ru' ? 'en' : 'ru');
       });
-      document.getElementById('headerThemeToggle').addEventListener('click', (e) => {
+
+      themeToggle.addEventListener('click', (e) => {
         e.stopPropagation();
         applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
       });
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
-      });
-      document.getElementById('btnGoPhotos').addEventListener('click', () => switchTab('photos'));
-      document.getElementById('btnGoReleases').addEventListener('click', () => switchTab('download'));
-      document.getElementById('btnPhotosToReleases').addEventListener('click', () => switchTab('download'));
-    }
 
-    window.addEventListener('DOMContentLoaded', async () => {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          navigateToTab(btn.getAttribute('data-tab'), false);
+        });
+      });
+
       applyTheme(currentTheme);
-      initEvents();
-      await loadProjectData();
-      applyTranslations();
-      switchTab(currentTab);
+      applyLanguage(currentLang);
+      navigateToTab(currentTab, false);
+      loadProjectData();
     });
   </script>
 </body>
